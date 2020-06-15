@@ -9,6 +9,8 @@ date: 2019-01-01
 
 Spring 2019 as the Instructor on Record
 
+syllabus
+
 Course Information
 ======
 * Course: PSC 202 Introduction to Political Analysis
@@ -19,3 +21,6 @@ Course Information
 Course Description
 ======
 The purpose of this course, required for political science majors, is to build skills for conducting, interpreting, and presenting political science research. These skills include: basic research and data collection practices, techniques for measuring political science concepts quantitatively, hypothesis testing, interpretation of statistical evidence, and the presentation of findings in a clear and compelling manner. Tying these components together is a thematic focus on important political science concepts such as democracy, power, or representation. (excerpt from the syllabus)
+
+
+Additional materials provided upon request.

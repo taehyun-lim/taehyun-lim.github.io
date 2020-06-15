@@ -28,8 +28,12 @@ Course Learning Outcomes – Students will gain knowledge in the following areas
 * Major international topics including: IR theories; foreign policy; international conflict of various kinds and conflict resolution; international organizations, law and human rights; international integration, both historically and currently; environmental and population challenges; the North-* South gap; and the international political economy    
 
 (excerpt from Dr. Northrup’s Fall 2017 syllabus)
+
 My Responsibility
 ======
-I was the instructor for two recitation sections each semester. In Spring 2016, they were both twenty-eight students, in Fall 2016, twenty and twenty-one, and in Fall 2017, twenty three and twenty. I designed quizzes, graded exams, quizzes, and group projects, led two discussion sections every week, and held office hours.
+I was the instructor for two recitation sections each semester. In Spring 2016, they were both twenty-eight students, in Fall 2016, twenty and twenty-one, and in Fall 2017, twenty three and twenty. I designed quizzes, graded exams, quizzes, and group projects, led two discussion sections every week, and held office hours.    
 
-At first it didn’t come as easy as I hoped. Some students would be very eager to participate while others were passive and needed more encouragement. Some grasped my point quickly while others needed more explanation. I tried to listen better and be clearer as the sections went on. I was able to better attend to the students’ needs later on.
+At first it didn’t come as easy as I hoped. Some students would be very eager to participate while others were passive and needed more encouragement. Some grasped my point quickly while others needed more explanation. I tried to listen better and be clearer as the sections went on. I was able to better attend to the students’ needs later on.    
+
+
+Additional materials provided upon request.
