@@ -9,6 +9,8 @@ redirect_from:
 
 {% include base_path %}
 
+[Click to download my full CV]({{ 'files/Tae_Hyun_Lim_CV.pdf' | relative_url }})
+
 Education
 ======
 * Ph.D. Candidate, Political Science.      
@@ -46,6 +48,3 @@ Teaching
   <ul>{% for post in site.teaching %}
     {% include archive-single-cv.html %}
   {% endfor %}</ul>
-
-
-updated on September 1, 2019.
