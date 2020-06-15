@@ -1,0 +1,8 @@
+---
+title: 'Embedding Party Competition into Electoral Institutions: Family Policy Development
+  inSouth Korea'
+---
+
+This paper is based on the research conducted for Chapter 3 of mydissertation.
+
+This paper argues that it was party competition over swing districts in thepopulation-dense Seoul Metropolitan area that caused the adoption of universal childcaresubsidy in South Korea.
