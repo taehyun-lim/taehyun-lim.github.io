@@ -13,20 +13,20 @@ redirect_from:
 
 Education
 ======
-* Ph.D. Candidate, Political Science.      
+* Ph.D. Candidate, Political Science,      
 	The Maxwell School of Citizenship and Public Affairs, Syracuse University  
 	Fields: Comparative Politics, Public Administration and Public Policy
 
-* M.A., Political Science. 2019
+* M.A., Political Science. 2019.
 Syracuse University
 
-* M.A., Economics. 2019
+* M.A., Economics, 2019,
 Syracuse University
 
-* M.A., International Studies. 2014
+* M.A., International Studies, 2014,
 Yonsei University, Seoul, South Korea
 
-* LL.B., 2010
+* LL.B., 2010,
 	Yonsei University, Seoul, South Korea    
 	Minor: Political Science and International Relations
 
