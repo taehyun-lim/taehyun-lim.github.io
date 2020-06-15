@@ -4,6 +4,7 @@ collection: teaching
 type: Undergraduate Course, Instructor on Record
 permalink: "/teaching/introduction_to_political_analysis_solo"
 venue: Syracuse University
+date: 2019-01-01
 ---
 
 Spring 2019 as the Instructor on Record
