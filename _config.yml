@@ -83,12 +83,12 @@ author:
   name             : "Tae Hyun Lim"
   avatar           : "profile.png"
   bio              : "Political Science Ph.D. Candidate"
-  location         : "Syracuse N.Y."
+  location         : 
   employer         : "Syracuse University"
   pubmed           : # "https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
   googlescholar    : # "http://yourfullgooglescholarurl.com"
   email            : "talim@syr.edu"
-  researchgate     :  # example: "https://www.researchgate.net/profile/yourprofile"
+  researchgate     : # example: "https://www.researchgate.net/profile/yourprofile"
   uri              :
   bitbucket        :
   codepen          :

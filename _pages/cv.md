@@ -37,7 +37,7 @@ Research and Teaching Interests
   
 Research
 ======
-  <ul>{% for post in site.publications %}
+  <ul>{% for post in site.research %}
     {% include archive-single-cv.html %}
   {% endfor %}</ul>
   
@@ -46,19 +46,6 @@ Teaching
   <ul>{% for post in site.teaching %}
     {% include archive-single-cv.html %}
   {% endfor %}</ul>
-
-Professional Experiences
-=====
-* 2018. Research Assistant, to Dr. Margarita Estévez-Abe, Syracuse University
-* 2018-2019. Teaching Mentor, Graduate School, Syracuse University
-* 2014-Present. Teaching Assistant, Department of Political Science, the Maxwell School, Syracuse University
-* 2013-2014. Teaching Assistant, to Dr. Sang-young Rhyu, Yonsei University
-* 2012. Research Assistant, to Dr. Sang-young Rhyu, Yonsei University
-
-Professional Training
-=====
-* 2016-2018. Future Professoriate Program, Graduate School, Syracuse University
-* 2017. Empirical Implications of Theoretical Models Certification, Empirical Implications of Theoretical Models
 
 Undergraduate Teaching Experience
 =====
