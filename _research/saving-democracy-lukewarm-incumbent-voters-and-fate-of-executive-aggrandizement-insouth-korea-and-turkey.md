@@ -1,6 +1,5 @@
 ---
-title: Saving Democracy? Lukewarm Incumbent Voters and Fate of Executive Aggrandizement
-  inSouth Korea and Turkey
+title: Saving Democracy? Lukewarm Incumbent Voters and Fate of Executive Aggrandizement in South Korea and Turkey
 ---
 
 with Aykut Özturk
