@@ -47,22 +47,5 @@ Teaching
     {% include archive-single-cv.html %}
   {% endfor %}</ul>
 
-Undergraduate Teaching Experience
-=====
-Syracuse University
-PSC 124 International Relations
-Teaching Assistant for Dr. Terrell A. Northrup. Fall 2017, Fall 2016, Spring 2016
-Guest Lecturer on Global Finance and Business. Fall 2017, Fall 2016, Spring 2016
-
-PSC 125 Political Theory
-Teaching Assistant for Dr. Laurence Thomas. Fall 2015, Spring 2015
-
-PSC 202 Introduction to Political Analysis
-Instructor on Record Spring, 2019
-Teaching Assistant for Dr. Simon Weschle. Fall 2018, Spring 2018
-Teaching Assistant for Dr. Christopher G. Faricy. Spring 2017
-
-PSC 338 Politics of Globalization
-Teaching Assistant for Dr. Seth K. Jolly. Spring 2015
 
 updated on September 1, 2019.
