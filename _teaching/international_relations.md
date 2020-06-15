@@ -4,7 +4,7 @@ collection: teaching
 type: Undergraduate Course, Teaching Assistant
 permalink: "/teaching/international_relations"
 venue: Syracuse University
-date: 2020-01-01
+date: '2020-01-01'
 ---
 
 Spring 2016, Fall 2016, Fall 2017, Spring 2020
@@ -14,7 +14,7 @@ Course Information
 * Course: PSC 124 International Relations   
 * Semester: Spring 2016, Fall 2016, Fall 2017, and Spring 2020
 * Instructor: Dr. Terrell Northrup    
-* Enrollment: 170 undergraduate students (Spring 2016), 129 undergraduate students (Fall 2016), 126 undergraduate students (Fall 2017), and undergraduate students (Spring 2020)
+* Enrollment: 170 undergraduate students (Spring 2016), 129 undergraduate students (Fall 2016), 126 undergraduate students (Fall 2017), and 141 undergraduate students (Spring 2020)
 
 Course Description
 ======
@@ -31,7 +31,7 @@ Course Learning Outcomes – Students will gain knowledge in the following areas
 
 My Responsibility
 ======
-I was the instructor for two recitation sections each semester. In Spring 2016, they were both twenty-eight students, in Fall 2016, twenty and twenty-one, and in Fall 2017, twenty three and twenty. I designed quizzes, graded exams, quizzes, and group projects, led two discussion sections every week, and held office hours.
+I was the instructor for two recitation sections each semester. In Spring 2016, they were both twenty-eight students, in Fall 2016, twenty and twenty-one, in Fall 2017, twenty-three and twenty, and in Spring 2020, twenty-five and twenty-nine. I designed quizzes, graded exams, quizzes, and group projects, led two discussion sections every week, and held office hours.
 
 
 Additional materials provided upon request.
