@@ -17,7 +17,7 @@ Education
 	The Maxwell School of Citizenship and Public Affairs, Syracuse University  
 	Fields: Comparative Politics, Public Administration and Public Policy
 
-* M.A., Political Science. 2019.
+* M.A., Political Science, 2019,
 Syracuse University
 
 * M.A., Economics, 2019,
