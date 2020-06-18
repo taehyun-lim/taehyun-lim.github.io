@@ -1,6 +1,6 @@
 ---
 title: 'Embedding Party Competition into Electoral Institutions: Family Policy Development
-  inSouth Korea'
+  in South Korea'
 ---
 
 This paper is based on the research conducted for Chapter 3 of mydissertation.
