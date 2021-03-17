@@ -7,7 +7,7 @@ venue: Syracuse University
 date: '2020-01-01'
 ---
 
-Spring 2016, Fall 2016, Fall 2017, Spring 2020, Fall 2020, Spring 2021
+Spring 2016, Fall 2016, Fall 2017, Spring 2020, Fall 2020, and Spring 2021
 
 Course Information
 ======
