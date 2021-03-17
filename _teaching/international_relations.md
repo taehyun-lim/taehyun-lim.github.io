@@ -4,7 +4,7 @@ collection: teaching
 type: Undergraduate Course, Teaching Assistant
 permalink: "/teaching/international_relations"
 venue: Syracuse University
-date: '2020-01-01'
+date: '2021-01-01'
 ---
 
 Spring 2016, Fall 2016, Fall 2017, Spring 2020, Fall 2020, and Spring 2021
