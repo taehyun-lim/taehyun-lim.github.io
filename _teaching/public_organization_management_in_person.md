@@ -13,7 +13,7 @@ Fall 2022 and Spring 2023 as the Instructor on Record, in person.
 
 Course Information
 ======
-* Course: PA 470 Public Organization Management (in person)
+* Course: PA 470 Public Organization Management (In Person)
 * Semester: Fall 2022 and Spring 2023
 * Instructor: Tae Hyun Lim 
 * Enrollment:  27 undergraduate students (Fall 2022), and 34 undergraduate students (Spring 2023).
