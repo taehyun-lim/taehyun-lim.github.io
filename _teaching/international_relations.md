@@ -1,5 +1,5 @@
 ---
-title: International Relations (Teaching Assistant)
+title: (Teaching Assistant) International Relations
 collection: teaching
 type: Undergraduate Course, Teaching Assistant
 permalink: "/teaching/international_relations"

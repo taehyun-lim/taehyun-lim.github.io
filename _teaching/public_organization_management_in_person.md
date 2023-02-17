@@ -4,17 +4,17 @@ collection: teaching
 type: Undergraduate Course, Instructor on Record
 permalink: "/teaching/public_organization_management_in_person"
 venue: University of Arizona
-date: '2022-09-01'
+date: '2023-01-01'
 ---
 
-Fall 2022 and Spring 2023 as the Instructor on Record, in person. 
+Fall 2022 and Spring 2023 as the Instructor on Record, Provided in Person. 
 
 Course Information
 ======
-* Course: PA 470 Public Organization Management (In Person)
+* Course: PA 470 Public Organization Management (in Person)
 * Semester: Fall 2022 and Spring 2023
 * Instructor: Tae Hyun Lim 
-* Enrollment:  27 undergraduate students (Fall 2022), and 34 undergraduate students (Spring 2023).
+* Enrollment:  27 undergraduate students (Fall 2022) and 34 undergraduate students (Spring 2023).
 
 Course Description
 ======
