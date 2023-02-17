@@ -8,10 +8,10 @@ redirect_from:
 - "/about.html"
 ---
 
-Welcome! I am a Ph.D. an Adjunct Instructor in the School of Government and Public Policy at the University of Arizona. I am expected to receive my Ph.D. in political science in 2023 from the Maxwell School of Citizenship and Public Affairs at Syracuse University.
+Welcome! I am an Adjunct Instructor in the School of Government and Public Policy at the University of Arizona. I am expected to receive my Ph.D. in political science in May 2023 from the Maxwell School of Citizenship and Public Affairs at Syracuse University.
 
 My research focuses on public policy, public opinion, and political institution nexus. 
 
-For details about me, my work, teaching, and more, check out the tabs above. You can also email me at [thlim@arizona.edu](mailto:thlim@arizona.edu).
+For details about me, my work, teaching, and data, check out the tabs above. You can also email me at [thlim@arizona.edu](mailto:thlim@arizona.edu).
 
 Thanks for visiting!
