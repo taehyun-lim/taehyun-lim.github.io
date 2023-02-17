@@ -1,5 +1,5 @@
 ---
-title: Introduction to Political Analysis
+title: Introduction to Political Analysis (Teaching Assistant)
 collection: teaching
 type: Undergraduate Course, Teaching Assistant
 permalink: "/teaching/introduction_to_political_science"

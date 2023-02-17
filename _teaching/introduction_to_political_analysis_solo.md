@@ -1,5 +1,5 @@
 ---
-title: Introduction to Political Analysis (Instructor on Record)
+title: Introduction to Political Analysis
 collection: teaching
 type: Undergraduate Course, Instructor on Record
 permalink: "/teaching/introduction_to_political_analysis_solo"
