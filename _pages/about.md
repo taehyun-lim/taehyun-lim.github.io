@@ -8,7 +8,7 @@ redirect_from:
 - "/about.html"
 ---
 
-Welcome! I am an Adjunct Instructor in the School of Government and Public Policy at the University of Arizona. I am expected to receive my Ph.D. in political science in May 2023 from the Maxwell School of Citizenship and Public Affairs at Syracuse University.
+Welcome! I am an Adjunct Instructor at the School of Government and Public Policy at the University of Arizona. I am expected to receive my Ph.D. in political science in May 2023 from the Maxwell School of Citizenship and Public Affairs at Syracuse University.
 
 My research focuses on public policy, public opinion, and political institution nexus. 
 
