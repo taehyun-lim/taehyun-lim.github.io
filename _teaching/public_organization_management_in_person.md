@@ -9,8 +9,6 @@ date: '2022-09-01'
 
 Fall 2022 and Spring 2023 as the Instructor on Record, in person. 
 
-[Click here to download the syllabus]({{ 'files/fall_2022_public_organization_management_syllabus_in_person.pdf' | relative_url }})
-
 Course Information
 ======
 * Course: PA 470 Public Organization Management (In Person)

@@ -9,8 +9,6 @@ date: '2019-01-01'
 
 Spring 2019 as the Instructor on Record
 
-[Click here to download the syllabus]({{ 'files/spring_2019_psc_202_introduction_to_political_analysis_syllabus.pdf' | relative_url }})
-
 Course Information
 ======
 * Course: PSC 202 Introduction to Political Analysis
