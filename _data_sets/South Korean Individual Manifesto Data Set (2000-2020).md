@@ -1,6 +1,6 @@
 ---
-collection: data
-permalink: "/data/individual_manifesto"
+collection: data_sets
+permalink: "/data_sets/individual_manifesto"
 title: 'South Korean Individual Manifesto Data Set (2000-2020)'
 ---
 
