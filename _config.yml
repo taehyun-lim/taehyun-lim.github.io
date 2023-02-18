@@ -83,7 +83,7 @@ author:
   name             : "Tae Hyun Lim"
   avatar           : "profile.png"
   bio              : "Adjunct Instructor"
-  location         : "Tucson, AZ"
+  location         : # "Tucson, AZ"
   employer         : "University of Arizona"
   pubmed           : # "https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
   googlescholar    : "https://scholar.google.com/citations?user=prfRV4AAAAAJ&hl=en"
