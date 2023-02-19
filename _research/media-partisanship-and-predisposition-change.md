@@ -2,7 +2,7 @@
 title: 'Media, Partisanship, and Predisposition Change: Evidence from Gender Role Ideology Change in South Korea'
 ---
 
-
+  
 
 Public opinion literature is divided on whether media reflects or affects public opinion and whether media affects predispositions as they do policy preferences.
 This paper addresses the above two debates.
