@@ -13,7 +13,7 @@ redirect_from:
 
 Education
 ======
-* Ph.D. Candidate, Political Science,      
+* Ph.D., Political Science, 2023,
 	The Maxwell School of Citizenship and Public Affairs, Syracuse University  
 	Fields: Comparative Politics, Public Administration and Public Policy
 
