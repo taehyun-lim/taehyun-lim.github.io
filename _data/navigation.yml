@@ -6,8 +6,8 @@ main:
   - title: "Teaching"
     url: /teaching/    
 
-  - title: "Data Sets"
-    url: /data_sets/
+  #- title: "Data Sets"
+  #  url: /data_sets/
         
   - title: "C.V."
     url: /cv/
