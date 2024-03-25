@@ -2,7 +2,7 @@
 title: Do Men Care about Childcare? Rethinking the Politics of Work-Family Reconciliation
 ---
 
-with Margarita Estévez-Abe. Social Politics: International Studies in Gender, State & Society, jxae002, https://doi.org/10.1093/sp/jxae002
+with Margarita Estévez-Abe. _Social Politics: International Studies in Gender, State & Society_, jxae002, https://doi.org/10.1093/sp/jxae002
 
 
 We demonstrate that in-dividuals consider household as an economic unit regarding their preference for work-family reconciliation policies. We challenge the common assumption in the welfare state literature that: women’s greater educational attainment and stronger labor market attachment have changed their preferences for work-family reconciliation policies–but not men’s. We demonstrate that in-dividuals consider household as an economic unit. Men in dual-earner households are often very supportive of policies that subsidize their costs: subsidies for childcare and paid parentalleaves. We use international survey data to analyze factors that shape respondents’ preferences for different reconciliation policies from nineteen OECD member countries.
