@@ -1,5 +1,9 @@
 ---
 title: 'Call Me Auntie: Do the Scopes of the Offices Determine Gendered Campaign Messages'
+# date: 2024
+categories: 
+  - WorkInProgress
+# order: 2
 ---
 
 with Yu Jeong Hwang. This study examines how political candidates’ gender affects their campaign messages depending on the scope and the level of elections.
