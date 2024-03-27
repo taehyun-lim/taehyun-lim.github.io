@@ -2,6 +2,7 @@
 collection: research
 permalink: "/research/dissertation"
 title: 'Party Competition in Swing Districts and Childcare Policy Development in South Korea (Dissertation)'
+categories: 'Dissertation'
 ---
 
 My dissertation is about the South Korea's adoption of universal family policies from 2009 to 2013. Despite the absence of those causal factors typically associated with generous welfare states, South Korea expanded its public childcare subsidies so much so rapidly that it became one of the top providers of formal childcare among OECD countries by 2013. What explains the recent welfare state expansion in Korea? And can the Korean case enrich our thinking about the politics of welfare expansion more broadly? These questions motivate my dissertation.
