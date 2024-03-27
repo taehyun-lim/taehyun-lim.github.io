@@ -7,23 +7,7 @@ author_profile: true
 
 {% include base_path %}
 
-<h2>Publications</h2>
-{% for post in site.research %}
-  {% if post.categories contains 'Publications' %}
-    {% include archive-single.html %}
-  {% endif %}
+{% for post in site.research reversed %}
+  {% include archive-single.html %}
 {% endfor %}
 
-<h2>Dissertation</h2>
-{% for post in site.research %}
-  {% if post.categories contains 'Dissertation' %}
-    {% include archive-single.html %}
-  {% endif %}
-{% endfor %}
-
-<h2>Work in Progress</h2>
-{% for post in site.research %}
-  {% if post.categories contains 'WorkInProgress' %}
-    {% include archive-single.html %}
-  {% endif %}
-{% endfor %}
