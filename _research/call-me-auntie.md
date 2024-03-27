@@ -1,8 +1,8 @@
 ---
 title: 'Call Me Auntie: Do the Scopes of the Offices Determine Gendered Campaign Messages'
 # date: 2024
-categories: 
-  - WorkInProgress
+# categories: 
+#  - WorkInProgress
 # order: 2
 ---
 
