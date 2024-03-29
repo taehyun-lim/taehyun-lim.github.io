@@ -3,6 +3,7 @@ collection: research
 permalink: "/research/dissertation"
 title: 'Party Competition in Swing Districts and Childcare Policy Development in South Korea (Dissertation)'
 # categories: 'Dissertation'
+order: 1
 ---
 
 This dissertation argues that public childcare in majoritarian countries develops as a result of electoral competition over swing district voters. [https://surface.syr.edu/etd/1718/](https://surface.syr.edu/etd/1718/)
