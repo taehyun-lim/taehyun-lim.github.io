@@ -3,6 +3,7 @@ collection: research
 permalink: "/research/dissertation"
 title: 'Party Competition in Swing Districts and Childcare Policy Development in South Korea (Dissertation)'
 # categories: 'Dissertation'
+date: 2023-05-14
 order: 1
 ---
 

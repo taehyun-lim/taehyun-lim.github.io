@@ -1,9 +1,9 @@
 ---
 title: 'Do Men Care about Childcare? Rethinking the Politics of Work-Family Reconciliation'
-# date: 2024
+date: 2024-02-28
 # categories: 
 #  - Publications
-order: 2
+# order: 2
 ---
 
 Margarita Estévez-Abe and **Tae Hyun Lim**. 2024. _Social Politics: International Studies in Gender, State & Society_, jxae002, [https://doi.org/10.1093/sp/jxae002](https://doi.org/10.1093/sp/jxae002)
