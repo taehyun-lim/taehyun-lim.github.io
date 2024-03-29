@@ -1,6 +1,9 @@
 ---
 title: 'Predicting Support for COVID-19 Policies with Partisan Media Use and Negative Emotion: Evidence from the U.S. and South Korea'
-order: 2
+# date: 2023
+# categories: 
+#  - Publications
+# order: 1
 ---
 
 Kim, D. H., **Lim, T. H.**, Hwang, Y. J., & Kim, S. 2023. _Journal of Health Communication_. [https://doi.org/10.1080/10810730.2023.2236963](https://doi.org/10.1080/10810730.2023.2236963)

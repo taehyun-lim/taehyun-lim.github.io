@@ -1,5 +1,9 @@
 ---
 title: 'Media, Partisanship, and Predisposition Change: Evidence from Gender Role Ideology Change in South Korea'
+# date: 2024
+# categories: 
+#  - WorkInProgress
+# order: 2
 ---
 
 This paper analyzes how the media reports affect and reflect predispositions.  
