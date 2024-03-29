@@ -1,6 +1,7 @@
 ---
 title: 'Do Men Care about Childcare? Rethinking the Politics of Work-Family Reconciliation'
 date: 2024-02-28
+doi: 10.1093/sp/jxae002
 # categories: 
 #  - Publications
 # order: 2

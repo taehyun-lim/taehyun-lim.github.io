@@ -1,6 +1,7 @@
 ---
 title: 'Predicting Support for COVID-19 Policies with Partisan Media Use and Negative Emotion: Evidence from the U.S. and South Korea'
 date: 2023-12-25
+doi: 10.1080/10810730.2023.2236963
 # categories: 
 #  - Publications
 # order: 3
