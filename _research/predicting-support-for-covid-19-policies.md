@@ -3,7 +3,7 @@ title: 'Predicting Support for COVID-19 Policies with Partisan Media Use and Neg
 # date: 2023
 # categories: 
 #  - Publications
- order: 2
+order: 2
 ---
 
 Kim, D. H., **Lim, T. H.**, Hwang, Y. J., & Kim, S. 2023. _Journal of Health Communication_. [https://doi.org/10.1080/10810730.2023.2236963](https://doi.org/10.1080/10810730.2023.2236963)
