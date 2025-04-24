@@ -7,47 +7,14 @@
     <style>
         body {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            margin: 0;
             height: 100vh;
-            background-color: #ffffff;
-        }
-
-        .blinking-header {
-            background-color: black;
-            color: yellow;
-            border: 4px solid yellow;
-            padding: 15px 25px;
-            font-size: 2rem;
-            font-weight: bold;
-            text-align: center;
-            animation: blink 1s infinite;
-            /* animation: blink 1s steps(2, start) infinite; */
-            width: 100%;
-            font-family: sans-serif;
-        }
-
-        @keyframes blink {
-            0%, 70% {
-                visibility: visible;
-            }
-            70.01%, 100% {
-                visibility: hidden;
-            }
-            /* to {
-                visibility: hidden;
-            } */
-        }
-
-        .tableauPlaceholder {
-            margin-top: 20px;
+            margin: 0;
         }
     </style>
 </head>
 <body>
-    <div class="blinking-header">TOMORROW (Friday) !!! 1 PM ANRR with LUNCH!!!!</div>
-
     <div class='tableauPlaceholder' id='viz1744982759335' style='position: relative'>
         <noscript>
             <a href='#'>
@@ -68,12 +35,11 @@
             <param name='language' value='en-US' />
         </object>
     </div>
-
     <script type='text/javascript'>
         var divElement = document.getElementById('viz1744982759335');
         var vizElement = divElement.getElementsByTagName('object')[0];
-        vizElement.style.width = '1016px';
-        vizElement.style.height = '991px';
+        vizElement.style.width='1016px';
+        vizElement.style.height='991px';
         var scriptElement = document.createElement('script');
         scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
         vizElement.parentNode.insertBefore(scriptElement, vizElement);
