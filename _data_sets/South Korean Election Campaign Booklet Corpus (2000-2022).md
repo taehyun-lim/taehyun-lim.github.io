@@ -1,7 +1,7 @@
 ---
 collection: data_sets
 permalink: "/data_sets/individual_manifesto"
-title: 'South Korean Electino Campaign Booklet Corpus (2000-2022)'
+title: 'South Korean Election Campaign Booklet Corpus (2000-2022)'
 ---
 
 The South Korean Electino Campaign Booklet Corpus is a collection of manifesto pamphlets of individual candidates who ran for offices in in single-member or multi-member districts during six National Assembly elections, six local elections, and five Presidential elections in South Korea between 2000 and 2022. The dataset has 49,679 observations.
