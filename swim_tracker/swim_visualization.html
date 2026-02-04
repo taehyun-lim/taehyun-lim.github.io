@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swim Time Tracker - Interactive Visualization</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #0077b6;
+            --secondary-color: #00b4d8;
+            --accent-color: #90e0ef;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #1a1a2e;
+            --text-muted: #6c757d;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-color) 0%, #e3f2fd 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0, 119, 182, 0.3);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h3 {
+            color: var(--primary-color);
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card h3::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .event-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .event-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 4px;
+        }
+
+        .event-item:hover {
+            background: var(--bg-color);
+        }
+
+        .event-item.selected {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #caf0f8 100%);
+        }
+
+        .event-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 12px;
+            accent-color: var(--primary-color);
+        }
+
+        .event-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .event-name {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        .event-count {
+            background: var(--bg-color);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-group label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        select, input[type="range"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.2s ease;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.3s;
+            border-radius: 26px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background: var(--primary-color);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 119, 182, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .chart-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-color);
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .chart-tab {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .chart-tab.active {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        #mainChart, #comparisonChart, #pbChart {
+            width: 100%;
+            height: 500px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--bg-color) 0%, white 100%);
+            padding: 16px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .stat-card.pb {
+            border-left-color: var(--success-color);
+        }
+
+        .stat-card.recent {
+            border-left-color: var(--warning-color);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .stat-event {
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            margin-top: 4px;
+        }
+
+        .improvement-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .improvement-badge.positive {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .improvement-badge.negative {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .data-table {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        th {
+            background: var(--bg-color);
+            font-weight: 600;
+            color: var(--text-muted);
+            position: sticky;
+            top: 0;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .time-cell {
+            font-family: 'Consolas', monospace;
+            font-weight: 600;
+        }
+
+        .pb-indicator {
+            display: inline-block;
+            background: var(--success-color);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-left: 6px;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            color: var(--text-muted);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--bg-color);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 12px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+
+        .tooltip {
+            position: relative;
+        }
+
+        .info-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--bg-color);
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            cursor: help;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏊 Swim Time Tracker</h1>
+            <p>Interactive visualization of swimming performance data</p>
+        </header>
+
+        <div class="dashboard-grid">
+            <aside class="sidebar">
+                <div class="card">
+                    <h3>Events</h3>
+                    <div class="btn-group" style="margin-bottom: 12px;">
+                        <button class="btn btn-secondary" onclick="selectAllEvents()">Select All</button>
+                        <button class="btn btn-secondary" onclick="clearAllEvents()">Clear All</button>
+                    </div>
+                    <div class="event-list" id="eventList">
+                        <div class="loading">
+                            <div class="loading-spinner"></div>
+                            Loading events...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Display Options</h3>
+                    <div class="controls">
+                        <div class="control-group">
+                            <label>Chart Type</label>
+                            <select id="chartType" onchange="updateChart()">
+                                <option value="line">Line Chart</option>
+                                <option value="scatter">Scatter Plot</option>
+                                <option value="area">Area Chart</option>
+                            </select>
+                        </div>
+
+                        <div class="toggle-container">
+                            <label>Invert Y-Axis (faster up)</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="invertY" checked onchange="updateChart()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-container">
+                            <label>Show Trend Lines</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="showTrend" onchange="updateChart()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-container">
+                            <label>Show Personal Bests</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="showPB" checked onchange="updateChart()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-container">
+                            <label>Aggregate by Date</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="aggregateDate" onchange="updateChart()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Filter by Course</h3>
+                    <div class="controls">
+                        <select id="courseFilter" onchange="updateChart()">
+                            <option value="all">All Courses</option>
+                            <option value="SCY">SCY (Short Course Yards)</option>
+                            <option value="SCM">SCM (Short Course Meters)</option>
+                            <option value="LCM">LCM (Long Course Meters)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Date Range</h3>
+                    <div class="controls">
+                        <div class="control-group">
+                            <label>From</label>
+                            <input type="date" id="dateFrom" onchange="updateChart()">
+                        </div>
+                        <div class="control-group">
+                            <label>To</label>
+                            <input type="date" id="dateTo" onchange="updateChart()">
+                        </div>
+                        <button class="btn btn-secondary" onclick="resetDateRange()">Reset Range</button>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="main-content">
+                <div class="stats-grid" id="statsGrid">
+                    <!-- Stats will be populated dynamically -->
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h2 class="chart-title">📈 Time Progression</h2>
+                        <div class="chart-tabs">
+                            <button class="chart-tab active" onclick="switchTab(this, 'progression')">Progression</button>
+                            <button class="chart-tab" onclick="switchTab(this, 'comparison')">Event Comparison</button>
+                            <button class="chart-tab" onclick="switchTab(this, 'pb')">Personal Bests</button>
+                        </div>
+                    </div>
+                    <div id="mainChart"></div>
+                    <div id="comparisonChart" style="display: none;"></div>
+                    <div id="pbChart" style="display: none;"></div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h2 class="chart-title">📊 Improvement Analysis</h2>
+                    </div>
+                    <div id="improvementChart" style="width: 100%; height: 400px;"></div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h2 class="chart-title">📋 Race History</h2>
+                    </div>
+                    <div class="data-table" id="dataTable">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Event</th>
+                                    <th>Time</th>
+                                    <th>Meet</th>
+                                    <th>Course</th>
+                                    <th>Improvement</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let rawData = [];
+        let filteredData = [];
+        let selectedEvents = new Set();
+        let eventColors = {};
+        let personalBests = {};
+
+        // Color palette for events
+        const colorPalette = [
+            '#0077b6', '#00b4d8', '#90e0ef', '#48cae4', '#023e8a',
+            '#0096c7', '#00d4ff', '#03045e', '#caf0f8', '#ade8f4',
+            '#ff6b6b', '#feca57', '#48dbfb', '#1dd1a1', '#5f27cd',
+            '#ff9ff3', '#54a0ff', '#00d2d3', '#ff6b6b', '#c8d6e5'
+        ];
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+        });
+
+        async function loadData() {
+            try {
+                const response = await fetch('data_2574598_20260204.csv');
+                const csvText = await response.text();
+                
+                Papa.parse(csvText, {
+                    header: true,
+                    complete: function(results) {
+                        rawData = results.data
+                            .filter(row => row.event && row.time_seconds)
+                            .map(row => ({
+                                ...row,
+                                date: new Date(row.date),
+                                time_seconds: parseFloat(row.time_seconds)
+                            }))
+                            .filter(row => !isNaN(row.date.getTime()) && !isNaN(row.time_seconds))
+                            .sort((a, b) => a.date - b.date);
+                        
+                        initializeDashboard();
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('eventList').innerHTML = `
+                    <div class="empty-state">
+                        <p>Error loading data. Please ensure the CSV file exists.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function initializeDashboard() {
+            // Get unique events and assign colors
+            const events = [...new Set(rawData.map(d => d.event))].sort();
+            events.forEach((event, i) => {
+                eventColors[event] = colorPalette[i % colorPalette.length];
+                selectedEvents.add(event);
+            });
+
+            // Calculate personal bests
+            calculatePersonalBests();
+
+            // Set date range
+            const dates = rawData.map(d => d.date);
+            const minDate = new Date(Math.min(...dates));
+            const maxDate = new Date(Math.max(...dates));
+            document.getElementById('dateFrom').value = minDate.toISOString().split('T')[0];
+            document.getElementById('dateTo').value = maxDate.toISOString().split('T')[0];
+
+            // Render event list
+            renderEventList(events);
+
+            // Initial chart render
+            updateChart();
+        }
+
+        function calculatePersonalBests() {
+            personalBests = {};
+            rawData.forEach(row => {
+                const key = row.event;
+                if (!personalBests[key] || row.time_seconds < personalBests[key].time_seconds) {
+                    personalBests[key] = row;
+                }
+            });
+        }
+
+        function renderEventList(events) {
+            const eventList = document.getElementById('eventList');
+            const eventCounts = {};
+            rawData.forEach(row => {
+                eventCounts[row.event] = (eventCounts[row.event] || 0) + 1;
+            });
+
+            eventList.innerHTML = events.map(event => `
+                <label class="event-item ${selectedEvents.has(event) ? 'selected' : ''}" onclick="toggleEventSelection(this, '${event}')">
+                    <input type="checkbox" ${selectedEvents.has(event) ? 'checked' : ''}>
+                    <span class="event-color" style="background: ${eventColors[event]}"></span>
+                    <span class="event-name">${event}</span>
+                    <span class="event-count">${eventCounts[event]}</span>
+                </label>
+            `).join('');
+        }
+
+        function toggleEventSelection(element, event) {
+            const checkbox = element.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+            
+            if (checkbox.checked) {
+                selectedEvents.add(event);
+                element.classList.add('selected');
+            } else {
+                selectedEvents.delete(event);
+                element.classList.remove('selected');
+            }
+            updateChart();
+        }
+
+        function selectAllEvents() {
+            const events = [...new Set(rawData.map(d => d.event))];
+            events.forEach(event => selectedEvents.add(event));
+            document.querySelectorAll('.event-item').forEach(item => {
+                item.classList.add('selected');
+                item.querySelector('input').checked = true;
+            });
+            updateChart();
+        }
+
+        function clearAllEvents() {
+            selectedEvents.clear();
+            document.querySelectorAll('.event-item').forEach(item => {
+                item.classList.remove('selected');
+                item.querySelector('input').checked = false;
+            });
+            updateChart();
+        }
+
+        function resetDateRange() {
+            const dates = rawData.map(d => d.date);
+            const minDate = new Date(Math.min(...dates));
+            const maxDate = new Date(Math.max(...dates));
+            document.getElementById('dateFrom').value = minDate.toISOString().split('T')[0];
+            document.getElementById('dateTo').value = maxDate.toISOString().split('T')[0];
+            updateChart();
+        }
+
+        function getFilteredData() {
+            const courseFilter = document.getElementById('courseFilter').value;
+            const dateFrom = new Date(document.getElementById('dateFrom').value);
+            const dateTo = new Date(document.getElementById('dateTo').value);
+            const aggregateDate = document.getElementById('aggregateDate').checked;
+
+            let data = rawData.filter(row => {
+                if (!selectedEvents.has(row.event)) return false;
+                if (courseFilter !== 'all' && row.course !== courseFilter) return false;
+                if (row.date < dateFrom || row.date > dateTo) return false;
+                return true;
+            });
+
+            if (aggregateDate) {
+                // Group by event and date, take fastest time
+                const grouped = {};
+                data.forEach(row => {
+                    const key = `${row.event}_${row.date.toISOString().split('T')[0]}`;
+                    if (!grouped[key] || row.time_seconds < grouped[key].time_seconds) {
+                        grouped[key] = row;
+                    }
+                });
+                data = Object.values(grouped);
+            }
+
+            return data.sort((a, b) => a.date - b.date);
+        }
+
+        function formatTime(seconds) {
+            if (seconds >= 60) {
+                const mins = Math.floor(seconds / 60);
+                const secs = (seconds % 60).toFixed(2);
+                return `${mins}:${secs.padStart(5, '0')}`;
+            }
+            return seconds.toFixed(2);
+        }
+
+        function updateChart() {
+            filteredData = getFilteredData();
+            
+            updateStats();
+            updateProgressionChart();
+            updateComparisonChart();
+            updatePBChart();
+            updateImprovementChart();
+            updateTable();
+        }
+
+        function updateStats() {
+            const statsGrid = document.getElementById('statsGrid');
+            
+            if (filteredData.length === 0) {
+                statsGrid.innerHTML = '<div class="empty-state">Select events to view statistics</div>';
+                return;
+            }
+
+            // Overall stats
+            const totalSwims = filteredData.length;
+            const uniqueEvents = new Set(filteredData.map(d => d.event)).size;
+            const uniqueMeets = new Set(filteredData.map(d => d.meet)).size;
+
+            // Best improvement (largest time drop in any event)
+            let bestImprovement = { event: '', improvement: 0 };
+            selectedEvents.forEach(event => {
+                const eventData = filteredData.filter(d => d.event === event).sort((a, b) => a.date - b.date);
+                if (eventData.length >= 2) {
+                    const first = eventData[0].time_seconds;
+                    const best = Math.min(...eventData.map(d => d.time_seconds));
+                    const improvement = first - best;
+                    if (improvement > bestImprovement.improvement) {
+                        bestImprovement = { event, improvement };
+                    }
+                }
+            });
+
+            // Most recent PB
+            let recentPB = null;
+            Object.values(personalBests).forEach(pb => {
+                if (selectedEvents.has(pb.event)) {
+                    if (!recentPB || pb.date > recentPB.date) {
+                        recentPB = pb;
+                    }
+                }
+            });
+
+            statsGrid.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-label">Total Swims</div>
+                    <div class="stat-value">${totalSwims}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Events Selected</div>
+                    <div class="stat-value">${uniqueEvents}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Meets</div>
+                    <div class="stat-value">${uniqueMeets}</div>
+                </div>
+                <div class="stat-card pb">
+                    <div class="stat-label">Best Time Drop</div>
+                    <div class="stat-value">${bestImprovement.improvement > 0 ? '-' + bestImprovement.improvement.toFixed(2) + 's' : 'N/A'}</div>
+                    <div class="stat-event">${bestImprovement.event || ''}</div>
+                </div>
+                ${recentPB ? `
+                <div class="stat-card recent">
+                    <div class="stat-label">Most Recent PB</div>
+                    <div class="stat-value">${formatTime(recentPB.time_seconds)}</div>
+                    <div class="stat-event">${recentPB.event} - ${recentPB.date.toLocaleDateString()}</div>
+                </div>
+                ` : ''}
+            `;
+        }
+
+        function updateProgressionChart() {
+            const invertY = document.getElementById('invertY').checked;
+            const showTrend = document.getElementById('showTrend').checked;
+            const showPB = document.getElementById('showPB').checked;
+            const chartType = document.getElementById('chartType').value;
+
+            if (filteredData.length === 0) {
+                Plotly.newPlot('mainChart', [], {
+                    title: 'Select events to view progression',
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)'
+                });
+                return;
+            }
+
+            const traces = [];
+            const events = [...new Set(filteredData.map(d => d.event))];
+
+            events.forEach(event => {
+                const eventData = filteredData.filter(d => d.event === event);
+                
+                const trace = {
+                    name: event,
+                    x: eventData.map(d => d.date),
+                    y: eventData.map(d => d.time_seconds),
+                    text: eventData.map(d => `
+                        <b>${event}</b><br>
+                        Time: ${d.time}<br>
+                        Meet: ${d.meet}<br>
+                        Date: ${d.date.toLocaleDateString()}<br>
+                        Course: ${d.course}
+                        ${d.tags ? '<br>Tags: ' + d.tags : ''}
+                    `),
+                    hovertemplate: '%{text}<extra></extra>',
+                    marker: { color: eventColors[event], size: 8 },
+                    line: { color: eventColors[event], width: 2 }
+                };
+
+                if (chartType === 'line') {
+                    trace.type = 'scatter';
+                    trace.mode = 'lines+markers';
+                } else if (chartType === 'scatter') {
+                    trace.type = 'scatter';
+                    trace.mode = 'markers';
+                    trace.marker.size = 10;
+                } else if (chartType === 'area') {
+                    trace.type = 'scatter';
+                    trace.mode = 'lines';
+                    trace.fill = 'tozeroy';
+                    trace.fillcolor = eventColors[event] + '40';
+                }
+
+                traces.push(trace);
+
+                // Add trend line
+                if (showTrend && eventData.length >= 2) {
+                    const xNumeric = eventData.map(d => d.date.getTime());
+                    const y = eventData.map(d => d.time_seconds);
+                    const { slope, intercept } = linearRegression(xNumeric, y);
+                    
+                    traces.push({
+                        name: `${event} Trend`,
+                        x: [eventData[0].date, eventData[eventData.length - 1].date],
+                        y: [slope * xNumeric[0] + intercept, slope * xNumeric[xNumeric.length - 1] + intercept],
+                        type: 'scatter',
+                        mode: 'lines',
+                        line: { color: eventColors[event], width: 1, dash: 'dash' },
+                        showlegend: false,
+                        hoverinfo: 'skip'
+                    });
+                }
+
+                // Add PB marker
+                if (showPB && personalBests[event]) {
+                    const pb = personalBests[event];
+                    if (eventData.some(d => d.row_uid === pb.row_uid)) {
+                        traces.push({
+                            name: `${event} PB`,
+                            x: [pb.date],
+                            y: [pb.time_seconds],
+                            type: 'scatter',
+                            mode: 'markers',
+                            marker: {
+                                color: '#28a745',
+                                size: 16,
+                                symbol: 'star',
+                                line: { color: 'white', width: 2 }
+                            },
+                            showlegend: false,
+                            hovertemplate: `<b>Personal Best!</b><br>${event}: ${pb.time}<extra></extra>`
+                        });
+                    }
+                }
+            });
+
+            const layout = {
+                title: '',
+                xaxis: {
+                    title: 'Date',
+                    showgrid: true,
+                    gridcolor: '#e9ecef',
+                    rangeslider: { visible: true }
+                },
+                yaxis: {
+                    title: 'Time (seconds)',
+                    showgrid: true,
+                    gridcolor: '#e9ecef',
+                    autorange: invertY ? 'reversed' : true
+                },
+                hovermode: 'closest',
+                legend: {
+                    orientation: 'h',
+                    yanchor: 'bottom',
+                    y: 1.02,
+                    xanchor: 'right',
+                    x: 1
+                },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                margin: { t: 60, r: 20, b: 80, l: 60 }
+            };
+
+            const config = {
+                responsive: true,
+                displayModeBar: true,
+                modeBarButtonsToAdd: ['drawline', 'drawopenpath', 'eraseshape'],
+                toImageButtonOptions: {
+                    format: 'png',
+                    filename: 'swim_progression'
+                }
+            };
+
+            Plotly.newPlot('mainChart', traces, layout, config);
+        }
+
+        function updateComparisonChart() {
+            if (filteredData.length === 0) {
+                Plotly.newPlot('comparisonChart', [], {
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)'
+                });
+                return;
+            }
+
+            // Group data by event for box plot comparison
+            const events = [...new Set(filteredData.map(d => d.event))];
+            
+            const traces = events.map(event => {
+                const eventData = filteredData.filter(d => d.event === event);
+                return {
+                    name: event,
+                    y: eventData.map(d => d.time_seconds),
+                    type: 'box',
+                    marker: { color: eventColors[event] },
+                    boxpoints: 'all',
+                    jitter: 0.3,
+                    pointpos: -1.5
+                };
+            });
+
+            const layout = {
+                title: '',
+                yaxis: {
+                    title: 'Time (seconds)',
+                    showgrid: true,
+                    gridcolor: '#e9ecef'
+                },
+                showlegend: false,
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                margin: { t: 40, r: 20, b: 80, l: 60 }
+            };
+
+            Plotly.newPlot('comparisonChart', traces, layout, { responsive: true });
+        }
+
+        function updatePBChart() {
+            const events = [...selectedEvents].filter(e => personalBests[e]);
+            
+            if (events.length === 0) {
+                Plotly.newPlot('pbChart', [], {
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)'
+                });
+                return;
+            }
+
+            // Sort by time for better visualization
+            const sortedEvents = events.sort((a, b) => personalBests[a].time_seconds - personalBests[b].time_seconds);
+
+            const trace = {
+                x: sortedEvents.map(e => personalBests[e].time_seconds),
+                y: sortedEvents,
+                type: 'bar',
+                orientation: 'h',
+                marker: {
+                    color: sortedEvents.map(e => eventColors[e])
+                },
+                text: sortedEvents.map(e => {
+                    const pb = personalBests[e];
+                    return `${pb.time} @ ${pb.meet}<br>${pb.date.toLocaleDateString()}`;
+                }),
+                hovertemplate: '<b>%{y}</b><br>%{text}<extra></extra>'
+            };
+
+            const layout = {
+                title: '',
+                xaxis: {
+                    title: 'Time (seconds)',
+                    showgrid: true,
+                    gridcolor: '#e9ecef'
+                },
+                yaxis: {
+                    automargin: true
+                },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                margin: { t: 40, r: 20, b: 60, l: 120 }
+            };
+
+            Plotly.newPlot('pbChart', [trace], layout, { responsive: true });
+        }
+
+        function updateImprovementChart() {
+            const events = [...selectedEvents];
+            
+            if (events.length === 0 || filteredData.length === 0) {
+                Plotly.newPlot('improvementChart', [], {
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)'
+                });
+                return;
+            }
+
+            const improvements = events.map(event => {
+                const eventData = filteredData.filter(d => d.event === event).sort((a, b) => a.date - b.date);
+                if (eventData.length < 2) return { event, improvement: 0 };
+                
+                const firstTime = eventData[0].time_seconds;
+                const bestTime = Math.min(...eventData.map(d => d.time_seconds));
+                return {
+                    event,
+                    improvement: ((firstTime - bestTime) / firstTime * 100).toFixed(1),
+                    timeDropped: (firstTime - bestTime).toFixed(2)
+                };
+            }).filter(d => d.improvement > 0).sort((a, b) => b.improvement - a.improvement);
+
+            const trace = {
+                x: improvements.map(d => d.event),
+                y: improvements.map(d => parseFloat(d.improvement)),
+                type: 'bar',
+                marker: {
+                    color: improvements.map(d => eventColors[d.event]),
+                    line: { color: 'rgba(0,0,0,0.1)', width: 1 }
+                },
+                text: improvements.map(d => `${d.improvement}% (${d.timeDropped}s)`),
+                textposition: 'outside',
+                hovertemplate: '<b>%{x}</b><br>Improvement: %{y:.1f}%<extra></extra>'
+            };
+
+            const layout = {
+                title: '',
+                xaxis: {
+                    title: '',
+                    tickangle: -45
+                },
+                yaxis: {
+                    title: 'Improvement (%)',
+                    showgrid: true,
+                    gridcolor: '#e9ecef'
+                },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                margin: { t: 40, r: 20, b: 100, l: 60 }
+            };
+
+            Plotly.newPlot('improvementChart', [trace], layout, { responsive: true });
+        }
+
+        function updateTable() {
+            const tableBody = document.getElementById('tableBody');
+            
+            if (filteredData.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" class="empty-state">No data to display</td></tr>';
+                return;
+            }
+
+            // Sort by date descending (most recent first)
+            const sortedData = [...filteredData].sort((a, b) => b.date - a.date);
+
+            // Calculate previous times for improvement column
+            const previousTimes = {};
+            [...filteredData].sort((a, b) => a.date - b.date).forEach(row => {
+                const key = row.event;
+                if (previousTimes[key] !== undefined) {
+                    row.previousTime = previousTimes[key];
+                }
+                previousTimes[key] = row.time_seconds;
+            });
+
+            tableBody.innerHTML = sortedData.slice(0, 100).map(row => {
+                const isPB = personalBests[row.event] && personalBests[row.event].row_uid === row.row_uid;
+                let improvementHtml = '-';
+                
+                if (row.previousTime !== undefined) {
+                    const diff = row.previousTime - row.time_seconds;
+                    if (diff !== 0) {
+                        const sign = diff > 0 ? '-' : '+';
+                        const className = diff > 0 ? 'positive' : 'negative';
+                        improvementHtml = `<span class="improvement-badge ${className}">${sign}${Math.abs(diff).toFixed(2)}s</span>`;
+                    }
+                }
+
+                return `
+                    <tr>
+                        <td>${row.date.toLocaleDateString()}</td>
+                        <td>
+                            <span class="event-color" style="background: ${eventColors[row.event]}; display: inline-block; vertical-align: middle;"></span>
+                            ${row.event}
+                        </td>
+                        <td class="time-cell">
+                            ${row.time}
+                            ${isPB ? '<span class="pb-indicator">PB</span>' : ''}
+                        </td>
+                        <td>${row.meet || '-'}</td>
+                        <td>${row.course || '-'}</td>
+                        <td>${improvementHtml}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function switchTab(button, tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.chart-tab').forEach(tab => tab.classList.remove('active'));
+            button.classList.add('active');
+
+            // Show/hide charts
+            document.getElementById('mainChart').style.display = tabName === 'progression' ? 'block' : 'none';
+            document.getElementById('comparisonChart').style.display = tabName === 'comparison' ? 'block' : 'none';
+            document.getElementById('pbChart').style.display = tabName === 'pb' ? 'block' : 'none';
+
+            // Trigger resize to fix Plotly layout
+            if (tabName === 'comparison') {
+                Plotly.Plots.resize('comparisonChart');
+            } else if (tabName === 'pb') {
+                Plotly.Plots.resize('pbChart');
+            } else {
+                Plotly.Plots.resize('mainChart');
+            }
+        }
+
+        // Linear regression helper
+        function linearRegression(x, y) {
+            const n = x.length;
+            let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+            
+            for (let i = 0; i < n; i++) {
+                sumX += x[i];
+                sumY += y[i];
+                sumXY += x[i] * y[i];
+                sumXX += x[i] * x[i];
+            }
+            
+            const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+            const intercept = (sumY - slope * sumX) / n;
+            
+            return { slope, intercept };
+        }
+    </script>
+</body>
+</html>
