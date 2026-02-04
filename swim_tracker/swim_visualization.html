@@ -749,25 +749,34 @@
                 eventCounts[row.event] = (eventCounts[row.event] || 0) + 1;
             });
 
-            eventList.innerHTML = events.map(event => `
-                <label class="event-item ${selectedEvents.has(event) ? 'selected' : ''}" onclick="toggleEventSelection(this, '${event}')">
-                    <input type="checkbox" ${selectedEvents.has(event) ? 'checked' : ''}>
-                    <span class="event-color" style="background: ${eventColors[event]}"></span>
-                    <span class="event-name">${event}</span>
-                    <span class="event-count">${eventCounts[event]}</span>
-                </label>
+            eventList.innerHTML = events.map(evt => `
+                <div class="event-item ${selectedEvents.has(evt) ? 'selected' : ''}" onclick="toggleEventSelection(this, '${evt}')">
+                    <input type="checkbox" ${selectedEvents.has(evt) ? 'checked' : ''} onclick="handleCheckboxClick(event, this.parentElement, '${evt}')">
+                    <span class="event-color" style="background: ${eventColors[evt]}"></span>
+                    <span class="event-name">${evt}</span>
+                    <span class="event-count">${eventCounts[evt]}</span>
+                </div>
             `).join('');
         }
 
-        function toggleEventSelection(element, event) {
+        function toggleEventSelection(element, eventName) {
             const checkbox = element.querySelector('input[type="checkbox"]');
             checkbox.checked = !checkbox.checked;
-            
-            if (checkbox.checked) {
-                selectedEvents.add(event);
+            updateEventState(element, eventName, checkbox.checked);
+        }
+
+        function handleCheckboxClick(e, element, eventName) {
+            e.stopPropagation();
+            const checkbox = element.querySelector('input[type="checkbox"]');
+            updateEventState(element, eventName, checkbox.checked);
+        }
+
+        function updateEventState(element, eventName, isChecked) {
+            if (isChecked) {
+                selectedEvents.add(eventName);
                 element.classList.add('selected');
             } else {
-                selectedEvents.delete(event);
+                selectedEvents.delete(eventName);
                 element.classList.remove('selected');
             }
             updateChart();
