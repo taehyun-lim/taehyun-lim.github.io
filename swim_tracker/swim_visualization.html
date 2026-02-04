@@ -676,9 +676,20 @@
             loadData();
         });
 
+        const CSV_FILENAME = 'Shepard_Olsen_2574598_20260204.csv';
+
         async function loadData() {
             try {
-                const response = await fetch('data_2574598_20260204.csv');
+                // Parse swimmer name from filename
+                const filenameParts = CSV_FILENAME.replace('.csv', '').split('_');
+                if (filenameParts.length >= 2) {
+                    const firstName = filenameParts[0];
+                    const lastName = filenameParts[1];
+                    document.querySelector('header h1').textContent = `🏊 Swim Time Tracker: ${firstName} ${lastName}`;
+                    document.title = `Swim Time Tracker - ${firstName} ${lastName}`;
+                }
+
+                const response = await fetch(CSV_FILENAME);
                 const csvText = await response.text();
                 
                 Papa.parse(csvText, {
