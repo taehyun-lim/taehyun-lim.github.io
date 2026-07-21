@@ -1,2 +1,16 @@
+# Jekyll
 _site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+.bundle/
+vendor/
 
+# OS / editor cruft
+.DS_Store
+*.log
+
+# Stray build artifacts from unrelated experiments (not used by the Jekyll build)
+node_modules/
+dist/
+.astro/

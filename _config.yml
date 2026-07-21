@@ -10,7 +10,7 @@ locale                   : "en-US"
 title                    : "Tae Hyun Lim"
 title_separator          : "-"
 name                     : &name "Tae Hyun Lim"
-description              : &description "Ph.D. Candidate"
+description              : &description "Data Science/Analysis Research Librarian at Hamilton College"
 url                      : https://taehyun-lim.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "taehyun-lim/taehyun-lim.github.io"
@@ -73,7 +73,7 @@ social:
 
 # Analytics
 analytics:
-  provider               :  "google-universal" # false (default), "google", "google-universal", "custom"
+  provider               :  false # false (default), "google", "google-universal", "custom"
   google:
     tracking_id          :
 
