@@ -1,5 +1,7 @@
 ---
 collection: data_sets
+type: dataset
+nav_order: 1
 permalink: "/data_sets/individual_manifesto"
 title: 'South Korean Election Campaign Booklet Corpus (2000-2022)'
 ---
@@ -13,6 +15,7 @@ The South Korean Election Campaign Booklet Corpus is a collection of manifesto p
 | Resource | Link |
 |----------|------|
 | **R Package & Documentation** | [taehyun-lim.github.io/krpoltext](https://taehyun-lim.github.io/krpoltext/) |
+| **AI agent (MCP)** | [kr-elections-mcp](https://github.com/taehyun-lim/kr-elections-mcp) &middot; ask in plain language |
 | **Static Data API** | [index.json](https://taehyun-lim.github.io/krpoltext/data/index.json) &middot; [metadata.json](https://taehyun-lim.github.io/krpoltext/data/metadata.json) &middot; [schema](https://taehyun-lim.github.io/krpoltext/data/schema/campaign_booklet.json) |
 | **OSF Repository** | [doi.org/10.17605/OSF.IO/RCT9Y](https://doi.org/10.17605/OSF.IO/RCT9Y) |
 | **GitHub** | [taehyun-lim/krpoltext](https://github.com/taehyun-lim/krpoltext) |

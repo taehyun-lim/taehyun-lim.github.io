@@ -1,5 +1,5 @@
 ---
-title: Data Sets
+title: Data & Tools
 layout: archive
 permalink: "/data_sets/"
 author_profile: true
@@ -7,8 +7,109 @@ author_profile: true
 
 {% include base_path %}
 
-<p>Both corpora are accessible via the <a href="https://taehyun-lim.github.io/krpoltext/"><strong>krpoltext</strong> R package</a> (v0.2.0, with CSV and Parquet support) and a <a href="https://taehyun-lim.github.io/krpoltext/data/index.json">static data API</a> that exposes dataset metadata, schema, and download links.</p>
+{% assign datasets = site.data_sets | where: "type", "dataset" | sort: "nav_order" %}
 
-{% for post in site.data_sets reversed %}
+<style>
+  .archive__item-excerpt { font-size: 1em; }
+  .dt-anchor { margin: 1.2em 0 1.5em; padding: 0.9em 1.1em; border-left: 4px solid #52adc8; background: #fafafa; }
+  .dt-anchor .dt-label { display: block; margin-bottom: 0.3em; font-size: 0.72em; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #7a8288; }
+  .dt-anchor .dt-doi { display: inline-block; margin-top: 0.35em; }
+  .dt-eco { overflow-x: auto; margin: 1em 0 0.75em; }
+  .dt-eco svg { display: block; width: 100%; min-width: 620px; height: auto; }
+  .dt-eco .eco-box { fill: #fff; stroke: #dcdee0; stroke-width: 1.5; }
+  .dt-eco .eco-ext { fill: #fafafa; stroke: #dcdee0; stroke-width: 1.5; stroke-dasharray: 4 4; }
+  .dt-eco .eco-title { fill: #494e52; font-size: 18px; font-weight: 700; text-anchor: middle; }
+  .dt-eco .eco-sub { fill: #7a8288; font-size: 12.5px; text-anchor: middle; }
+  .dt-eco .eco-flow { stroke: #b7bcc0; stroke-width: 1.6; fill: none; }
+  .dt-eco figcaption { margin-top: 0.4em; color: #7a8288; font-size: 0.85em; }
+  .dt-ways { padding-left: 1.1em; }
+  .dt-ways li { margin-bottom: 0.5em; }
+  .dt-cite dt { font-weight: 700; }
+  .dt-cite dd { margin: 0 0 0.6em; }
+  .dt-sibling { color: #7a8288; }
+</style>
+
+<p class="dt-lead">Peer-reviewed corpora on South Korean politics, with the open-source tools built to work with them.</p>
+
+<div class="dt-anchor">
+  <span class="dt-label">Published as a data paper</span>
+  Lim, T. H. (2025). South Korean Election Campaign Booklet and Party Statements Corpora. <em>Scientific Data</em>, 12, 1030.
+  <span class="dt-doi">Publication: <a href="https://doi.org/10.1038/s41597-025-05220-4">https://doi.org/10.1038/s41597-025-05220-4</a></span><br>
+  <span class="dt-doi">Data (OSF): <a href="https://doi.org/10.17605/OSF.IO/RCT9Y">https://doi.org/10.17605/OSF.IO/RCT9Y</a></span>
+</div>
+
+<h2 class="archive__subtitle">Data</h2>
+{% for post in datasets %}
   {% include archive-single.html %}
 {% endfor %}
+
+<h2 class="archive__subtitle">Tools</h2>
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    <h2 class="archive__item-title" itemprop="headline"><a href="https://taehyun-lim.github.io/krpoltext/">krpoltext v0.2.0 &mdash; R package</a></h2>
+    <p class="archive__item-excerpt" itemprop="description">The R package that distributes both corpora. It loads either corpus in a single line, verifies and caches the files with SHA-256, reads CSV or Parquet, exposes metadata and schema helpers, and bridges directly to <code class="highlighter-rouge">quanteda</code>. Documentation and a static JSON API are on the package site.</p>
+  </article>
+</div>
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    <h2 class="archive__item-title" itemprop="headline"><a href="https://github.com/taehyun-lim/kr-elections-mcp">kr-elections-mcp v0.1.0 &mdash; MCP server</a></h2>
+    <p class="archive__item-excerpt" itemprop="description">A Model Context Protocol (MCP) server that lets an AI assistant read the corpora and South Korea's official election records in plain language &mdash; search manifesto and statement text, look up candidates and results, and link an official candidate record to their corpus manifesto. It runs locally: the corpus tools work out of the box, while the election-record tools wrap the NEC Open API and need your own NEC service key.</p>
+  </article>
+</div>
+
+<h2 class="archive__subtitle">Three ways to reach the data</h2>
+<ol class="dt-ways">
+  <li><strong>Download the files.</strong> Full CSV and Parquet on the <a href="https://doi.org/10.17605/OSF.IO/RCT9Y">Open Science Framework</a>, with a citable DOI &mdash; the shortest path for replication.</li>
+  <li><strong>Work in R.</strong> The <a href="https://taehyun-lim.github.io/krpoltext/"><code>krpoltext</code></a> package loads, filters, and caches either corpus and bridges to <code>quanteda</code>.</li>
+  <li><strong>Ask an AI agent.</strong> The <a href="https://github.com/taehyun-lim/kr-elections-mcp">kr-elections-mcp</a> server lets an assistant read the corpora and official election records in plain language.</li>
+</ol>
+
+<h2 class="archive__subtitle">How the pieces fit</h2>
+<figure class="dt-eco">
+  <svg viewBox="0 0 1000 250" role="img" aria-label="Two corpora feed the krpoltext R package and a static JSON API, which feed the kr-elections-mcp server; the MCP server also wraps the National Election Commission Open API.">
+    <defs>
+      <marker id="dt-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 1 L9 5 L0 9" fill="none" stroke="#b7bcc0" stroke-width="1.6"/>
+      </marker>
+    </defs>
+    <line class="eco-flow" x1="212" y1="79" x2="270" y2="79" marker-end="url(#dt-arrow)"/>
+    <line class="eco-flow" x1="470" y1="79" x2="528" y2="79" marker-end="url(#dt-arrow)"/>
+    <line class="eco-flow" x1="728" y1="79" x2="786" y2="79" marker-end="url(#dt-arrow)"/>
+    <line class="eco-flow" x1="886" y1="170" x2="886" y2="118" marker-end="url(#dt-arrow)"/>
+
+    <rect class="eco-box" x="12" y="40" width="200" height="78" rx="4"/>
+    <text class="eco-title" x="112" y="72">Two corpora</text>
+    <text class="eco-sub" x="112" y="94">source</text>
+
+    <rect class="eco-box" x="270" y="40" width="200" height="78" rx="4"/>
+    <text class="eco-title" x="370" y="72">krpoltext</text>
+    <text class="eco-sub" x="370" y="94">R package</text>
+
+    <rect class="eco-box" x="528" y="40" width="200" height="78" rx="4"/>
+    <text class="eco-title" x="628" y="72">static JSON API</text>
+    <text class="eco-sub" x="628" y="94">any language</text>
+
+    <rect class="eco-box" x="786" y="40" width="200" height="78" rx="4"/>
+    <text class="eco-title" x="886" y="70">kr-elections-mcp</text>
+    <text class="eco-sub" x="886" y="94">AI agents</text>
+
+    <rect class="eco-ext" x="786" y="170" width="200" height="58" rx="4"/>
+    <text class="eco-title" x="886" y="196">NEC Open API</text>
+    <text class="eco-sub" x="886" y="215">external · gov't records</text>
+  </svg>
+  <figcaption>The same corpora, reachable three ways — files for anyone, R for researchers, and AI agents via the MCP server, which also wraps the government's election records.</figcaption>
+</figure>
+
+<h2 class="archive__subtitle">How to cite &amp; acknowledge</h2>
+<dl class="dt-cite">
+  <dt>Data &amp; paper</dt>
+  <dd>Cite the data paper and the OSF dataset. The full descriptor lives at <a href="{{ base_path }}/research/two-political-text-data-sets">Research &rarr; two political text data sets</a>.</dd>
+  <dt>Software</dt>
+  <dd>Acknowledge <code>krpoltext</code> via <code>citation("krpoltext")</code> and its version tag.</dd>
+  <dt>MCP server</dt>
+  <dd>Cite the data it serves; acknowledge the server by name and version.</dd>
+</dl>
+
+<p>Data licensed <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a>; code licensed MIT. Attribution and the license travel with any copy.</p>
+
+<p class="dt-sibling">Sibling project: <a href="https://github.com/taehyun-lim">korean-law MCP</a> — a Korean legal-domain server (separate domain, listed for reference).</p>
