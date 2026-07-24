@@ -26,7 +26,7 @@ Syracuse University
 * M.A., International Studies, 2014,
 Yonsei University, Seoul, South Korea
 
-* B.A. in Law, 2010,
+* Bachelor of Laws (LL.B.), 2010,
 	Yonsei University, Seoul, South Korea    
 	Minor: Political Science and International Relations
 
