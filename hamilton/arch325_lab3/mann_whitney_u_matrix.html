@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mann-Whitney U, Cell by Cell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#FBFCFC; --surface:#FFFFFF; --panel:#EEF2F3; --ink:#1C2428; --muted:#5D6B72; --line:#D5DDE0;
+  --slate:#26333A; --chalk:#F4F6F5; --accent:#B5652B; --accent2:#3D6F8E; --note:#FBF3E0;
+  --win:#1baf7a; --lose:#D5DDE0; --tie:#eda100;
+  --display:"Newsreader",Cambria,Georgia,serif; --body:"IBM Plex Sans",Calibri,"Segoe UI",Arial,sans-serif; --mono:"IBM Plex Mono","Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  color-scheme:dark; --bg:#151C20; --surface:#1C252A; --panel:#243037; --ink:#E6ECEE; --muted:#9AAAB1; --line:#34434A;
+  --slate:#0E1416; --chalk:#E6ECEE; --accent:#E0935B; --accent2:#7FB0CF; --note:#2E2A1F;
+  --win:#199e70; --lose:#34434A; --tie:#c98500; } }
+:root[data-theme="dark"]{ color-scheme:dark; --bg:#151C20; --surface:#1C252A; --panel:#243037; --ink:#E6ECEE; --muted:#9AAAB1; --line:#34434A;
+  --slate:#0E1416; --chalk:#E6ECEE; --accent:#E0935B; --accent2:#7FB0CF; --note:#2E2A1F;
+  --win:#199e70; --lose:#34434A; --tie:#c98500; }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body);padding-inline:16px;padding-block:0 40px}
+.wrap{max-width:860px;margin:0 auto}
+header{padding-block:28px 6px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px;font-weight:600}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(26px,4.2vw,36px);line-height:1.15;margin:0 0 8px;text-wrap:balance}
+header p{margin:0 0 4px;color:var(--muted);max-width:70ch}
+h3{font-family:var(--display);font-weight:600;font-size:18px;margin:0 0 4px;color:var(--ink)}
+.sub{font-size:13px;color:var(--muted);margin:0 0 10px}
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;background:var(--panel);border-radius:12px;padding:14px 16px;margin-block:18px}
+.btn{font:600 13px var(--body);border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--panel)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px 14px;margin-block:18px}
+.gridwrap{overflow-x:auto}
+table.grid{border-collapse:collapse;font-variant-numeric:tabular-nums;font-family:var(--mono);font-size:13px;margin:8px 0}
+table.grid th,table.grid td{width:44px;height:36px;text-align:center;border:1px solid var(--line)}
+table.grid thead th{color:var(--muted);font-weight:600;background:var(--panel)}
+table.grid tbody th{color:var(--muted);font-weight:600;background:var(--panel);text-align:right;padding-right:8px}
+.cell-win{background:color-mix(in srgb, var(--win) 28%, var(--surface))}
+.cell-lose{background:var(--surface)}
+.cell-tie{background:color-mix(in srgb, var(--tie) 30%, var(--surface))}
+.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--muted);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:14px;border-radius:3px;display:inline-block;border:1px solid var(--line)}
+.stats{display:flex;flex-wrap:wrap;gap:14px;margin-block:14px}
+.stat{background:var(--panel);border-radius:10px;padding:10px 16px;min-width:140px}
+.stat span{display:block;font-size:12px;color:var(--muted)}
+.stat strong{font-family:var(--display);font-size:24px;font-variant-numeric:tabular-nums}
+.note{background:var(--note);border-radius:10px;padding:12px 16px;margin-block:16px;font-size:14px}
+math{font-size:1.05em;margin-block:6px;color:var(--ink)}
+footer{margin-top:30px;font-size:13px;color:var(--muted)}
+.wrap :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p class="eyebrow">What U is actually counting</p>
+  <h1>Mann-Whitney U, Cell by Cell</h1>
+  <p>Every Bethel value (rows) is compared against every Glenns/Dragon value (columns). A green cell means the row value is smaller; U is just how many green cells there are (ties count as half).</p>
+</header>
+
+<div class="controls">
+  <button class="btn" id="shuffleBtn">New random samples</button>
+</div>
+
+<div class="panel">
+  <h3>Bethel (rows) vs. Glenns/Dragon (columns)</h3>
+  <p class="sub">Green = Bethel value is smaller · amber = tie (½) · blank = Bethel value is larger</p>
+  <div class="gridwrap"><table class="grid" id="grid"></table></div>
+  <div class="legend">
+    <span><i class="cell-win"></i>Bethel &lt; Glenns/Dragon (1)</span>
+    <span><i class="cell-tie"></i>Tie (½)</span>
+    <span><i class="cell-lose"></i>Bethel &gt; Glenns/Dragon (0)</span>
+  </div>
+</div>
+
+<div class="stats" id="statBox"></div>
+
+<div class="panel">
+  <h3>Cross-check: the rank-sum shortcut</h3>
+  <p class="sub">You never actually have to build this grid — Excel gets the same number from ranks</p>
+  <math display="block" id="uFormula"></math>
+  <p class="sub" id="uNote"></p>
+</div>
+
+<div class="note" id="readout"></div>
+
+<footer>U counts "wins," so it only ever depends on which group's values tend to rank higher — not on how far apart the raw numbers are. That is the same rank-only logic Kruskal-Wallis uses for three or more groups.</footer>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+
+let A, B;
+function freshData(){
+  A = [4.1, 5.3, 6.0, 6.8, 9.2];
+  B = [3.0, 3.6, 5.3, 5.9, 8.0, 14.0];
+}
+freshData();
+
+function computeU(a,b){
+  let U=0;
+  a.forEach(av=>{ b.forEach(bv=>{ if(av<bv) U+=1; else if(av===bv) U+=0.5; }); });
+  return U;
+}
+
+function rankSumCheck(a,b){
+  const combined = [...a.map(v=>({v,g:'A'})), ...b.map(v=>({v,g:'B'}))];
+  const sorted=[...combined].sort((x,y)=>x.v-y.v);
+  const ranks=new Array(combined.length);
+  let k=0;
+  while(k<sorted.length){
+    let j=k;
+    while(j+1<sorted.length && sorted[j+1].v===sorted[k].v) j++;
+    const avg=(k+1+j+1)/2;
+    for(let m=k;m<=j;m++) ranks[combined.indexOf(sorted[m])]=avg;
+    k=j+1;
+  }
+  let R_B=0;
+  combined.forEach((c,i)=>{ if(c.g==='B') R_B+=ranks[i]; });
+  const nA=a.length, nB=b.length;
+  const U_B = R_B - nB*(nB+1)/2;
+  return {R_B, U_B, nA, nB};
+}
+
+function render(){
+  const sortedA=[...A].sort((x,y)=>x-y);
+  const sortedB=[...B].sort((x,y)=>x-y);
+  const grid=$('#grid');
+  let html='<thead><tr><th></th>'+sortedB.map(b=>'<th>'+b.toFixed(1)+'</th>').join('')+'</tr></thead><tbody>';
+  let U=0;
+  sortedA.forEach(a=>{
+    html+='<tr><th>'+a.toFixed(1)+'</th>';
+    sortedB.forEach(b=>{
+      if(a<b){ html+='<td class="cell-win">1</td>'; U+=1; }
+      else if(a===b){ html+='<td class="cell-tie">½</td>'; U+=0.5; }
+      else { html+='<td class="cell-lose"></td>'; }
+    });
+    html+='</tr>';
+  });
+  html+='</tbody>';
+  grid.innerHTML=html;
+
+  const {R_B, U_B, nA, nB} = rankSumCheck(A,B);
+  $('#statBox').innerHTML = [
+    ['U (from the grid)', U.toFixed(1)],
+    ['n Bethel', nA],
+    ['n Glenns/Dragon', nB],
+    ['Max possible U', nA*nB]
+  ].map(x=>'<div class="stat"><span>'+x[0]+'</span><strong>'+x[1]+'</strong></div>').join('');
+
+  $('#uFormula').innerHTML = '<msub><mi>U</mi><mtext>GD</mtext></msub><mo>=</mo><msub><mi>R</mi><mtext>GD</mtext></msub><mo>&#x2212;</mo><mfrac><mrow><msub><mi>n</mi><mtext>GD</mtext></msub><mo>(</mo><msub><mi>n</mi><mtext>GD</mtext></msub><mo>+</mo><mn>1</mn><mo>)</mo></mrow><mn>2</mn></mfrac><mo>=</mo><mn>'+R_B.toFixed(1)+'</mn><mo>&#x2212;</mo><mn>'+(nB*(nB+1)/2).toFixed(1)+'</mn><mo>=</mo><mn>'+U_B.toFixed(1)+'</mn>';
+  $('#uNote').textContent = 'R_GD = sum of Glenns/Dragon\'s ranks in the combined, sorted list of all '+(nA+nB)+' values (ties get the average rank they span). Same '+U_B.toFixed(1)+' either way — counting cells by hand, or subtracting from a rank sum.';
+
+  $('#readout').innerHTML = '<b>U = '+U.toFixed(1)+' out of a possible '+(nA*nB)+'.</b> If school made no difference, U should land somewhere near half of that maximum by chance. How far U sits from that midpoint, relative to its expected spread, is what the z-approximation and p-value in the workbook are testing.';
+}
+
+$('#shuffleBtn').onclick=()=>{
+  A = A.map(()=> Math.round((2+Math.random()*13)*10)/10);
+  B = B.map(()=> Math.round((2+Math.random()*13)*10)/10);
+  render();
+};
+
+render();
+})();
+</script>
+
+</body>
+</html>

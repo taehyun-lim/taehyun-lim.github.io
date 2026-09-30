@@ -1,0 +1,582 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Comparing Assemblages</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#FBFCFC; --surface:#FFFFFF; --panel:#EEF2F3; --ink:#1C2428; --muted:#5D6B72; --line:#D5DDE0;
+  --slate:#26333A; --chalk:#F4F6F5; --acad:#3D6F8E; --ind:#B5652B; --pencil:#D9A52E; --note:#FBF3E0;
+  --pos:#B5652B; --neg:#3D6F8E;
+  --display:"Newsreader",Cambria,Georgia,serif; --body:"IBM Plex Sans",Calibri,"Segoe UI",Arial,sans-serif; --mono:"IBM Plex Mono","Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  color-scheme:dark; --bg:#151C20; --surface:#1C252A; --panel:#243037; --ink:#E6ECEE; --muted:#9AAAB1; --line:#34434A;
+  --slate:#0E1416; --chalk:#E6ECEE; --acad:#7FB0CF; --ind:#E0935B; --pencil:#E8BF5A; --note:#2E2A1F; --pos:#E0935B; --neg:#7FB0CF; } }
+:root[data-theme="dark"]{ color-scheme:dark; --bg:#151C20; --surface:#1C252A; --panel:#243037; --ink:#E6ECEE; --muted:#9AAAB1; --line:#34434A;
+  --slate:#0E1416; --chalk:#E6ECEE; --acad:#7FB0CF; --ind:#E0935B; --pencil:#E8BF5A; --note:#2E2A1F; --pos:#E0935B; --neg:#7FB0CF; }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body);padding-inline:16px;padding-block:0 48px}
+.wrap{max-width:1040px;margin:0 auto}
+header{padding-block:32px 16px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(30px,5vw,44px);line-height:1.1;margin:0 0 8px;text-wrap:balance}
+header p{margin:0;color:var(--muted);max-width:68ch}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-bottom:24px}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:thin;padding-block:8px}
+.tabs button{flex:0 0 auto;font:500 14px var(--body);color:var(--muted);background:transparent;border:1px solid transparent;border-radius:999px;padding:7px 14px;cursor:pointer}
+.tabs button:hover{color:var(--ink);background:var(--panel)}
+.tabs button[aria-selected="true"]{color:var(--chalk);background:var(--slate);border-color:var(--slate)}
+:root[data-theme="dark"] .tabs button[aria-selected="true"]{color:var(--ink);background:var(--panel);border-color:var(--line)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .tabs button[aria-selected="true"]{color:var(--ink);background:var(--panel);border-color:var(--line)} }
+button:focus-visible,input:focus-visible{outline:2px solid var(--pencil);outline-offset:2px}
+h2{font-family:var(--display);font-weight:700;font-size:30px;line-height:1.15;margin:0 0 6px;text-wrap:balance}
+h3{font-family:var(--display);font-weight:600;font-size:20px;margin:0 0 8px}
+.lede{color:var(--muted);margin:0 0 20px;max-width:68ch}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-block:20px}
+.box{background:var(--panel);border-radius:10px;padding:18px 20px}
+.note{background:var(--note);border-radius:10px;padding:14px 18px;margin-block:18px}
+.q{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:8px}
+.q div{border-top:2px solid var(--line);padding-top:8px}
+.q b{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:2px}
+.tool h3{display:flex;align-items:center;gap:8px}
+.chip{font:600 11px var(--body);letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--surface);color:var(--acad);border:1px solid var(--line)}
+ol,ul{padding-left:20px;margin:0}
+li{margin-bottom:6px}
+code,.code{font-family:var(--mono);font-size:13.5px}
+.code{display:block;background:var(--slate);color:#F4F6F5;border-radius:8px;padding:10px 12px;margin:6px 0 10px;overflow-x:auto;white-space:pre}
+p code,li code{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+.tbl{overflow-x:auto;margin-block:10px}
+table{border-collapse:collapse;font-variant-numeric:tabular-nums;min-width:100%}
+th,td{padding:7px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+thead th{font-size:13px;color:var(--muted);font-weight:600}
+td input{width:80px;font:inherit;font-variant-numeric:tabular-nums;text-align:right;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 6px}
+.pos{color:var(--pos);font-weight:600}.neg{color:var(--neg);font-weight:600}
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin-block:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;min-width:120px}
+.stat span{display:block;font-size:12px;color:var(--muted)}
+.stat strong{font-family:var(--display);font-size:24px;font-variant-numeric:tabular-nums}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px;background:var(--surface)}
+.seg button{font:500 14px var(--body);border:0;background:transparent;color:var(--muted);padding:6px 14px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--slate);color:#F4F6F5}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-block:12px}
+input[type=range]{width:min(360px,100%);accent-color:var(--acad)}
+svg text{fill:var(--ink);font-family:var(--body)}
+svg .ax{fill:var(--muted);font-size:11px}
+.steps{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-block:18px}
+.steps div{background:var(--panel);border-radius:10px;padding:14px}
+.steps b{font-family:var(--display);font-size:18px;display:block}
+.steps .hot{background:var(--note)}
+.muted{color:var(--muted)}
+footer{margin-top:40px;font-size:13px;color:var(--muted)}
+footer p{margin:0 0 8px}
+footer a{color:var(--acad)}
+@media (prefers-reduced-motion:no-preference){ section{animation:fade .2s ease-out} @keyframes fade{from{opacity:.4}to{opacity:1}} }
+.mathbox{margin-block:20px}
+.eqs{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.eq{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto}
+.lbl{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.where{display:block;font-size:13.5px;color:var(--muted)}
+math{font-size:1.15em;margin-block:10px;color:var(--ink)}
+.worked{margin-top:14px;background:var(--note);border-radius:8px;padding:12px 14px;overflow-x:auto}
+.worked math{font-size:1.05em}
+.box.interactive{border-left:4px solid var(--acad);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.box.interactive .ico{font-size:22px;line-height:1}
+.box.interactive .txt{flex:1 1 220px}
+.box.interactive h3{margin:0 0 2px}
+.box.interactive a{color:var(--acad);font-weight:700;text-decoration:none}
+.box.interactive a:hover{text-decoration:underline}
+.box.interactive p{margin:0;color:var(--muted);font-size:13.5px}
+</style>
+
+</head><body><div class="wrap">
+<header>
+  <p class="eyebrow">ARCH 325 · Lab 3 companion</p>
+  <h1>Comparing Assemblages</h1>
+  <p>Descriptive and statistical tools for comparing the academic and industrial education evidence at the Bethel, Glenns/Dragon and Woodville schools (Betti 2023). Each tab covers one tool: what it compares, a worked example from the lab data, and the steps in Excel and Google Sheets.</p>
+</header>
+
+<nav aria-label="Sections"><div class="tabs" role="tablist" id="tabs"></div></nav>
+
+<main id="panels">
+
+<section id="overview" data-label="Overview" role="tabpanel">
+  <h2>The workflow</h2>
+  <p class="lede">Every comparison in this lab runs through the same five steps. Step 2 is the one people skip, and it can change the answer.</p>
+  <div class="steps">
+    <div><b>1 · Ask</b>One specific research question</div>
+    <div class="hot"><b>2 · Count</b>Decide the unit: items, catalog lots, or presence per test unit</div>
+    <div><b>3 · Describe</b>Cross-tabs, percentages, charts, medians</div>
+    <div><b>4 · Test</b>Could the difference be chance?</div>
+    <div><b>5 · Size it</b>How big is the difference?</div>
+  </div>
+  <div class="grid2">
+    <div class="box">
+      <h3>The data</h3>
+      <p>Two sheets, one row per catalog lot. The <code>Count</code> column holds the number of items in each lot.</p>
+      <div class="tbl"><table><thead><tr><th>School</th><th>Academic</th><th>Industrial</th><th>Units with finds</th></tr></thead>
+      <tbody><tr><td>Bethel</td><td>781</td><td>232</td><td>15</td></tr><tr><td>Glenns/Dragon</td><td>1,265</td><td>19</td><td>16</td></tr><tr><td>Woodville</td><td>2,191</td><td>656</td><td>69</td></tr><tr><td><b>Total</b></td><td><b>4,237</b></td><td><b>907</b></td><td></td></tr></tbody></table></div>
+    </div>
+    <div class="box">
+      <h3>Pick your tool</h3>
+      <div class="tbl"><table><thead><tr><th>Question</th><th>Data</th><th>Tool</th></tr></thead><tbody>
+      <tr><td>How do the mixes differ?</td><td>counts</td><td>cross-tab, %</td></tr>
+      <tr><td>Could it be chance?</td><td>counts</td><td>χ² (chi-square)</td></tr>
+      <tr><td>How big is it?</td><td>counts</td><td>Cramér’s V</td></tr>
+      <tr><td>Sizes or condition?</td><td>measurements</td><td>median, histogram</td></tr>
+      <tr><td>Chance? (3+ groups)</td><td>measurements</td><td>Kruskal-Wallis</td></tr>
+      <tr><td>Which pair differs?</td><td>measurements</td><td>Mann-Whitney</td></tr></tbody></table></div>
+    </div>
+  </div>
+  <p class="muted">Cleaning tip: Layer labels vary ("B " with a trailing space, "A Waterscreen Upper", "Clean-up"). Reduce them to the stratigraphic letter A–D before comparing levels.</p>
+</section>
+
+<section id="counting" data-label="What we count" role="tabpanel" hidden>
+  <h2>What are we counting?</h2>
+  <p class="lede">The same data gives a different story depending on the unit of count. Switch between them and watch Bethel.</p>
+  <div class="q"><div><b>Compares</b>How the unit of quantification changes a comparison</div><div><b>Example</b>Industrial share by school, counted two ways</div></div>
+  <div class="row"><div class="seg" role="group" aria-label="Unit of count"><button id="u-items" aria-pressed="true">Items (Count column)</button><button id="u-lots" aria-pressed="false">Catalog lots (rows)</button></div></div>
+  <div class="grid2">
+    <div class="box"><h3>Industrial share of each school</h3><svg id="countChart" viewBox="0 0 420 240" width="100%" role="img" aria-label="Bar chart of industrial share by school"></svg></div>
+    <div class="box"><h3>Pearson residuals, industrial row</h3><div class="tbl"><table id="countRes"></table></div><p id="countMsg" class="muted"></p></div>
+  </div>
+  <div class="note"><b>Why it flips:</b> 1,197 of Glenns/Dragon’s 1,265 academic items are writing-slate fragments. Slate shatters, so one slate can become dozens of "items". Neither count is wrong. Say which one you used and why, and check whether your answer changes.</div>
+</section>
+
+<section id="descriptive" data-label="Descriptive stats" role="tabpanel" hidden>
+  <h2>Before any test: a table like Betti’s</h2>
+  <p class="lede">Betti (2023, Table 6.7) reports raw counts and counts standardized by excavated area. Raw totals mostly reflect how much ground was dug.</p>
+  <div class="q"><div><b>Compares</b>Raw counts vs. counts adjusted for unequal excavation effort</div><div><b>Example</b>Woodville’s totals look enormous until you divide by its excavated area</div></div>
+  <div class="box">
+    <h3>Excavated area, back-calculated from Table 6.7</h3>
+    <p class="muted">Betti reports both a count and a standardized count for the same artifacts. Dividing one by the other (×100) recovers the area she excavated at each school — it comes out consistent across every row of her table.</p>
+    <div class="tbl"><table><thead><tr><th>School</th><th>Excavated area</th><th>Test units</th></tr></thead><tbody>
+    <tr><td>Bethel</td><td>312.5 sq ft</td><td>15</td></tr>
+    <tr><td>Glenns/Dragon</td><td>331.25 sq ft</td><td>16</td></tr>
+    <tr><td>Woodville</td><td>1,593.75 sq ft</td><td>69</td></tr></tbody></table></div>
+  </div>
+  <div class="box">
+    <h3>Type × school, raw and standardized (per 100 sq ft)</h3>
+    <div class="tbl"><table><thead><tr><th></th><th>Bethel</th><th></th><th>Glenns/Dragon</th><th></th><th>Woodville</th><th></th></tr>
+    <tr><th></th><th>Count</th><th>Std.</th><th>Count</th><th>Std.</th><th>Count</th><th>Std.</th></tr></thead><tbody>
+    <tr><td>Academic</td><td>781</td><td>249.9</td><td>1,265</td><td>381.9</td><td>2,191</td><td>137.5</td></tr>
+    <tr><td>Industrial</td><td>232</td><td>74.2</td><td>19</td><td>5.7</td><td>656</td><td>41.2</td></tr></tbody></table></div>
+  </div>
+  <div class="note"><b>Read it:</b> by raw count, Woodville dwarfs the other two schools. Standardized, Glenns/Dragon actually has the densest academic assemblage — the raw gap was mostly excavation effort, not what was really deposited there.</div>
+  <div class="grid2">
+    <div class="box tool"><h3>Excel <span class="chip">SUMIFS</span></h3><ol>
+      <li>Count for one cell:</li></ol>
+      <span class="code">=SUMIFS(I:I, A:A, "Bethel", E:E, "Academic")</span>
+      <ol start="2"><li>Standardized (area in a small lookup table, e.g. named range or a cell reference):</li></ol>
+      <span class="code">=[count cell] / 312.5 * 100</span></div>
+    <div class="box tool"><h3>Google Sheets</h3>
+      <p>SUMIFS works the same. Keep the three areas in a small table and pull the right one with a lookup instead of typing the number each time:</p>
+      <span class="code">=SUMIFS(I:I, A:A, "Bethel", E:E, "Academic") / VLOOKUP("Bethel", AreaTable, 2, FALSE) * 100</span></div>
+  </div>
+</section>
+
+<section id="hyptest" data-label="Hypothesis testing" role="tabpanel" hidden>
+  <h2>What a p-value actually says</h2>
+  <p class="lede">Every test on the other tabs ends in a p-value. Before trusting one, know what it does and doesn’t mean.</p>
+  <div class="q"><div><b>Compares</b>Nothing by itself — this is the logic every test on this page shares</div><div><b>Example</b>With N ≈ 5,000, almost every comparison here comes out "significant"</div></div>
+  <div class="grid2">
+    <div class="box">
+      <h3>The logic</h3>
+      <ol>
+        <li><b>Null hypothesis, H<sub>0</sub>:</b> assume there’s no real difference — school made no difference to the mix, or to pencil length. Any pattern you see is just noise. This is the hypothesis the math actually works from.</li>
+        <li><b>Alternative hypothesis, H<sub>1</sub>:</b> school does make a difference. This is what you suspect going in, but the test never assumes it, computes anything under it, or hands you a probability for it.</li>
+        <li><b>p-value:</b> if H<sub>0</sub> were true, how surprising would data this extreme (or more) be, just from random sampling? In plain terms: assuming there really is no difference, how often would random sampling alone throw up a result this far from "no difference" — or farther?</li>
+        <li><b>Threshold:</b> p &lt; .05 is a convention for "surprising enough to doubt H<sub>0</sub>," not a law of nature.</li>
+      </ol>
+    </div>
+    <div class="box">
+      <h3>What it is <i>not</i></h3>
+      <ul>
+        <li>Not the probability the null hypothesis is true.</li>
+        <li>Not the probability your result happened "by chance" in some general sense.</li>
+        <li>Not a measure of how <i>big</i> or important the difference is — that’s the effect size (Cramér’s V, ε²), on the next tabs.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="box">
+      <h3>Reject H<sub>0</sub> — never "accept H<sub>1</sub>"</h3>
+      <ul>
+        <li><b>Small p:</b> you <b>reject H<sub>0</sub></b>. You have not proven H<sub>1</sub> — you've shown the no-difference story is hard to square with the data, nothing more.</li>
+        <li><b>Large p:</b> you <b>fail to reject H<sub>0</sub></b>. That is not "accepting H<sub>0</sub>" or proving there's no difference; it only means this data didn't give you enough evidence to doubt it.</li>
+        <li>The asymmetry is built into the math: a p-value is computed by assuming H<sub>0</sub> and asking how surprising the data would be under it. Nothing is ever computed under H<sub>1</sub>, so the result can count as evidence <i>against</i> H<sub>0</sub> — it can never be evidence <i>for</i> H<sub>1</sub> in the same direct sense.</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>How to read it, in words</h3>
+      <p class="muted">Example: type × school, χ² = 307.4, df = 2, p &lt; .001</p>
+      <p><b>Read it as:</b> <i>“If school really made no difference to the type mix (H<sub>0</sub>), a table this lopsided or more so would turn up well under 0.1% of the time by chance alone — surprising enough to reject H<sub>0</sub>. Type mix is associated with school.”</i></p>
+      <p><b>Not:</b> <i>“There's a 99.9% chance school affects the mix.”</i> &nbsp;·&nbsp; <i>“This proves school affects the mix.”</i> &nbsp;·&nbsp; <i>“We accept H<sub>1</sub> that school affects the mix.”</i></p>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="box tool"><h3>Z-score <span class="chip">Excel = Sheets</span></h3>
+      <p>By hand: <i>z</i> = (value − mean) ÷ SD. As a formula:</p>
+      <span class="code">=(x-mean)/sd
+=STANDARDIZE(x, mean, sd)</span>
+      <p class="muted">STANDARDIZE takes the raw value, the mean and the SD directly, so you don't have to compute the subtraction yourself.</p></div>
+    <div class="box tool"><h3>p-value from a z-score <span class="chip">Excel = Sheets</span></h3>
+      <span class="code">Two-tailed  =2*(1-NORM.S.DIST(ABS(z),TRUE))
+Upper tail  =1-NORM.S.DIST(z,TRUE)
+Lower tail  =NORM.S.DIST(z,TRUE)</span>
+      <p class="muted">NORM.S.DIST(z, TRUE) returns the cumulative probability P(Z ≤ z) — that TRUE is what makes it the running-total curve, not the bell-curve height. Example: z = 1.96 → two-tailed p = .050; z = 2.576 → two-tailed p = .010.</p></div>
+  </div>
+  <div class="grid2">
+    <div class="box interactive">
+      <span class="ico">🔔</span>
+      <div class="txt">
+        <h3><a href="z_score_explorer.html" target="_blank" rel="noopener">Try it: Z-Score &amp; P-Value Explorer →</a></h3>
+        <p>Click anywhere on the curve or type a z-score directly, and watch the shaded p-value area update for a two-tailed, upper-tail, or lower-tail test.</p>
+      </div>
+    </div>
+    <div class="box interactive">
+      <span class="ico">◐</span>
+      <div class="txt">
+        <h3><a href="type_i_type_ii_error_explorer.html" target="_blank" rel="noopener">Try it: Type I &amp; Type II Error Explorer →</a></h3>
+        <p>Drag the decision threshold and the n / effect-size sliders to see why "fail to reject" can mean the test just didn't have the power to detect a real difference.</p>
+      </div>
+    </div>
+  </div>
+  <div class="note"><b>Why this matters here:</b> with N ≈ 5,000 fragments, almost any real pattern — even a tiny one — will clear p &lt; .05. A significant p-value tells you a difference probably isn’t just noise; it does not tell you the difference is large or archaeologically important. Always report the effect size and the percentages alongside it.</div>
+</section>
+
+<section id="crosstab" data-label="Cross-tab" role="tabpanel" hidden>
+  <h2>Describe first: the cross-tab</h2>
+  <p class="lede">A table of counts with column percentages is the base of every count-based comparison.</p>
+  <div class="q"><div><b>Compares</b>The make-up of assemblages across groups (schools, levels, trenches)</div><div><b>Example</b>Industrial items are 22.9% at Bethel, 1.5% at Glenns/Dragon, 23.0% at Woodville</div></div>
+  <div class="tbl"><table><thead><tr><th></th><th>Bethel</th><th>Glenns/Dragon</th><th>Woodville</th><th>Total</th></tr></thead><tbody>
+  <tr><td>Academic</td><td>781</td><td>1,265</td><td>2,191</td><td>4,237</td></tr>
+  <tr><td>Industrial</td><td>232</td><td>19</td><td>656</td><td>907</td></tr>
+  <tr><td><b>% industrial</b></td><td class="pos">22.9%</td><td class="pos">1.5%</td><td class="pos">23.0%</td><td>17.6%</td></tr></tbody></table></div>
+  <div class="grid2">
+    <div class="box tool"><h3>Excel <span class="chip">pivot</span></h3><ol>
+      <li>Select the data, then Insert → PivotTable.</li>
+      <li>Rows: <code>Type</code> · Columns: <code>Site</code> · Values: Sum of <code>Count</code>.</li>
+      <li>Value Field Settings → Show Values As → % of Column Total.</li>
+      <li>One cell at a time instead:</li></ol>
+      <span class="code">=SUMIFS(I:I, E:E, "Industrial", A:A, "Bethel")</span></div>
+    <div class="box tool"><h3>Google Sheets <span class="chip">pivot or QUERY</span></h3><ol>
+      <li>Insert → Pivot table, same fields.</li>
+      <li>Summarize by SUM, show as → % of column.</li>
+      <li>Or build the whole table in one formula:</li></ol>
+      <span class="code">=QUERY(A:I, "select E, sum(I)
+  where E is not null
+  group by E pivot A", 1)</span></div>
+  </div>
+  <p class="muted">Columns assume the workbook’s Combined data tab: A = Site, E = Type, F = Form, G = Material, I = Count, J = Pencil length. Chart the percentages as a 100% stacked bar, one bar per school.</p>
+</section>
+
+<section id="chisq" data-label="χ²" role="tabpanel" hidden>
+  <h2>χ²: could it be chance?</h2>
+  <p class="lede">Compare what you observed with what you’d expect if school made no difference. Edit the observed counts to see every piece update.</p>
+  <div class="q"><div><b>Compares</b>Whether category proportions differ between groups more than chance allows</div><div><b>Example</b>Type × school: χ² = 307.4, df = 2, p &lt; .001</div></div>
+  <div class="grid2">
+    <div class="box"><h3>Observed (editable)</h3><div class="tbl"><table id="obs"></table></div>
+      <h3 style="margin-top:14px">Expected</h3><div class="tbl"><table id="exp"></table></div></div>
+    <div class="box"><h3>Residuals: which cells drive it</h3><div class="tbl"><table id="res"></table></div>
+      <p class="muted">Positive (copper) = more than expected; negative (blue) = fewer. Beyond ±2 is worth discussing.</p>
+      <div class="stats" id="chiStats"></div></div>
+  </div>
+  <div class="box mathbox">
+    <h3>The math</h3>
+    <div class="eqs">
+      <div class="eq"><span class="lbl">Expected count for row <i>i</i>, column <i>j</i></span>
+        <math display="block"><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mi>R</mi><mi>i</mi></msub><mo>&#xD7;</mo><msub><mi>C</mi><mi>j</mi></msub></mrow><mi>N</mi></mfrac></math>
+        <span class="where"><i>R</i> = row total, <i>C</i> = column total, <i>N</i> = grand total</span></div>
+      <div class="eq"><span class="lbl">Pearson residual</span>
+        <math display="block"><msub><mi>r</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mi>O</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x2212;</mo><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><msqrt><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></msqrt></mfrac></math>
+        <span class="where">Squaring and summing the residuals gives χ².</span></div>
+      <div class="eq"><span class="lbl">χ² statistic</span>
+        <math display="block"><msup><mi>&#x3C7;</mi><mn>2</mn></msup><mo>=</mo><munder><mo>&#x2211;</mo><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></munder><mfrac><msup><mrow><mo stretchy="false">(</mo><msub><mi>O</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x2212;</mo><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="false">)</mo></mrow><mn>2</mn></msup><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mfrac><mspace width="1em"/><mtext>df</mtext><mo>=</mo><mo stretchy="false">(</mo><mi>r</mi><mo>&#x2212;</mo><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mi>c</mi><mo>&#x2212;</mo><mn>1</mn><mo stretchy="false">)</mo></math>
+        <span class="where"><i>O</i> = observed, <i>r</i> and <i>c</i> = number of rows and columns</span></div>
+    </div>
+    <div class="worked"><b>Worked cell: Bethel, academic</b>
+      <math display="block"><mi>E</mi><mo>=</mo><mfrac><mrow><mn>4,237</mn><mo>&#xD7;</mo><mn>1,013</mn></mrow><mn>5,144</mn></mfrac><mo>=</mo><mn>834.4</mn><mspace width="1.2em"/><mfrac><msup><mrow><mo stretchy="false">(</mo><mn>781</mn><mo>&#x2212;</mo><mn>834.4</mn><mo stretchy="false">)</mo></mrow><mn>2</mn></msup><mn>834.4</mn></mfrac><mo>=</mo><mn>3.42</mn><mspace width="1.2em"/><mi>r</mi><mo>=</mo><mfrac><mrow><mn>781</mn><mo>&#x2212;</mo><mn>834.4</mn></mrow><msqrt><mn>834.4</mn></msqrt></mfrac><mo>=</mo><mo>&#x2212;</mo><mn>1.85</mn></math>
+      <span class="where">Do this for all six cells and add the middle terms: χ² = 307.4, df = (2 − 1)(3 − 1) = 2.</span></div>
+  </div>
+  <div class="box interactive">
+    <span class="ico">⚒</span>
+    <div class="txt">
+      <h3><a href="chi_square_builder.html" target="_blank" rel="noopener">Try it: χ² Builder →</a></h3>
+      <p>Build your own observed table, pick a shape, and watch expected counts, residuals, χ², df and p update live.</p>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="box tool"><h3>χ² formulas <span class="chip">Excel = Sheets</span></h3><ol>
+      <li>Observed table in <code>B2:D3</code>, row totals in column E, column totals in row 4.</li>
+      <li>Expected: type in B7, copy across B7:D8<span class="code">=$E2*B$4/$E$4</span></li>
+      <li>p-value<span class="code">=CHISQ.TEST(B2:D3, B7:D8)</span></li>
+      <li>χ² statistic for your report<span class="code">=SUMPRODUCT((B2:D3-B7:D8)^2/B7:D8)</span></li>
+      <li>Residual for each cell<span class="code">=(B2-B7)/SQRT(B7)</span></li></ol></div>
+    <div class="box tool"><h3>Check the assumptions</h3><ul>
+      <li><b>Expected ≥ 5 in every cell.</b> Check with <code>=MIN(B7:D8)</code>. If not, merge categories or use Fisher’s exact test in R.</li>
+      <li><b>Independent observations.</b> Fragments of one object aren’t independent. Re-run with catalog lots or presence per unit as a check.</li>
+      <li><b>df</b> = (rows − 1) × (columns − 1).</li>
+      <li>The p-value says the table is unusual. The residuals say where.</li></ul></div>
+  </div>
+  <div class="box">
+    <h3>Why this distribution is called "chi-square"</h3>
+    <p class="muted">Not a metaphor — it's the literal mechanism, one step at a time.</p>
+    <ol>
+      <li>Square a standard normal Z, and you've defined the distribution called "chi-square with 1 degree of freedom."</li>
+      <li>Add up k independent squared Z's, and you get the χ² distribution with k degrees of freedom.</li>
+      <li>Our Pearson residuals, (O−E)/√E, behave approximately like a standard normal Z once the sample is reasonably large — that's the Central Limit Theorem at work.</li>
+      <li>&#967;² = Σ(O−E)²/E is exactly the sum of those squared residuals — approximately a sum of squared Z's.</li>
+      <li>So the name "chi-square" for this statistic's reference distribution isn't a metaphor. It's built the same way an actual χ² variable is built.</li>
+      <li>The table has 6 cells, but the row and column totals are fixed, so only 2 cells are actually free to vary once those totals are set. That's why we compare χ² against the χ² distribution with df = 2, not 6.</li>
+    </ol>
+  </div>
+</section>
+
+<section id="effect" data-label="Cramér’s V" role="tabpanel" hidden>
+  <h2>Cramér’s V: how big is the difference?</h2>
+  <p class="lede">p-values shrink as samples grow; the effect size does not. Scale the sample below while keeping the same proportions.</p>
+  <div class="q"><div><b>Compares</b>The strength of association in a χ² table, 0 (none) to 1 (complete)</div><div><b>Example</b>Type × school V = 0.24; pencil material × school V = 0.36</div></div>
+  <div class="box">
+    <label for="scale"><b>Sample size:</b> <span id="scaleLbl"></span></label>
+    <div class="row"><input type="range" id="scale" min="0" max="100" value="67.1" step="0.1"></div>
+    <div class="stats" id="effStats"></div>
+    <p class="muted" id="effMsg"></p>
+  </div>
+  <div class="box mathbox">
+    <h3>The math</h3>
+    <div class="eqs">
+      <div class="eq"><span class="lbl">χ²</span>
+        <math display="block"><msup><mi>&#x3C7;</mi><mn>2</mn></msup><mo>=</mo><munder><mo>&#x2211;</mo><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></munder><mfrac><msup><mrow><mo stretchy="false">(</mo><msub><mi>O</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x2212;</mo><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="false">)</mo></mrow><mn>2</mn></msup><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mfrac><mspace width="1.2em"/><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mi>R</mi><mi>i</mi></msub><mo>&#xD7;</mo><msub><mi>C</mi><mi>j</mi></msub></mrow><mi>N</mi></mfrac></math>
+        <span class="where">Same χ² from the Chi-square tab. Look at <i>E</i>: <i>N</i> is already sitting in its denominator, so <i>N</i> is baked into χ² before V ever touches it.</span></div>
+      <div class="eq"><span class="lbl">Cramér’s V</span>
+        <math display="block"><mi>V</mi><mo>=</mo><msqrt><mfrac><msup><mi>&#x3C7;</mi><mn>2</mn></msup><mrow><mi>N</mi><mo stretchy="false">(</mo><mi>k</mi><mo>&#x2212;</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></mfrac></msqrt><mspace width="1em"/><mi>k</mi><mo>=</mo><mo>min</mo><mo stretchy="false">(</mo><mi>r</mi><mo>,</mo><mi>c</mi><mo stretchy="false">)</mo></math>
+        <span class="where"><i>N</i> shows up a second time here, in V’s own denominator. Those two N’s — one hidden inside χ², one explicit — are what cancel each other, and dividing by <i>k</i> − 1 then keeps V between 0 and 1 for any table size.</span></div>
+      <div class="eq"><span class="lbl">Why p shrinks but V doesn’t</span>
+        <math display="block"><mtext>same proportions,&#xA0;</mtext><mi>N</mi><mo>&#xD7;</mo><mi>m</mi><mspace width="0.6em"/><mo>&#x21D2;</mo><mspace width="0.6em"/><msup><mi>&#x3C7;</mi><mn>2</mn></msup><mo>&#xD7;</mo><mi>m</mi><mo>,</mo><mspace width="0.6em"/><mi>V</mi><mtext>&#xA0;unchanged</mtext></math>
+        <span class="where">Multiply every count by <i>m</i> and χ² grows by <i>m</i>, so p falls. V cancels the <i>m</i> out.</span></div>
+    </div>
+    <div class="worked"><b>Worked: type × school</b>
+      <math display="block"><mi>V</mi><mo>=</mo><msqrt><mfrac><mn>307.4</mn><mrow><mn>5,144</mn><mo>&#xD7;</mo><mo stretchy="false">(</mo><mn>2</mn><mo>&#x2212;</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></mfrac></msqrt><mo>=</mo><msqrt><mn>0.0598</mn></msqrt><mo>=</mo><mn>0.24</mn></math></div>
+  </div>
+  <div class="grid2">
+    <div class="box tool"><h3>Excel and Sheets</h3>
+      <span class="code">=SQRT(chi2 / (N * (MIN(rows, cols) - 1)))</span>
+      <p>For a 2 × 3 table, MIN(rows, cols) − 1 = 1, so V = √(χ² ÷ N).</p></div>
+    <div class="box"><h3>Rough reading</h3><div class="tbl"><table><thead><tr><th>V</th><th>Strength</th><th>Lab example</th></tr></thead><tbody>
+      <tr><td>≈ 0.1</td><td>weak</td><td></td></tr><tr><td>≈ 0.3</td><td>moderate</td><td>0.24 type × school · 0.28 type × Woodville level</td></tr><tr><td>≥ 0.5</td><td>strong</td><td></td></tr></tbody></table></div></div>
+  </div>
+  <div class="box">
+    <h3>Why V doesn't grow with N, even though &#967;² does</h3>
+    <p class="muted">Same mechanism, run in reverse — dividing the sample-size dependence back out.</p>
+    <ol>
+      <li>Keep the same proportions in the table but multiply every cell by m (same shape, more data), and &#967;² multiplies by m too — more observations just means more terms adding up in the same direction.</li>
+      <li>That's why p keeps shrinking as N grows: &#967;² eventually gets big enough to look "significant" even for a tiny, unimportant difference.</li>
+      <li>Cramér's V divides &#967;² by N (and by k−1, the largest number of cells that can vary) before taking a square root: V = √(&#967;² ÷ (N(k−1))).</li>
+      <li>Dividing by N exactly cancels that m: &#967;² behaves like N × φ² for some φ that depends only on the proportions in the table, not on how much data you collected.</li>
+      <li>So φ² = &#967;²/N is already free of sample size; V is just √(φ²/(k−1)), rescaled to run from 0 to 1.</li>
+      <li>That's the whole story: &#967;² (and p) tells you how much data it took to detect the pattern; V tells you how strong the pattern actually is.</li>
+    </ol>
+  </div>
+</section>
+
+<section id="measure" data-label="Measurements" role="tabpanel" hidden>
+  <h2>Measurements: state of recovery</h2>
+  <p class="lede">For lengths, weights or completeness, look at the distribution before choosing a summary or a test.</p>
+  <div class="q"><div><b>Compares</b>The size or condition of objects across groups</div><div><b>Example</b>Graphite pencil fragment length: median 6.8 mm at Bethel, 6.2 at Woodville, 5.5 at Glenns/Dragon</div></div>
+  <div class="row"><div class="seg" role="group" aria-label="School" id="siteSeg"></div></div>
+  <div class="grid2">
+    <div class="box"><h3 id="histTitle">Length distribution</h3><svg id="hist" viewBox="0 0 420 240" width="100%" role="img" aria-label="Histogram of pencil fragment lengths"></svg><p class="muted">Right-skewed: many short fragments, a few long ones. The median is a fairer summary than the mean.</p></div>
+    <div class="box"><h3>Summary</h3><div class="tbl"><table><thead><tr><th>School</th><th>n</th><th>Median</th><th>Mean</th><th>SD</th><th>Range</th></tr></thead><tbody>
+      <tr><td>Bethel</td><td>572</td><td>6.84</td><td>7.59</td><td>3.89</td><td>2.1–30.0</td></tr>
+      <tr><td>Glenns/Dragon</td><td>53</td><td>5.50</td><td>6.30</td><td>3.17</td><td>2.0–16.5</td></tr>
+      <tr><td>Woodville</td><td>315</td><td>6.20</td><td>6.89</td><td>3.26</td><td>2.4–24.7</td></tr></tbody></table></div></div>
+  </div>
+  <div class="box interactive">
+    <span class="ico">↔</span>
+    <div class="txt">
+      <h3><a href="mean_vs_median.html" target="_blank" rel="noopener">Try it: Mean vs Median — drag an outlier →</a></h3>
+      <p>Drag one fragment length out to 30 mm and watch the mean chase it while the median barely moves.</p>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="box tool"><h3>Excel</h3>
+      <span class="code">=COUNTIFS(A:A,"Bethel",G:G,"graphite",F:F,"pencil",J:J,"&lt;&gt;")
+=AVERAGEIFS(J:J,A:A,"Bethel",G:G,"graphite",F:F,"pencil")</span>
+      <p>Median (Excel 365):</p><span class="code">=MEDIAN(FILTER(J:J,(A:A="Bethel")*(G:G="graphite")*(F:F="pencil")*(J:J&lt;&gt;"")))</span>
+      <p>Older Excel: <code>=MEDIAN(IF(...))</code>, entered with Ctrl+Shift+Enter. Histogram: Insert → Chart → Histogram.</p></div>
+    <div class="box tool"><h3>Google Sheets</h3>
+      <p>COUNTIFS and AVERAGEIFS work the same. FILTER takes separate conditions:</p>
+      <span class="code">=MEDIAN(FILTER(J:J, A:A="Bethel", G:G="graphite", F:F="pencil", J:J&lt;&gt;""))
+=STDEV(FILTER(J:J, A:A="Bethel", G:G="graphite", F:F="pencil", J:J&lt;&gt;""))</span>
+      <p>Histogram: Insert → Chart → Chart type: Histogram.</p></div>
+  </div>
+</section>
+
+<section id="kw" data-label="Kruskal-Wallis" role="tabpanel" hidden>
+  <h2>Kruskal-Wallis and pairwise follow-ups</h2>
+  <p class="lede">Neither Excel nor Sheets has a built-in function, but a few formulas do it. It uses ranks instead of raw values, so skew and outliers matter less.</p>
+  <div class="q"><div><b>Compares</b>Whether a measurement’s distribution differs among three or more groups</div><div><b>Example</b>Pencil fragment length by school: H = 10.2, df = 2, p = .006</div></div>
+  <div class="box mathbox">
+    <h3>The math</h3>
+    <div class="eqs">
+      <div class="eq"><span class="lbl">Kruskal-Wallis H</span>
+        <math display="block"><mi>H</mi><mo>=</mo><mfrac><mn>12</mn><mrow><mi>N</mi><mo stretchy="false">(</mo><mi>N</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></mfrac><munderover><mo>&#x2211;</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>g</mi></munderover><mfrac><msubsup><mi>R</mi><mi>j</mi><mn>2</mn></msubsup><msub><mi>n</mi><mi>j</mi></msub></mfrac><mo>&#x2212;</mo><mn>3</mn><mo stretchy="false">(</mo><mi>N</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mspace width="1em"/><mtext>df</mtext><mo>=</mo><mi>g</mi><mo>&#x2212;</mo><mn>1</mn></math>
+        <span class="where"><i>R<sub>j</sub></i> = sum of ranks in group <i>j</i>, <i>n<sub>j</sub></i> = its size, <i>g</i> = number of groups. Compare H with a χ² distribution.</span></div>
+      <div class="eq"><span class="lbl">Tie correction (optional)</span>
+        <math display="block"><msub><mi>H</mi><mtext>corr</mtext></msub><mo>=</mo><mfrac><mi>H</mi><mrow><mn>1</mn><mo>&#x2212;</mo><mfrac><mrow><mo>&#x2211;</mo><mo stretchy="false">(</mo><msup><mi>t</mi><mn>3</mn></msup><mo>&#x2212;</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><mrow><msup><mi>N</mi><mn>3</mn></msup><mo>&#x2212;</mo><mi>N</mi></mrow></mfrac></mrow></mfrac></math>
+        <span class="where"><i>t</i> = number of values sharing each tied rank.</span></div>
+      <div class="eq" style="grid-column:1/-1"><span class="lbl">Mann-Whitney U and its z</span>
+        <math display="block"><msub><mi>U</mi><mn>1</mn></msub><mo>=</mo><msub><mi>R</mi><mn>1</mn></msub><mo>&#x2212;</mo><mfrac><mrow><msub><mi>n</mi><mn>1</mn></msub><mo stretchy="false">(</mo><msub><mi>n</mi><mn>1</mn></msub><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><mn>2</mn></mfrac></math><math display="block"><mi>z</mi><mo>=</mo><mfrac><mrow><msub><mi>U</mi><mn>1</mn></msub><mo>&#x2212;</mo><mfrac><mrow><msub><mi>n</mi><mn>1</mn></msub><msub><mi>n</mi><mn>2</mn></msub></mrow><mn>2</mn></mfrac></mrow><msqrt><mfrac><mrow><msub><mi>n</mi><mn>1</mn></msub><msub><mi>n</mi><mn>2</mn></msub><mo stretchy="false">(</mo><msub><mi>n</mi><mn>1</mn></msub><mo>+</mo><msub><mi>n</mi><mn>2</mn></msub><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><mn>12</mn></mfrac></msqrt></mfrac></math>
+        <span class="where">Two-sided p = 2 × (1 − Φ(|z|)), where Φ is the standard normal curve.</span></div>
+    </div>
+    <div class="worked"><b>Worked: pencil length, N = 940</b>
+      <div class="tbl"><table><thead><tr><th>School</th><th>n</th><th>Rank sum R</th><th>R² ÷ n</th></tr></thead><tbody>
+      <tr><td>Bethel</td><td>572</td><td>280,817.0</td><td>137,863,964</td></tr>
+      <tr><td>Glenns/Dragon</td><td>53</td><td>20,700.5</td><td>8,085,108</td></tr>
+      <tr><td>Woodville</td><td>315</td><td>140,752.5</td><td>62,892,909</td></tr>
+      <tr><td><b>Sum</b></td><td>940</td><td></td><td><b>≈ 208,841,980</b></td></tr></tbody></table></div>
+      <math display="block"><mi>H</mi><mo>=</mo><mfrac><mn>12</mn><mrow><mn>940</mn><mo>&#xD7;</mo><mn>941</mn></mrow></mfrac><mo>&#xD7;</mo><mn>208,841,980</mn><mo>&#x2212;</mo><mn>3</mn><mo>&#xD7;</mo><mn>941</mn><mo>=</mo><mn>2,833.2</mn><mo>&#x2212;</mo><mn>2,823</mn><mo>=</mo><mn>10.2</mn></math>
+      <span class="where">With df = 2, p = .006.</span></div>
+  </div>
+  <div class="box interactive">
+    <span class="ico">⇅</span>
+    <div class="txt">
+      <h3><a href="rank_visualizer.html" target="_blank" rel="noopener">Try it: From Raw Values to Ranks →</a></h3>
+      <p>Toggle between raw fragment lengths and their ranks, and watch one huge outlier stop dominating the moment it becomes just "rank 15."</p>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="box tool"><h3>Kruskal-Wallis <span class="chip">Excel = Sheets</span></h3>
+      <p>Put the graphite pencils with a length on their own sheet: A = Site, B = Length (940 rows).</p><ol>
+      <li>Rank every fragment, shortest = 1 (column C)<span class="code">=RANK.AVG(B2, $B$2:$B$941, 1)</span></li>
+      <li>For each school: n and the sum of ranks R<span class="code">=COUNTIF(A:A, "Bethel")
+=SUMIF(A:A, "Bethel", C:C)</span></li>
+      <li>H statistic (N = 940)<span class="code">=12/(N*(N+1)) * SUM(R²/n for each school) - 3*(N+1)</span></li>
+      <li>p-value, df = number of schools − 1<span class="code">=CHISQ.DIST.RT(H, 2)</span></li></ol>
+      <p class="muted">Skipping the tie correction barely changes H with this data.</p></div>
+    <div class="box tool"><h3>Which schools differ? <span class="chip">Mann-Whitney</span></h3><ol>
+      <li>Keep two schools only and re-rank them together.</li>
+      <li><code>U = R₁ − n₁(n₁+1)/2</code></li>
+      <li><code>z = (U − n₁n₂/2) / √(n₁n₂(n₁+n₂+1)/12)</code></li>
+      <li><span class="code">=2*(1-NORM.S.DIST(ABS(z), TRUE))</span></li>
+      <li>Three comparisons, so adjust: multiply p by 3 (Bonferroni) or use Holm.</li></ol>
+      <div class="tbl"><table><thead><tr><th>Pair</th><th>p</th><th>Holm p</th></tr></thead><tbody>
+      <tr><td>Bethel vs Glenns/Dragon</td><td>.012</td><td class="pos">.036</td></tr>
+      <tr><td>Bethel vs Woodville</td><td>.020</td><td class="pos">.039</td></tr>
+      <tr><td>Glenns/Dragon vs Woodville</td><td>.135</td><td>.135</td></tr></tbody></table></div>
+      <p>Bethel’s fragments run a little longer than those at the other two schools.</p></div>
+  </div>
+  <div class="grid2">
+    <div class="box interactive">
+      <span class="ico">▦</span>
+      <div class="txt">
+        <h3><a href="mann_whitney_u_matrix.html" target="_blank" rel="noopener">Try it: Mann-Whitney U, Cell by Cell →</a></h3>
+        <p>See U built one pairwise comparison at a time, then check it against the rank-sum shortcut.</p>
+      </div>
+    </div>
+    <div class="box interactive">
+      <span class="ico">⇊</span>
+      <div class="txt">
+        <h3><a href="holm_correction_visualizer.html" target="_blank" rel="noopener">Try it: Holm Correction, Step by Step →</a></h3>
+        <p>Step through sorting, multiplying, and the running max that turns three raw p-values into three honest ones.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="writeup" data-label="Checks & write-up" role="tabpanel" hidden>
+  <h2>Before you trust it, and how to write it</h2>
+  <div class="grid2">
+    <div class="box"><h3>Four checks</h3><ul>
+      <li><b>Independence:</b> fragments of one slate are not separate observations. Try catalog lots or presence per test unit.</li>
+      <li><b>Expected ≥ 5:</b> small subsets reach this limit quickly. Merge categories or use Fisher’s exact test.</li>
+      <li><b>Excavation effort:</b> finds come from 69 units at Woodville and 15 at Bethel. Compare proportions, not totals.</li>
+      <li><b>Many tests:</b> run 20 and one will look "significant" by chance. Answer one question, or correct.</li></ul></div>
+    <div class="box"><h3>A results sentence</h3>
+      <p><i>“Industrial items made up 23% of the Woodville assemblage but 1.5% at Glenns/Dragon (χ² = 307.4, df = 2, p &lt; .001, Cramér’s V = 0.24). Because most Glenns/Dragon academic items are slate fragments, part of this gap may reflect breakage rather than teaching.”</i></p>
+      <p><b>Include:</b> the percentages, the test and its numbers, the effect size, and a caveat about what the data can’t tell you.</p></div>
+  </div>
+  <div class="note"><b>Other examples to try:</b> slate vs. graphite pencils by school (V = 0.36; Bethel has none of the 98 slate pencils), or academic vs. industrial by level at Woodville (industrial share falls from 43% in level A to 11% in level C).</div>
+</section>
+</main>
+
+<footer>
+  <p><b>Questions?</b> Email Data Science/Analysis Research Librarian Tae Hyun Lim at <a href="mailto:tlim@hamilton.edu">tlim@hamilton.edu</a>, or ask a <a href="https://libguides.hamilton.edu/c.php?g=132443&amp;p=8194735" target="_blank" rel="noopener">Data Science Tutor</a>.</p>
+  <p>Data: Betti, Colleen. 2023. “Go ahead and erect the buildings themselves:” An archaeological study of three Black schools in Gloucester County, Virginia. PhD diss., UNC Chapel Hill; catalog tDAR id 476266. Figures computed from the Lab 3 spreadsheet.</p>
+</footer>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const fmt=(x,d=0)=>x.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const SITES=['Bethel','Glenns/Dragon','Woodville'];
+
+/* tabs */
+const panels=[...document.querySelectorAll('main section')], tabs=$('#tabs');
+panels.forEach(p=>{const b=document.createElement('button');b.setAttribute('role','tab');b.id='t-'+p.id;b.textContent=p.dataset.label;b.setAttribute('aria-controls',p.id);b.onclick=()=>show(p.id,true);tabs.appendChild(b);});
+function show(id,save){panels.forEach(p=>p.hidden=p.id!==id);[...tabs.children].forEach(b=>b.setAttribute('aria-selected',b.id==='t-'+id));
+  if(save){try{localStorage.setItem('tab',id)}catch(e){} try{history.replaceState(null,'','#'+id)}catch(e){}}
+  if(id==='counting')drawCount(); if(id==='measure')drawHist();}
+tabs.addEventListener('keydown',e=>{const bs=[...tabs.children],i=bs.indexOf(document.activeElement);if(i<0)return;
+  if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const j=(i+(e.key==='ArrowRight'?1:bs.length-1))%bs.length;bs[j].focus();bs[j].click();}});
+let start=location.hash.slice(1); if(!panels.some(p=>p.id===start)){try{start=localStorage.getItem('tab')}catch(e){start=null}} if(!panels.some(p=>p.id===start))start='overview';
+
+/* stats helpers */
+function chi(O){const R=O.map(r=>r.reduce((a,b)=>a+b,0)),C=O[0].map((_,j)=>O.reduce((a,r)=>a+r[j],0)),N=R.reduce((a,b)=>a+b,0);
+  const E=O.map((r,i)=>r.map((_,j)=>R[i]*C[j]/N));let x=0;O.forEach((r,i)=>r.forEach((o,j)=>{x+=(o-E[i][j])**2/E[i][j]}));
+  const res=O.map((r,i)=>r.map((o,j)=>(o-E[i][j])/Math.sqrt(E[i][j])));const df=(O.length-1)*(O[0].length-1);
+  const p=Math.exp(-x/2); /* exact for df = 2 */
+  const V=Math.sqrt(x/(N*(Math.min(O.length,O[0].length)-1)));return{E,x,res,df,p,V,N,minE:Math.min(...E.flat())};}
+const pf=p=>p<0.001?'< .001':p.toFixed(3).replace(/^0/,'');
+const rc=v=>v>0?'pos':'neg';
+
+/* counting toggle */
+const DATA={items:[[781,1265,2191],[232,19,656]],lots:[[708,128,643],[95,19,261]]};let unit='items';
+function drawCount(){const O=DATA[unit],r=chi(O),share=SITES.map((_,j)=>O[1][j]/(O[0][j]+O[1][j])*100);
+  const svg=$('#countChart'),W=420,H=240,l=40,b=200,top=20,max=35,bw=70;let s='';
+  [0,10,20,30].forEach(t=>{const y=b-(t/max)*(b-top);s+=`<line x1="${l}" x2="${W-10}" y1="${y}" y2="${y}" stroke="${css('--line')}"/><text class="ax" x="${l-6}" y="${y+4}" text-anchor="end">${t}%</text>`});
+  share.forEach((v,j)=>{const x=l+30+j*120,h=(v/max)*(b-top);s+=`<rect x="${x}" y="${b-h}" width="${bw}" height="${h}" rx="3" fill="${css(unit==='items'?'--ind':'--pencil')}"/><text x="${x+bw/2}" y="${b-h-6}" text-anchor="middle" font-size="13" font-weight="600">${v.toFixed(1)}%</text><text class="ax" x="${x+bw/2}" y="${b+18}" text-anchor="middle">${SITES[j]}</text>`});
+  svg.innerHTML=s;
+  $('#countRes').innerHTML='<thead><tr><th></th>'+SITES.map(s=>`<th>${s}</th>`).join('')+'</tr></thead><tbody><tr><td>Industrial</td>'+r.res[1].map(v=>`<td class="${rc(v)}">${v>0?'+':''}${v.toFixed(1)}</td>`).join('')+`</tr></tbody>`;
+  $('#countMsg').textContent=`χ² = ${fmt(r.x,1)}, df = 2, p ${pf(r.p)}, V = ${r.V.toFixed(2)}. `+(unit==='items'?'Counting items, Bethel has MORE industrial material than expected.':'Counting lots, Bethel has FEWER industrial lots than expected.');}
+['items','lots'].forEach(u=>$('#u-'+u).onclick=()=>{unit=u;$('#u-items').setAttribute('aria-pressed',u==='items');$('#u-lots').setAttribute('aria-pressed',u==='lots');drawCount();});
+
+/* χ² calculator */
+const obs=[[781,1265,2191],[232,19,656]],ROWS=['Academic','Industrial'];
+const head='<thead><tr><th></th>'+SITES.map(s=>`<th>${s}</th>`).join('')+'</tr></thead>';
+$('#obs').innerHTML=head+'<tbody>'+ROWS.map((r,i)=>`<tr><td>${r}</td>`+obs[i].map((v,j)=>`<td><input id="o${i}${j}" type="number" min="0" step="1" value="${v}" aria-label="${r} at ${SITES[j]}"></td>`).join('')+'</tr>').join('')+'</tbody>';
+function calc(){for(let i=0;i<2;i++)for(let j=0;j<3;j++){const v=Math.max(0,parseFloat($(`#o${i}${j}`).value)||0);obs[i][j]=v;}
+  if(obs.flat().reduce((a,b)=>a+b,0)===0)return; const r=chi(obs); if(!isFinite(r.x)){$('#chiStats').innerHTML='<p class="muted">Every row and column needs at least one item.</p>';return;}
+  $('#exp').innerHTML=head+'<tbody>'+ROWS.map((n,i)=>`<tr><td>${n}</td>`+r.E[i].map(v=>`<td>${fmt(v,1)}</td>`).join('')+'</tr>').join('')+'</tbody>';
+  $('#res').innerHTML=head+'<tbody>'+ROWS.map((n,i)=>`<tr><td>${n}</td>`+r.res[i].map(v=>`<td class="${rc(v)}">${v>0?'+':''}${v.toFixed(2)}</td>`).join('')+'</tr>').join('')+'</tbody>';
+  $('#chiStats').innerHTML=[['χ²',fmt(r.x,1)],['df',r.df],['p',pf(r.p)],['Cramér’s V',r.V.toFixed(3)],['Min expected',fmt(r.minE,1)]].map(a=>`<div class="stat"><span>${a[0]}</span><strong>${a[1]}</strong></div>`).join('')+(r.minE<5?'<p class="neg">An expected count is under 5. Use Fisher’s exact test instead.</p>':'');}
+$('#obs').addEventListener('input',calc);
+
+/* effect size slider */
+const base=[[781,1265,2191],[232,19,656]];
+function eff(){const t=+$('#scale').value, Nn=Math.round(50*Math.pow(10,t/100*3)); const k=Nn/5144;
+  const O=base.map(r=>r.map(v=>v*k)); const r=chi(O);
+  $('#scaleLbl').textContent=`N = ${fmt(Nn)}`+(Math.abs(Nn-5144)<60?' (the real lab data)':'');
+  $('#effStats').innerHTML=[['N',fmt(Nn)],['χ²',fmt(r.x,1)],['p',pf(r.p)],['Cramér’s V',r.V.toFixed(3)]].map(a=>`<div class="stat"><span>${a[0]}</span><strong>${a[1]}</strong></div>`).join('');
+  $('#effMsg').textContent=r.p<0.05?`Same proportions, and "significant" at N = ${fmt(Nn)}. V stays at ${r.V.toFixed(2)} whatever the sample size.`:`Same proportions, but not significant with only ${fmt(Nn)} items. V is still ${r.V.toFixed(2)}.`;}
+$('#scale').addEventListener('input',eff);
+
+/* histogram */
+const BINS=['<4','4–6','6–8','8–10','10–12','12–14','14–16','16–20','20+'];
+const H={'All schools':[161,247,207,145,90,46,17,19,8],'Bethel':[92,143,119,89,62,35,12,14,6],'Glenns/Dragon':[12,19,9,6,4,1,1,1,0],'Woodville':[57,85,79,50,24,10,4,4,2]};
+let site='All schools'; const seg=$('#siteSeg');
+Object.keys(H).forEach(k=>{const b=document.createElement('button');b.textContent=k;b.setAttribute('aria-pressed',k===site);b.onclick=()=>{site=k;[...seg.children].forEach(c=>c.setAttribute('aria-pressed',c.textContent===k));drawHist();};seg.appendChild(b);});
+function drawHist(){const v=H[site],n=v.reduce((a,b)=>a+b,0),pct=v.map(x=>x/n*100),max=30,W=420,b=195,top=15,l=40,bw=(W-l-10)/v.length;let s='';
+  [0,10,20,30].forEach(t=>{const y=b-(t/max)*(b-top);s+=`<line x1="${l}" x2="${W-10}" y1="${y}" y2="${y}" stroke="${css('--line')}"/><text class="ax" x="${l-6}" y="${y+4}" text-anchor="end">${t}%</text>`});
+  pct.forEach((p,i)=>{const h=(Math.min(p,max)/max)*(b-top),x=l+i*bw;s+=`<rect x="${x+2}" y="${b-h}" width="${bw-4}" height="${h}" fill="${css('--pencil')}"/><text class="ax" x="${x+bw/2}" y="${b+15}" text-anchor="middle">${BINS[i]}</text>`});
+  s+=`<text class="ax" x="${(W+l)/2}" y="232" text-anchor="middle">Length (mm) · share of fragments</text>`;
+  $('#hist').innerHTML=s; $('#histTitle').textContent=`${site}: ${n} fragments`;}
+
+calc(); eff(); show(start,false);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{drawCount();drawHist();});
+new MutationObserver(()=>{drawCount();drawHist();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+})();
+</script>
+</body></html>

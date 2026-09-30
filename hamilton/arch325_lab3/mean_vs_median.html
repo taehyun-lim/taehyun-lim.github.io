@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mean vs Median: Drag an Outlier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#FBFCFC; --surface:#FFFFFF; --panel:#EEF2F3; --ink:#1C2428; --muted:#5D6B72; --line:#D5DDE0;
+  --slate:#26333A; --chalk:#F4F6F5; --accent:#B5652B; --accent2:#3D6F8E; --note:#FBF3E0;
+  --display:"Newsreader",Cambria,Georgia,serif; --body:"IBM Plex Sans",Calibri,"Segoe UI",Arial,sans-serif; --mono:"IBM Plex Mono","Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  color-scheme:dark; --bg:#151C20; --surface:#1C252A; --panel:#243037; --ink:#E6ECEE; --muted:#9AAAB1; --line:#34434A;
+  --slate:#0E1416; --chalk:#E6ECEE; --accent:#E0935B; --accent2:#7FB0CF; --note:#2E2A1F; } }
+:root[data-theme="dark"]{ color-scheme:dark; --bg:#151C20; --surface:#1C252A; --panel:#243037; --ink:#E6ECEE; --muted:#9AAAB1; --line:#34434A;
+  --slate:#0E1416; --chalk:#E6ECEE; --accent:#E0935B; --accent2:#7FB0CF; --note:#2E2A1F; }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body);padding-inline:16px;padding-block:0 40px}
+.wrap{max-width:800px;margin:0 auto}
+header{padding-block:28px 6px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px;font-weight:600}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(26px,4.2vw,36px);line-height:1.15;margin:0 0 8px;text-wrap:balance}
+header p{margin:0 0 4px;color:var(--muted);max-width:70ch}
+h3{font-family:var(--display);font-weight:600;font-size:18px;margin:0 0 4px;color:var(--ink)}
+.sub{font-size:13px;color:var(--muted);margin:0 0 10px}
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;background:var(--panel);border-radius:12px;padding:14px 16px;margin-block:18px}
+.btn{font:600 13px var(--body);border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--panel)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px 14px;margin-block:18px}
+svg{width:100%;height:auto;display:block;touch-action:none}
+.axtext{fill:var(--muted);font-size:12px;font-family:var(--body)}
+.stats{display:flex;flex-wrap:wrap;gap:14px;margin-block:14px}
+.stat{background:var(--panel);border-radius:10px;padding:10px 16px;min-width:130px}
+.stat span{display:block;font-size:12px;color:var(--muted)}
+.stat strong{font-family:var(--display);font-size:26px;font-variant-numeric:tabular-nums}
+.note{background:var(--note);border-radius:10px;padding:12px 16px;margin-block:16px;font-size:14px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted);margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:2px;display:inline-block}
+footer{margin-top:30px;font-size:13px;color:var(--muted)}
+.wrap :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hint{font-size:12.5px;color:var(--muted);margin:6px 0 0}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p class="eyebrow">Why the median survives what the mean doesn't</p>
+  <h1>Mean vs Median: Drag an Outlier</h1>
+  <p>Twelve pencil-fragment lengths (mm). Drag the highlighted point to make it a bigger or smaller outlier, and watch the mean chase it while the median barely moves.</p>
+</header>
+
+<div class="controls">
+  <button class="btn" id="resetBtn">Reset to starting values</button>
+  <button class="btn" id="shuffleBtn">New random set</button>
+</div>
+
+<div class="panel">
+  <h3>Drag the copper point</h3>
+  <p class="sub">All eleven other points stay fixed — only this one moves</p>
+  <svg id="svgLine" viewBox="0 0 900 220" role="img" aria-label="Number line of fragment lengths with draggable outlier, mean and median markers"></svg>
+  <div class="legend">
+    <span><i style="background:var(--accent)"></i>Mean</span>
+    <span><i style="background:var(--accent2)"></i>Median</span>
+  </div>
+  <p class="hint">Drag the large copper dot left and right along the axis.</p>
+</div>
+
+<div class="stats" id="statBox"></div>
+<div class="note" id="readout"></div>
+
+<footer>The mean uses every value's exact distance from center, so one extreme point can drag it a long way. The median only cares about rank order — which value sits in the middle — so it barely reacts until an outlier actually crosses the middle position.</footer>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+const FIXED = [2.5, 3.1, 3.4, 3.9, 4.2, 4.6, 5.0, 5.3, 5.8, 6.4, 7.0];
+let outlier = 7.8;
+const XMIN=2, XMAX=32;
+
+const W=900,H=220,PAD={l:30,r:30,t:34,b:40};
+function xOf(v){ return PAD.l + (v-XMIN)/(XMAX-XMIN)*(W-PAD.l-PAD.r); }
+function vOf(px){ return XMIN + (px-PAD.l)/(W-PAD.l-PAD.r)*(XMAX-XMIN); }
+function svgEl(tag,attrs){ const e=document.createElementNS('http://www.w3.org/2000/svg',tag);
+  for(const k in attrs) e.setAttribute(k,attrs[k]); return e; }
+
+function stats(values){
+  const n=values.length;
+  const mean = values.reduce((a,b)=>a+b,0)/n;
+  const sorted=[...values].sort((a,b)=>a-b);
+  const mid=Math.floor(n/2);
+  const median = n%2? sorted[mid] : (sorted[mid-1]+sorted[mid])/2;
+  return {mean, median};
+}
+
+let dragging=false;
+
+function allValues(){ return [...FIXED, outlier]; }
+
+function render(){
+  const svg=$('#svgLine'); svg.innerHTML='';
+  const line=css('--line'), muted=css('--muted'), ink=css('--ink'), accent=css('--accent'), accent2=css('--accent2'), surface=css('--surface');
+  const axisY = H/2;
+
+  for(let v=XMIN; v<=XMAX; v+=5){ const gx=xOf(v);
+    svg.appendChild(svgEl('line',{x1:gx,x2:gx,y1:axisY-6,y2:axisY+6,stroke:line,'stroke-width':1}));
+    const t=svgEl('text',{x:gx,y:axisY+26,class:'axtext','text-anchor':'middle'}); t.textContent=v; svg.appendChild(t);
+  }
+  svg.appendChild(svgEl('line',{x1:PAD.l,x2:W-PAD.r,y1:axisY,y2:axisY,stroke:muted,'stroke-width':1.4}));
+
+  FIXED.forEach(v=>{
+    svg.appendChild(svgEl('circle',{cx:xOf(v),cy:axisY,r:7,fill:muted,opacity:0.55,stroke:surface,'stroke-width':1.5}));
+  });
+
+  const {mean, median} = stats(allValues());
+
+  function topMarker(x, color, label, y){
+    svg.appendChild(svgEl('line',{x1:x,x2:x,y1:y+16,y2:axisY-8,stroke:color,'stroke-width':1.6,'stroke-dasharray':'3,2'}));
+    const tri=svgEl('path',{d:'M'+(x-7)+','+(y+2)+' L'+(x+7)+','+(y+2)+' L'+x+','+(y+16)+' Z',fill:color});
+    svg.appendChild(tri);
+    const t=svgEl('text',{x:x,y:y-6,'text-anchor':'middle',class:'axtext','font-weight':'700',fill:color}); t.textContent=label; svg.appendChild(t);
+  }
+  topMarker(xOf(mean), accent, 'Mean '+mean.toFixed(2), PAD.t-18);
+  topMarker(xOf(median), accent2, 'Median '+median.toFixed(2), PAD.t-18+34);
+
+  // draggable outlier
+  const ox=xOf(outlier);
+  svg.appendChild(svgEl('line',{x1:ox,x2:ox,y1:axisY-30,y2:axisY+30,stroke:accent,'stroke-width':1,opacity:0.35}));
+  const handle=svgEl('circle',{cx:ox,cy:axisY,r:11,fill:accent,stroke:surface,'stroke-width':2,cursor:'grab',id:'handle'});
+  svg.appendChild(handle);
+  const vt=svgEl('text',{x:ox,y:axisY+44,'text-anchor':'middle',class:'axtext','font-weight':'700',fill:accent}); vt.textContent=outlier.toFixed(1); svg.appendChild(vt);
+
+  const hit=svgEl('rect',{x:PAD.l,y:0,width:W-PAD.l-PAD.r,height:H,fill:'transparent',cursor:'crosshair',id:'hitrect'});
+  svg.insertBefore(hit, svg.firstChild);
+
+  wireInteraction(svg);
+  updateStats(mean, median);
+}
+
+function setOutlier(v){
+  outlier = Math.max(XMIN, Math.min(XMAX, Math.round(v*10)/10));
+  render();
+}
+
+function updateStats(mean, median){
+  const gap = Math.abs(mean-median);
+  $('#statBox').innerHTML = [
+    ['Mean', mean.toFixed(2)],
+    ['Median', median.toFixed(2)],
+    ['Gap', gap.toFixed(2)]
+  ].map(a=>'<div class="stat"><span>'+a[0]+'</span><strong>'+a[1]+'</strong></div>').join('');
+  $('#readout').innerHTML = '<b>Drag the outlier out to '+XMAX+' mm</b> and the mean keeps climbing with it, while the median stays put unless the point crosses past the middle-ranked value. That is exactly why the lab reports medians for these right-skewed length distributions.';
+}
+
+function wireInteraction(svg){
+  const hit = svg.querySelector('#hitrect');
+  function fromEvent(e){
+    const rect = svg.getBoundingClientRect();
+    const scaleX = W/rect.width;
+    const px = (e.clientX - rect.left)*scaleX;
+    setOutlier(vOf(px));
+  }
+  hit.addEventListener('pointerdown', e=>{ dragging=true; hit.setPointerCapture(e.pointerId); fromEvent(e); });
+  hit.addEventListener('pointermove', e=>{ if(dragging) fromEvent(e); });
+  hit.addEventListener('pointerup', ()=>{ dragging=false; });
+  hit.addEventListener('pointercancel', ()=>{ dragging=false; });
+  const handle = svg.querySelector('#handle');
+  if(handle) handle.addEventListener('pointerdown', e=>{ dragging=true; hit.setPointerCapture(e.pointerId); e.stopPropagation(); });
+}
+
+$('#resetBtn').onclick=()=>{ outlier=7.8; render(); };
+$('#shuffleBtn').onclick=()=>{ outlier = Math.round((4+Math.random()*26)*10)/10; render(); };
+
+render();
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render);
+new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+})();
+</script>
+
+</body>
+</html>

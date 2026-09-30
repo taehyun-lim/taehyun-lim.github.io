@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Holm Correction, Step by Step</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#FBFCFC; --surface:#FFFFFF; --panel:#EEF2F3; --ink:#1C2428; --muted:#5D6B72; --line:#D5DDE0;
+  --slate:#26333A; --chalk:#F4F6F5; --accent:#B5652B; --accent2:#3D6F8E; --note:#FBF3E0;
+  --pos:#B5652B; --neg:#3D6F8E;
+  --display:"Newsreader",Cambria,Georgia,serif; --body:"IBM Plex Sans",Calibri,"Segoe UI",Arial,sans-serif; --mono:"IBM Plex Mono","Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  color-scheme:dark; --bg:#151C20; --surface:#1C252A; --panel:#243037; --ink:#E6ECEE; --muted:#9AAAB1; --line:#34434A;
+  --slate:#0E1416; --chalk:#E6ECEE; --accent:#E0935B; --accent2:#7FB0CF; --note:#2E2A1F; --pos:#E0935B; --neg:#7FB0CF; } }
+:root[data-theme="dark"]{ color-scheme:dark; --bg:#151C20; --surface:#1C252A; --panel:#243037; --ink:#E6ECEE; --muted:#9AAAB1; --line:#34434A;
+  --slate:#0E1416; --chalk:#E6ECEE; --accent:#E0935B; --accent2:#7FB0CF; --note:#2E2A1F; --pos:#E0935B; --neg:#7FB0CF; }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body);padding-inline:16px;padding-block:0 40px}
+.wrap{max-width:860px;margin:0 auto}
+header{padding-block:28px 6px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px;font-weight:600}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(26px,4.2vw,36px);line-height:1.15;margin:0 0 8px;text-wrap:balance}
+header p{margin:0 0 4px;color:var(--muted);max-width:70ch}
+h3{font-family:var(--display);font-weight:600;font-size:18px;margin:0 0 4px;color:var(--ink)}
+.sub{font-size:13px;color:var(--muted);margin:0 0 10px}
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;background:var(--panel);border-radius:12px;padding:14px 16px;margin-block:18px}
+.btn{font:600 13px var(--body);border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--panel)}
+.btn.primary{background:var(--accent2);border-color:var(--accent2);color:#fff}
+.btn:disabled{opacity:.4;cursor:default}
+.step-label{font-size:13px;color:var(--muted);margin-left:auto}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px 14px;margin-block:18px}
+.gridwrap{overflow-x:auto}
+table.steps{border-collapse:collapse;font-variant-numeric:tabular-nums;width:100%}
+table.steps th,table.steps td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+table.steps th:first-child,table.steps td:first-child{text-align:left}
+table.steps thead th{font-size:12.5px;color:var(--muted);font-weight:600}
+.col-hide{opacity:0;transform:translateY(4px)}
+.col-show{opacity:1;transform:translateY(0);transition:opacity .35s ease, transform .35s ease}
+.tag-reject{color:var(--pos);font-weight:700}
+.tag-fail{color:var(--muted)}
+.note{background:var(--note);border-radius:10px;padding:12px 16px;margin-block:16px;font-size:14px}
+footer{margin-top:30px;font-size:13px;color:var(--muted)}
+.wrap :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p class="eyebrow">Why you can't just compare each p to .05</p>
+  <h1>Holm Correction, Step by Step</h1>
+  <p>Three pairwise Mann-Whitney comparisons from the pencil-length data. Step through how Holm turns three raw p-values into three honest ones.</p>
+</header>
+
+<div class="controls">
+  <button class="btn" id="backBtn">&#8592; Back</button>
+  <button class="btn primary" id="nextBtn">Next step &#8594;</button>
+  <button class="btn" id="resetBtn">Reset</button>
+  <button class="btn" id="addBtn">Add a comparison</button>
+  <span class="step-label" id="stepLabel"></span>
+</div>
+
+<div class="panel">
+  <h3 id="panelTitle"></h3>
+  <p class="sub" id="panelSub"></p>
+  <div class="gridwrap"><table class="steps" id="stepTable"></table></div>
+</div>
+
+<div class="note" id="readout"></div>
+
+<footer>Holm's trick: the smallest p-value gets the harshest penalty (×m, same as plain Bonferroni), but each larger one gets a slightly gentler penalty (×(m−1), ×(m−2), …) since fewer hypotheses are still "in play" once the more significant ones are set aside. The running-max step just keeps the sequence from un-sorting itself.</footer>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const LAB_DEFAULT = [
+  {name:'Bethel vs Glenns/Dragon', p:0.0119},
+  {name:'Bethel vs Woodville', p:0.0195},
+  {name:'Glenns/Dragon vs Woodville', p:0.1346},
+];
+let rows = LAB_DEFAULT.map(r=>({...r}));
+let step = 0; // 0..4
+const ALPHA=0.05;
+const STEP_TITLES=[
+  'Step 0 — the raw p-values',
+  'Step 1 — sort ascending and rank them',
+  'Step 2 — multiply each by (m − rank + 1)',
+  'Step 3 — take the running maximum',
+  'Step 4 — cap at 1, then compare to α',
+];
+const STEP_SUBS=[
+  'In whatever order you happened to run the tests',
+  'Smallest p-value first — this fixes the order for every later step',
+  'Rank 1 is multiplied by m, rank 2 by m − 1, and so on',
+  'Each value becomes the largest of itself and everything before it',
+  'Anything over 1 is just capped at 1 — probabilities can\'t exceed it',
+];
+
+function computeHolm(data){
+  const m=data.length;
+  const withIdx = data.map((r,i)=>({...r, orig:i}));
+  const sorted = [...withIdx].sort((a,b)=>a.p-b.p);
+  sorted.forEach((r,i)=>{ r.rank=i+1; r.mult=m-i; r.raw = r.p*r.mult; });
+  let runMax=0;
+  sorted.forEach(r=>{ runMax=Math.max(runMax, r.raw); r.running=runMax; });
+  sorted.forEach(r=>{ r.final = Math.min(1, r.running); });
+  return sorted;
+}
+
+function render(){
+  const m=rows.length;
+  const sorted = computeHolm(rows);
+  $('#panelTitle').textContent = STEP_TITLES[step];
+  $('#panelSub').textContent = STEP_SUBS[step];
+  $('#stepLabel').textContent = 'Step '+step+' of 4 · m = '+m+' comparisons';
+  $('#backBtn').disabled = step===0;
+  $('#nextBtn').disabled = step===4;
+
+  const display = step===0 ? rows.map((r,i)=>({...r, rank:'—'})) : sorted;
+
+  let head = '<thead><tr><th>Comparison</th><th>Raw p</th>';
+  if(step>=1) head += '<th>Rank</th>';
+  if(step>=2) head += '<th>× (m−rank+1)</th>';
+  if(step>=3) head += '<th>Running max</th>';
+  if(step>=4) head += '<th>Holm-adjusted p</th><th>vs α = .05</th>';
+  head += '</tr></thead>';
+
+  let body='<tbody>';
+  display.forEach(r=>{
+    body += '<tr><td>'+r.name+'</td><td>'+r.p.toFixed(4)+'</td>';
+    if(step>=1) body += '<td>'+r.rank+'</td>';
+    if(step>=2) body += '<td class="col-show">'+r.raw.toFixed(4)+' <span style="color:var(--muted)">('+r.p.toFixed(4)+'×'+r.mult+')</span></td>';
+    if(step>=3) body += '<td class="col-show">'+r.running.toFixed(4)+'</td>';
+    if(step>=4){
+      const rej = r.final < ALPHA;
+      body += '<td class="col-show">'+r.final.toFixed(4)+'</td><td class="'+(rej?'tag-reject':'tag-fail')+'">'+(rej?'reject H₀':'fail to reject')+'</td>';
+    }
+    body += '</tr>';
+  });
+  body+='</tbody>';
+  $('#stepTable').innerHTML = head+body;
+
+  const notes = [
+    'Three tests, three raw p-values. All three look "significant" at the usual α = .05 — but running three tests inflates the chance that at least one clears .05 by luck alone.',
+    'Ranking fixes an order. The smallest raw p — the one we\'re least willing to be wrong about — goes first.',
+    'Rank 1 is penalized the most (×'+m+'), rank '+m+' the least (×1). This is already less harsh than plain Bonferroni, which would multiply every single one by '+m+'.',
+    'Taking the running maximum guarantees the adjusted values never decrease down the sorted list — without it, a later rank could end up smaller than an earlier one, which would not make sense.',
+    'Final call: Bethel–Glenns/Dragon and Bethel–Woodville both survive Holm correction; Glenns/Dragon–Woodville was never close and still is not.',
+  ];
+  $('#readout').innerHTML = '<b>'+notes[step]+'</b>';
+}
+
+$('#nextBtn').onclick=()=>{ if(step<4){ step++; render(); } };
+$('#backBtn').onclick=()=>{ if(step>0){ step--; render(); } };
+$('#resetBtn').onclick=()=>{ rows = LAB_DEFAULT.map(r=>({...r})); step=0; render(); };
+$('#addBtn').onclick=()=>{
+  if(rows.length>=6) return;
+  rows.push({name:'Extra comparison '+(rows.length-2), p: Math.round(Math.random()*400)/10000 + 0.001});
+  step=0; render();
+};
+
+render();
+})();
+</script>
+
+</body>
+</html>
