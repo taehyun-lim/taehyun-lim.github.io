@@ -35,6 +35,7 @@ h3{font-family:var(--display);font-weight:600;font-size:20px;margin:0 0 8px}
 .g-tools{grid-template-columns:minmax(440px,1fr) minmax(630px,1fr)}
 @media (max-width:1121px){ .g-tools{grid-template-columns:1fr} }
 .box{background:var(--panel);border-radius:10px;padding:18px 20px;min-width:0}
+.g-one{grid-template-columns:1fr}
 .note{background:var(--note);border-radius:10px;padding:14px 18px;margin-block:18px}
 .q{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:8px}
 .q div{border-top:2px solid var(--line);padding-top:8px}
@@ -332,7 +333,7 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
   <h2>χ²: could it be chance?</h2>
   <p class="lede">Compare what you observed with what you’d expect if school made no difference. Edit the observed counts to see every piece update.</p>
   <div class="q"><div><b>Compares</b>Whether category proportions differ between groups more than chance allows</div><div><b>Example</b>Type × school: χ² = 307.4, df = 2, p &lt; .001</div></div>
-  <div class="grid2">
+  <div class="grid2 g-one">
     <div class="box"><h3>Observed (editable)</h3><div class="tbl"><table id="obs"></table></div>
       <h3 style="margin-top:14px">Expected</h3><div class="tbl"><table id="exp"></table></div><p class="muted" id="expNote"></p></div>
     <div class="box"><h3>Residuals: which cells drive it</h3><div class="tbl"><table id="res"></table></div>
