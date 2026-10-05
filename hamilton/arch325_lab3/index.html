@@ -637,7 +637,7 @@ $('#obs').addEventListener('input',calc);
 
 /* effect size slider */
 const base=[[781,1265,2191],[232,19,656]];
-function eff(){const t=+$('#scale').value, Nn=Math.round(50*Math.pow(10,t/100*3)); const k=Nn/5144;
+function eff(){const t=+$('#scale').value; let Nn=Math.round(50*Math.pow(10,t/100*3)); if(Math.abs(Nn-5144)<60) Nn=5144; /* snap to the real table */ const k=Nn/5144;
   const O=base.map(r=>r.map(v=>v*k)); const r=chi(O);
   $('#scaleLbl').textContent=`N = ${fmt(Nn)}`+(Math.abs(Nn-5144)<60?' (the real lab data)':'');
   $('#effStats').innerHTML=[['N',fmt(Nn)],['χ²',fmt(r.x,1)],['p',pf(r.p)],['Cramér’s V',r.V.toFixed(3)]].map(a=>`<div class="stat"><span>${a[0]}</span><strong>${a[1]}</strong></div>`).join('');
