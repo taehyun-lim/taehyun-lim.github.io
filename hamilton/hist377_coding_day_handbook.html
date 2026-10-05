@@ -51,6 +51,8 @@
     line-height:1.62;-webkit-font-smoothing:antialiased;margin:0}
   p{margin:0 0 15px}
   a{color:var(--lapis);text-decoration-thickness:1px;text-underline-offset:2px}
+  a.slink{text-decoration-style:dotted;text-decoration-thickness:1px;white-space:nowrap;cursor:pointer}
+  a.slink:hover{text-decoration-style:solid}
   code{font-family:var(--mono);font-size:.875em;background:var(--code-bg);padding:1px 4px;border-radius:2px}
 
   .wrap{max-width:1220px;margin:0 auto;padding-left:20px;padding-right:20px;padding-block:0 60px}
@@ -112,9 +114,7 @@
   .slide-h .no.ref{background:var(--ink-3)}
   .slide-h h2{margin:0;font-family:var(--disp);font-size:22px;font-weight:600;letter-spacing:-.01em;
     flex:1 1 200px;min-width:0;text-wrap:pretty}
-  .onscreen{background:var(--screen);padding:30px 26px}
-  .onscreen .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
-    color:#8fa0bd;display:block;margin-bottom:14px}
+  .onscreen{background:var(--screen);padding:28px 26px}
   .onscreen .big{font-family:var(--disp);font-size:clamp(23px,3.4vw,34px);line-height:1.18;
     font-weight:600;margin:0 0 14px;color:#fff;text-wrap:pretty}
   .onscreen p{color:#c3ccdb;font-size:18px;line-height:1.55;margin:0 0 12px}
@@ -129,6 +129,10 @@
     text-decoration-thickness:1px;text-underline-offset:3px}
   .onscreen a:hover{text-decoration-color:var(--slide-link)}
   .onscreen a code{color:inherit;background:rgba(245,196,81,.14)}
+  .onscreen pre{margin:0 0 15px;padding:13px 15px;background:rgba(255,255,255,.055);
+    border:1px solid rgba(255,255,255,.1);border-radius:2px;font-family:var(--mono);
+    font-size:13px;line-height:1.62;color:#dfe6f0;overflow-x:auto;white-space:pre}
+  .onscreen pre b{color:#f5c451;font-weight:500}
   .onscreen a:focus-visible{outline:2px solid var(--slide-link);outline-offset:2px;border-radius:2px}
   .say{padding:17px 20px}
   .say .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
@@ -154,6 +158,16 @@
   .cp-h button:focus-visible{outline:2px solid var(--rubric);outline-offset:1px}
   .cp pre{margin:0;padding:15px;font-family:var(--mono);font-size:13px;line-height:1.6;
     color:var(--ink);overflow-x:auto;white-space:pre-wrap;word-break:break-word}
+  .cp pre .fill{background:var(--lap-bg);border-bottom:1px solid var(--lapis);padding:0 3px;
+    border-radius:2px;font-weight:500;color:var(--lapis)}
+  .cp pre .fill.empty{background:var(--warn-bg);border-bottom-color:var(--warn);color:var(--warn)}
+  .fillrow{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;margin:16px 0 0}
+  .fillrow label{display:flex;flex-direction:column;gap:5px;font-family:var(--mono);font-size:10.5px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  .fillrow select,.fillrow input{font-family:var(--mono);font-size:14px;padding:7px 10px;
+    border:1px solid var(--rule);border-radius:2px;background:var(--surface);color:var(--ink);min-width:140px}
+  .fillrow select:focus-visible,.fillrow input:focus-visible{outline:2px solid var(--rubric);outline-offset:1px}
+  .fillrow .hint{flex:1 1 240px;min-width:0;font-size:13px;color:var(--ink-3);line-height:1.5}
 
   .tbl{overflow-x:auto;border:1px solid var(--rule);background:var(--surface);margin:0}
   .say .tbl{margin:12px 0 0}
@@ -233,7 +247,7 @@
 <header class="head">
   <p class="eyebrow">Everything for today, and the reference to keep open while you work.</p>
   <h1>Coding Day Handbook</h1>
-  <p class="standfirst">You code a portion of a roll by hand, give the same pages to a machine, compare the two, and turn your own rows into a chart and a Word file. Every prompt you need is on this page, ready to copy. The dark block on each slide is what is on the screen; the text under it is the detail you will want while you work.</p>
+  <p class="standfirst">You code a portion of a roll by hand, give the same pages to a machine, compare the two, and turn your own rows into a chart and a Word file. Every prompt you need is on this page, ready to copy, so there is nothing to transcribe. Work straight down it, and come back to it whenever you need it afterwards.</p>
   <p class="contact">Questions? Email Data Science/Analysis Research Librarian Tae Hyun Lim at <a href="mailto:tlim@hamilton.edu">tlim@hamilton.edu</a>, or ask a <a href="https://libguides.hamilton.edu/c.php?g=132443&amp;p=8194735">Data Science Tutor</a>.</p>
 </header>
 
@@ -266,7 +280,7 @@
     <span class="rlab">Three ways in</span>
   </button>
   <button class="railitem" role="tab" id="t06" aria-controls="s06" aria-selected="false" tabindex="-1">
-    <span class="thumb" aria-hidden="true"><span class="thn">06</span><span class="tht">Our "text layer" is not text. It is OCR from 2011.</span></span>
+    <span class="thumb" aria-hidden="true"><span class="thn">06</span><span class="tht">Our "text layer" is not text. It is OCR from December 2011.</span></span>
     <span class="rlab">The twist in our PDF</span>
   </button>
   <button class="railitem" role="tab" id="t07" aria-controls="s07" aria-selected="false" tabindex="-1">
@@ -292,7 +306,7 @@
     <span class="rlab">What should come back</span>
   </button>
   <button class="railitem" role="tab" id="t12" aria-controls="s12" aria-selected="false" tabindex="-1">
-    <span class="thumb" aria-hidden="true"><span class="thn">12</span><span class="tht">Never copy a table out of the chat window</span></span>
+    <span class="thumb" aria-hidden="true"><span class="thn">12</span><span class="tht">Ask for a file. If none comes, copy with your eyes open.</span></span>
     <span class="rlab">Getting the file out intact</span>
   </button>
 
@@ -305,28 +319,20 @@
     <span class="thumb" aria-hidden="true"><span class="thn">14</span><span class="tht">Label every disagreement as one of these</span></span>
     <span class="rlab">Four kinds of disagreement</span>
   </button>
-  <button class="railitem" role="tab" id="t15" aria-controls="s15" aria-selected="false" tabindex="-1">
-    <span class="thumb" aria-hidden="true"><span class="thn">15</span><span class="tht">One line per disagreement, five columns</span></span>
-    <span class="rlab">The log you hand in</span>
-  </button>
 
   <p class="rail-sec">6 · From your rows to a figure</p>
   <button class="railitem" role="tab" id="t16" aria-controls="s16" aria-selected="false" tabindex="-1">
-    <span class="thumb" aria-hidden="true"><span class="thn">16</span><span class="tht">Your CSV, not the machine's</span></span>
+    <span class="thumb" aria-hidden="true"><span class="thn">15</span><span class="tht">Your CSV, not the machine's</span></span>
     <span class="rlab">Upload and ask</span>
   </button>
   <button class="railitem" role="tab" id="t17" aria-controls="s17" aria-selected="false" tabindex="-1">
-    <span class="thumb" aria-hidden="true"><span class="thn">17</span><span class="tht">Name the column. Ask for the table. Say n.</span></span>
+    <span class="thumb" aria-hidden="true"><span class="thn">16</span><span class="tht">Name the column. Ask for the table. Say n.</span></span>
     <span class="rlab">The chart prompt</span>
-  </button>
-  <button class="railitem" role="tab" id="t18" aria-controls="s18" aria-selected="false" tabindex="-1">
-    <span class="thumb" aria-hidden="true"><span class="thn">18</span><span class="tht">An image generator will draw you a chart. Do not let it.</span></span>
-    <span class="rlab">The trap</span>
   </button>
 
   <p class="rail-sec">7 · Into a Word file</p>
   <button class="railitem" role="tab" id="t19" aria-controls="s19" aria-selected="false" tabindex="-1">
-    <span class="thumb" aria-hidden="true"><span class="thn">19</span><span class="tht">Either works. Both take under a minute.</span></span>
+    <span class="thumb" aria-hidden="true"><span class="thn">17</span><span class="tht">Either works. Both take under a minute.</span></span>
     <span class="rlab">Two routes to a .docx</span>
   </button>
 
@@ -347,8 +353,7 @@
 <article class="slide" id="s01" role="tabpanel" aria-labelledby="t01">
   <div class="slide-h"><span class="no">01</span><h2>Title</h2></div>
   <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">Coding Day</p>
+          <p class="big">Coding Day</p>
     <p>Rolls A–I · <em>Calendar of Coroners Rolls of the City of London, 1300–1378</em></p>
     <p>You code. Then the machine codes. Then you find out who was right.</p>
   </div>
@@ -358,18 +363,15 @@
 <article class="slide" id="s02" role="tabpanel" aria-labelledby="t02" hidden>
   <div class="slide-h"><span class="no">02</span><h2>The three jobs</h2></div>
   <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">Three jobs, one session</p>
+          <p class="big">Three jobs, one session</p>
     <ul>
       <li><strong>Code it.</strong> You have already done this by hand.</li>
       <li><strong>Make the machine code it.</strong> Same pages, same codebook.</li>
       <li><strong>Compare, then chart.</strong> Your rows become a figure and a Word file.</li>
     </ul>
-    <p style="margin-top:14px"><strong>What is graded is not the rows. It is what you caught.</strong></p>
   </div>
   <div class="say">    
       <p>You are not learning to use AI today. You are learning to check it — and the only way to check a machine is to have done the work yourself first, which you have.</p>
-      <p>What you hand in at the end: your coded rows, the machine's coded rows, a log of where the two disagree, one chart built from your own rows, and a short write-up of one thing the machine got wrong.</p>
     
   </div>
 </article>
@@ -378,12 +380,11 @@
 <article class="slide" id="s03" role="tabpanel" aria-labelledby="t03" hidden>
   <div class="slide-h"><span class="no">03</span><h2>Which tool for which job</h2></div>
   <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">Two tools, and one to avoid</p>
+          <p class="big">Two tools, and one to avoid</p>
     <p>Both are on the <a href="https://www.hamilton.edu/offices/lits/tech-lab/artificial-intelligence/tools">LITS AI tools page</a> and both take your Hamilton credentials. <strong>Pick one and work in it.</strong></p>
     <ul>
-      <li><strong>Amplify</strong> — <a href="http://amplify.hamilton.edu/"><code>amplify.hamilton.edu</code></a> — Hamilton-hosted, with several models to choose from.</li>
-      <li><strong>Gemini</strong> — <a href="https://gemini.google.com/app"><code>gemini.google.com</code></a> — Google's model, through your Hamilton account.</li>
+      <li><strong>Amplify</strong> — <a href="http://amplify.hamilton.edu/"><code>amplify.hamilton.edu</code></a> — Hamilton-hosted, with several models to choose from. <strong>It does not run Python.</strong></li>
+      <li><strong>Gemini</strong> — <a href="https://gemini.google.com/app"><code>gemini.google.com</code></a> — Google's model. <strong>It can run Python internally</strong>, which is how it counts and charts.</li>
       <li><strong>Adobe Firefly</strong> — <strong>not for charts.</strong> It draws pictures. It will happily draw something that looks like a bar chart, with numbers it invented.</li>
     </ul>
   </div>
@@ -398,8 +399,7 @@
 <article class="slide" id="s04" role="tabpanel" aria-labelledby="t04" hidden>
   <div class="slide-h"><span class="no">04</span><h2>Set up, four steps</h2></div>
   <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">Before you prompt anything</p>
+          <p class="big">Before you prompt anything</p>
     <ul>
       <li><strong>1.</strong> Open <strong>either</strong> <a href="http://amplify.hamilton.edu/"><code>amplify.hamilton.edu</code></a> or <a href="https://gemini.google.com/app"><code>gemini.google.com</code></a> and sign in with your Hamilton account.</li>
       <li><strong>2.</strong> Start a <strong>new conversation</strong>.</li>
@@ -418,14 +418,13 @@
 <article class="slide" id="s05" role="tabpanel" aria-labelledby="t05" hidden>
   <div class="slide-h"><span class="no">05</span><h2>Three ways in</h2></div>
   <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">A PDF can be read three different ways</p>
+          <p class="big">A PDF can be read three different ways</p>
     <ul>
-      <li><strong>Embedded text layer.</strong> The characters are already stored in the file. Instant, free, exact — <em>if</em> the PDF was made from a word processor.</li>
-      <li><strong>The tool runs its own OCR.</strong> Used when there is no text layer. A machine guesses characters from pixels.</li>
-      <li><strong>The model looks at the page.</strong> A multimodal model treats the page as an image and reads it the way you would.</li>
+      <li><strong>Embedded text layer.</strong> The characters are already stored in the file. Instant, free, exact — <em>if</em> the PDF was made from a word processor. <em>Needs no program to run.</em></li>
+      <li><strong>The tool runs its own OCR</strong> — <em>optical character recognition</em>. Used when there is no text layer. A machine cuts the page into letter-sized pieces and guesses each one from its pixels. <strong>Needs to run a program.</strong></li>
+      <li><strong>The model looks at the page.</strong> A multimodal model treats the page as an image and reads it the way you would. <em>Needs no program to run.</em></li>
     </ul>
-    <p style="margin-top:14px"><strong>The output looks identical in all three cases.</strong></p>
+    <p style="margin-top:14px"><strong>Nothing in the answer tells you which one happened.</strong></p>
   </div>
   <div class="say">    <p>The last line is the one that matters. The chat window hands you text whichever route the tool took, with no label saying where it came from. Everything else today follows from that.</p>
   </div>
@@ -435,12 +434,17 @@
 <article class="slide" id="s06" role="tabpanel" aria-labelledby="t06" hidden>
   <div class="slide-h"><span class="no">06</span><h2>The twist in our PDF</h2></div>
   <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">Our "text layer" is not text. It is OCR from 2011.</p>
+          <p class="big">Our "text layer" is not text. It is OCR from December 2011.</p>
+    <p>The file says so itself. Ask it, with <code>pdfinfo</code>:</p>
+<pre>Creator:      Digitized by the Internet Archive
+Producer:     Recoded by LuraDocument PDF v2.28
+CreationDate: <b>Mon Dec  5 01:20:43 2011 EST</b>
+ModDate:      <b>Mon Dec  5 02:32:45 2011 EST</b></pre>
     <ul>
-      <li>The file reports one font — Courier — <strong>not embedded, with no character map.</strong></li>
-      <li>Every page is a scanned image with a black-and-white mask over it.</li>
-      <li>So the "text" was produced by a machine in 2011 looking at a 1913 book.</li>
+      <li>Created at 01:20, finished at 02:32 — <strong>72 minutes of machine processing</strong> on a 366-page book.</li>
+      <li><code>pdffonts</code> reports one font, Courier: not embedded, no character map. That is the signature of an <strong>invisible layer laid over a picture</strong>, not of typed text.</li>
+      <li><code>pdfimages</code> reports every page as a 400 ppi image with a one-bit black-and-white mask over it. <strong>That mask is what the OCR read.</strong></li>
+      <li>Note what the metadata does <em>not</em> say: which program read the letters. LuraDocument is the compressor. <strong>The engine is not named anywhere in the file.</strong></li>
     </ul>
     <p style="margin-top:14px">Extracting the text layer does not get you Sharpe's edition. <strong>It gets you a fifteen-year-old machine's guess at it.</strong></p>
   </div>
@@ -455,16 +459,15 @@
 <article class="slide" id="s07" role="tabpanel" aria-labelledby="t07" hidden>
   <div class="slide-h"><span class="no">07</span><h2>What breaks, and where</h2></div>
   <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">The fields you need sit in the worst type on the page</p>
+          <p class="big">The fields you need sit in the worst type on the page</p>
   </div>
   <div class="tbl">
   <table>
     <thead><tr><th>Field</th><th>Where it physically sits</th><th>What the text layer gives</th></tr></thead>
     <tbody>
-      <tr><td>Ward</td><td>Outer margin, small italic</td><td class="mono">Crupiil^^aie · iVaiebroke · Doue^aie · ^^''^^^</td></tr>
+      <tr><td>Ward</td><td>Outer margin, small italic</td><td class="mono">Nfiii^aif · Crupiil^^aie · iVaiebroke · ^^''^^^</td></tr>
       <tr><td>Chattel value</td><td>Italic fractions, <code>s.</code>/<code>d.</code> marks</td><td class="mono">9^. 6d. · 2^. · 107 los. 4^.</td></tr>
-      <tr><td>Entry number</td><td>An isolated numeral, no neighbours</td><td class="mono">14 … Freesto ie</td></tr>
+      <tr><td>Entry number</td><td>An isolated numeral, no neighbours</td><td class="mono">14 … Freesto?ie</td></tr>
       <tr><td>Occupation</td><td>Sometimes only glossed in a footnote</td><td class="mono">smallest type on the page</td></tr>
       <tr><td>Names, places</td><td>Body prose</td><td class="mono">William de Sfnte · Robertde Bat eldand</td></tr>
       <tr><td>Cause, outcome</td><td>Body prose</td><td>Generally good</td></tr>
@@ -482,30 +485,24 @@
 <article class="slide" id="s08" role="tabpanel" aria-labelledby="t08" hidden>
   <div class="slide-h"><span class="no">08</span><h2>Find out how yours read it</h2></div>
   <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">You cannot tell from the answer. So test it.</p>
+          <p class="big">You cannot tell from the answer. So test it.</p>
     <p>With your roll uploaded, before anything else, send these two messages.</p>
   </div>
   <div class="say">
     <div class="cp">
       <div class="cp-h"><span class="t">Diagnostic — message 1</span><button class="copy" type="button">Copy</button></div>
-      <pre>How did you read the PDF I just uploaded? Answer in one sentence,
-and say specifically whether you extracted an embedded text layer,
-ran your own OCR on the page images, or looked at the page images
-directly. If you are not sure, say you are not sure.</pre>
+      <pre>How did you read the PDF I just uploaded? Answer in one sentence, and say specifically whether you extracted an embedded text layer, ran your own OCR on the page images, or looked at the page images directly. If you are not sure, say you are not sure.</pre>
     </div>
     <div class="cp">
       <div class="cp-h"><span class="t">Diagnostic — message 2</span><button class="copy" type="button">Copy</button></div>
-      <pre>On printed page 46 there are two consecutive numbered entries,
-13 and 14. Give me both entry numbers and both victims' names
-exactly as printed. If any character is unclear, write it as you
-see it rather than correcting it.</pre>
+      <pre>List the headings of entries 1 to 5 in this roll, exactly as they appear, character for character. Do not add or remove spaces, and do not correct spelling. If a heading is unclear, write it as you see it.</pre>
     </div>    
-      <p>Message 2 has a known answer, which is what makes it a test. The page reads <strong>13. Edmund Poer</strong> and <strong>14. Reginald de Freestone</strong>. The stored text layer gives <code>14 … Freesto ie</code> — the numeral and the surname are both damaged.</p>
-      <p>So: if the tool returns both names cleanly, it either looked at the page or it filled the gap from somewhere else. If it returns the damage honestly, it is reading the text layer and telling you so. If it returns a confident wrong name, you have just watched a quiet failure happen, three minutes into the session, on a slide.</p>
+      <p>Every heading in the volume reads <em>On the death of [name]</em>. The stored text layer joins the <code>of</code> to the name, and it does it in every roll — <code>ofJohn</code>, <code>ofCristina</code>, <code>ofElena</code>, <code>ofGerardle Friiyter</code>. At least one of your first five entries will have it.</p>
+      <p>So: if the headings come back joined, the tool is reading the text layer and reporting it honestly. If all five come back with a clean space after <code>of</code>, it either looked at the page images or it tidied the text without telling you — and the second of those is the thing this whole session is about.</p>
+      <p>The tell is a single space. That is how small a quiet failure can be.</p>
       
     
-    <div class="demo"><b>Do this first</b> Run both messages before you paste the coding prompt, and note which of the three outcomes you got.</div>
+    <div class="demo"><b>Do this first</b> Run both messages before you paste the coding prompt, and note which of the two outcomes you got.</div>
   </div>
 </article>
 
@@ -513,8 +510,7 @@ see it rather than correcting it.</pre>
 <article class="slide" id="s09" role="tabpanel" aria-labelledby="t09" hidden>
   <div class="slide-h"><span class="no">09</span><h2>What a good prompt carries</h2></div>
   <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">Five things, or it will improvise</p>
+          <p class="big">Five things, or it will improvise</p>
     <ul>
       <li><strong>The exact columns</strong>, named and in order.</li>
       <li><strong>The value lists</strong>, closed, with an explicit option for "not stated".</li>
@@ -531,69 +527,64 @@ see it rather than correcting it.</pre>
 <article class="slide" id="s10" role="tabpanel" aria-labelledby="t10" hidden>
   <div class="slide-h"><span class="no">10</span><h2>The prompt</h2></div>
   <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">Fill in two blanks at the top. Paste the whole thing.</p>
+          <p class="big">Fill in two blanks at the top. Paste the whole thing.</p>
     <p>Change <code>ROLL_LETTER</code> and <code>CODER_ID</code> and nothing else. If you edit the columns, your rows stop lining up with everyone else's and the class dataset breaks.</p>
   </div>
   <div class="say">
+    <div class="fillrow">
+      <label for="roll-letter">Roll letter
+        <select id="roll-letter"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option></select>
+      </label>
+      <label for="coder-id">Coder ID
+        <input id="coder-id" type="text" autocomplete="off" spellcheck="false" placeholder="student">
+      </label>
+      <span class="hint">Type these once and they fill in below. Use <code>student</code> for your own coding, or the tool's name — <code>gemini</code>, <code>claude</code>, <code>amplify</code>.</span>
+    </div>
     <div class="cp">
       <div class="cp-h"><span class="t">Coding prompt — paste in after uploading the roll</span><button class="copy" type="button">Copy</button></div>
-<pre>ROLL_LETTER = [ ]
-CODER_ID    = [ ]
+<pre>ROLL_LETTER = {{ROLL_LETTER}}
+CODER_ID    = {{CODER_ID}}
 
-You are helping code medieval coroners' inquests into a dataset. The PDF I
-uploaded is one roll from R. R. Sharpe, ed., Calendar of Coroners Rolls of the
-City of London, A.D. 1300-1378 (1913).
+You are helping code medieval coroners' inquests into a dataset. The PDF I uploaded is one roll from R. R. Sharpe, ed., Calendar of Coroners Rolls of the City of London, A.D. 1300-1378 (1913).
 
-Produce ONE ROW PER NUMBERED ENTRY, in printed order, with these 20 columns
-in exactly this order:
+Produce ONE ROW PER NUMBERED ENTRY, in printed order, with these 21 columns in exactly this order:
 
-roll, case_number, printed_page, entry_type, inquest_date, date_verbatim,
-ward, ward_verbatim, within_without, parish_verbatim, victim_name,
-victim_gender, victim_status, manner_of_death, weapon, weapon_verbatim,
-perpetrator_name, perpetrator_outcome, chattels_verbatim, evidence_quote
+coder_id, roll, case_number, printed_page, entry_type, inquest_date, date_verbatim, ward, ward_verbatim, within_without, parish_verbatim, victim_name, victim_gender, victim_status, manner_of_death, weapon, weapon_verbatim, perpetrator_name, perpetrator_outcome, chattels_verbatim, evidence_quote
 
 VALUES
 
-entry_type: homicide | accident | death in custody | suicide |
-  cause undetermined | no death recorded
+entry_type: homicide | accident | death in custody | suicide | cause undetermined | no death recorded
 manner_of_death: natural | accident | assault | suicide | undetermined | none
 victim_gender: male | female | not given
-victim_status: gentleman/woman | craftsman/woman | servant/labourer |
-  apprentice | prisoner | destitute | cleric/religious | unknown
-weapon: bare hands | knife/dagger | club/staff | axe | sword |
-  bow and arrow | stone or thrown object | other | no weapon
-perpetrator_outcome: captured | surrendered | abjured the realm |
-  took sanctuary then escaped | fled, never taken | jury found no felony |
-  perpetrator died | outlawed | not stated | no perpetrator
+victim_status: gentleman/woman | craftsman/woman | servant/labourer | apprentice | prisoner | destitute | cleric/religious | unknown
+weapon: bare hands | knife/dagger | club/staff | axe | sword | bow and arrow | stone or thrown object | other | no weapon
+perpetrator_outcome: captured | surrendered | abjured the realm | took sanctuary then escaped | fled, never taken | jury found no felony | perpetrator died | outlawed | not stated | no perpetrator
 within_without: within | without | not specified | not applicable
 
 RULES
 
-1. "lay dead of a death OTHER THAN his rightful death" = an UNNATURAL death.
-   "DIED his rightful death" = a NATURAL death. These mean opposite things.
-   Read the phrase carefully before coding manner_of_death.
-2. Take the ward from the SENTENCE that names it, never from the marginal
-   note. Put the raw spelling in ward_verbatim, modernised in ward.
-3. inquest_date is the date at the head of the entry. That is when the body
-   was viewed, NOT necessarily when the person died. Do not adjust it.
-4. Any value you cannot read, write exactly: ILLEGIBLE
-   Any value the entry does not state, write exactly: NOT STATED
-   Never infer, never fill a gap from context, never guess a name.
-5. chattels_verbatim: copy the money phrase exactly as printed, including
-   damaged characters. Do not tidy it.
-6. evidence_quote: 5 to 15 words from the entry supporting manner_of_death.
+1. coder_id and roll are the same in every row: the two values given at the top. coder_id names who or what did the coding — student, gemini, claude, amplify.
+2. entry_type says what kind of RECORD this is. manner_of_death says how the person died. They are not the same question: an entry can be "no death recorded", and then manner_of_death is "none".
+3. "lay dead of a death OTHER THAN his rightful death" = an UNNATURAL death. "DIED his rightful death" = a NATURAL death. These mean opposite things. Read the phrase carefully before coding manner_of_death.
+4. Take the ward from the SENTENCE that names it, never from the marginal note. Put the raw spelling in ward_verbatim, modernised in ward.
+5. inquest_date is the date at the head of the entry. That is when the body was viewed, NOT necessarily when the person died. Write it as M/YYYY.
+6. date_verbatim: the date exactly as the entry gives it, feast day and regnal year included — for example "Tuesday next after the Purification B.V.Mary [2 Feb.] the year aforesaid".
+7. printed_page: the number printed at the top of the page. These are often mis-transcribed (lOI for 101, Ill for 111). If you cannot read it cleanly, write ILLEGIBLE rather than guessing.
+8. The five _verbatim columns: copy what the page says, exactly as printed, including damaged characters. Do not tidy, modernise or correct.
+9. Any value you cannot read, write exactly: ILLEGIBLE. Any value the entry does not state, write exactly: NOT STATED. Never infer, never fill a gap from context, never guess a name.
+10. evidence_quote: 5 to 15 words from the entry supporting manner_of_death.
 
 OUTPUT
 
-Write the result to a CSV file I can download. Quote every field. Do not
-print the table in the chat.
-Filename: roll_[ROLL_LETTER]_ai_[CODER_ID].csv
+Write the result to a CSV file I can download. Quote every field.
+Filename: roll_{{ROLL_LETTER}}_{{CODER_ID}}.csv
+
+If you cannot create a file, say so in one sentence before anything else, then print the rows in the chat as CSV inside a single code block, every field quoted, no commentary between rows. Do not give me a formatted table instead of a file without telling me.
 
 Then, in the chat and not in the file, tell me:
-  - how many rows you produced
-  - which case_numbers you could not read
-  - which fields you most often had to mark ILLEGIBLE</pre>
+- how many rows you produced
+- which case_numbers you could not read
+- which fields you most often had to mark ILLEGIBLE</pre>
     </div>    
       <p>Read rules 1 and 4 twice. Rule 1 is the trap you have already met by hand. Rule 4 decides whether the output is usable at all: a model that quietly fills gaps produces a beautiful CSV you cannot check, and a model that marks <code>ILLEGIBLE</code> tells you exactly where to look.</p>
       <p>Do not skip the three questions at the end. The row count is how you detect a dropped entry, and the <code>ILLEGIBLE</code> summary is a free map of where to spend your verification time.</p>
@@ -606,12 +597,11 @@ Then, in the chat and not in the file, tell me:
 <article class="slide" id="s11" role="tabpanel" aria-labelledby="t11" hidden>
   <div class="slide-h"><span class="no">11</span><h2>What should come back</h2></div>
   <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">Check these four things before you look at any row</p>
+          <p class="big">Check these four things before you look at any row</p>
     <ul>
       <li><strong>Row count</strong> matches the entry numbers you can see in the PDF.</li>
       <li><strong>First and last row</strong> match the first and last entry on your pages.</li>
-      <li><strong>The columns are the 20 asked for</strong>, in order, none invented.</li>
+      <li><strong>The columns are the 21 asked for</strong>, in order, none invented.</li>
       <li><strong>Some cells say <code>ILLEGIBLE</code>.</strong> If none do, be suspicious, not pleased.</li>
     </ul>
   </div>
@@ -623,19 +613,26 @@ Then, in the chat and not in the file, tell me:
 <article class="slide" id="s12" role="tabpanel" aria-labelledby="t12" hidden>
   <div class="slide-h"><span class="no">12</span><h2>Getting the file out intact</h2></div>
   <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">Never copy a table out of the chat window</p>
-    <p>Pasted tables lose characters <em>inside ordinary words</em> — and the result still looks like a word, so you will not notice.</p>
+          <p class="big">Ask for a file. If none comes, copy with your eyes open.</p>
+    <p>The prompt asks for a downloadable CSV. <strong>Amplify cannot make one</strong> — it does not run Python. Send the prompt anyway and read what comes back instead: how a tool behaves when it cannot do what you asked is part of what you are measuring.</p>
     <ul>
-      <li><code>Craftsman</code> → <code>Crafts</code></li>
-      <li><code>Nicholas Crabbe</code> → <code>Nichisbe</code></li>
-      <li><code>Neugate</code> → <code>Neate</code></li>
+      <li><strong>If you get a file:</strong> download it, open it, read the first row and the last row.</li>
+      <li><strong>If you get rows in the chat:</strong> the prompt told it to print CSV inside a code block. Copy from the code block. If it handed you a formatted table instead, ask again for the code block.</li>
     </ul>
-    <p style="margin-top:14px"><strong>Download the file. Open it. Read the first row and the last row.</strong></p>
+    <p style="margin-top:14px"><strong>Four ways a copied table breaks</strong></p>
+    <ul>
+      <li>A comma <em>inside</em> a field pushes that row's columns one cell to the left. One row out of line, and nothing looks wrong.</li>
+      <li>Excel rewrites whatever it thinks it recognises — <code>3/1300</code> becomes a date, <code>04</code> becomes <code>4</code>. The quietest of the four.</li>
+      <li>A markdown table lands in a single column, pipes and all, with <code>|---|</code> sitting in it as a data row.</li>
+      <li>The table stops early and whole rows never arrive. <strong>Count the rows.</strong></li>
+    </ul>
+    <p style="margin-top:14px">Characters already damaged in the <code>_verbatim</code> columns take one more hit on every one of these routes.</p>
+    <p style="margin-top:14px"><strong>Either route: check the row count, the first row, the last row, and every name against the page.</strong></p>
   </div>
   <div class="say">    
-      <p>Be precise about the cause, because it changes what you should trust. This is not the model being wrong — it is the text getting mangled between the model and your clipboard. The model produced <code>Nicholas Crabbe</code>; what landed in the spreadsheet was <code>Nichisbe</code>. Downloading a file avoids the whole class of problem.</p>
-      <p>If your tool will not produce a downloadable file, ask for the CSV inside a fenced code block and copy from there. Better, still not perfect — spot-check the first and last row either way.</p>
+      <p>Be precise about the cause, because it changes what you should trust. Not one of those four is the model being wrong — its rows were fine, and the damage happened between the chat window and your spreadsheet. That is why the fix is the route and not a better prompt: a downloaded file avoids the whole class of problem, a code block avoids most of it, a formatted table avoids none of it.</p>
+      <p>The Excel one deserves a second look, because it is the only one that leaves no trace. A date silently rewritten is indistinguishable from a date you coded that way, and it survives every check except comparing against the page. If <code>inquest_date</code> comes back tidier than you left it, something edited it.</p>
+      <p>Write down what your tool actually did with the file instruction. Did it tell you it could not make one, or did it quietly hand you a table as though that were what you asked for? Substituting one format for another without saying so is the same habit as filling in a ward name you could not read. You will meet it again on <a class="slink" href="#s14" data-go="s14">slide <span data-num="s14">14</span></a> as a <em>quiet</em> error, and it is worth writing down while you are there.</p>
     
   </div>
 </article>
@@ -644,18 +641,18 @@ Then, in the chat and not in the file, tell me:
 <article class="slide" id="s13" role="tabpanel" aria-labelledby="t13" hidden>
   <div class="slide-h"><span class="no">13</span><h2>How to line them up</h2></div>
   <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">Side by side, field by field, by case number</p>
+          <p class="big">Side by side, field by field, by case number</p>
     <ul>
       <li>Open both CSVs in one spreadsheet, your rows above, the machine's below.</li>
       <li>Sort both by <code>case_number</code>. Do not sort by anything else.</li>
       <li>Go <strong>down a column</strong>, not across a row. You are comparing fields, not entries.</li>
-      <li>Log every disagreement. Do not fix anything yet.</li>
+      <li>Note every disagreement as you go. Do not fix anything yet.</li>
     </ul>
   </div>
   <div class="say">    
       <p>Comparing down a column rather than across a row is a small change with a large effect. It keeps one kind of judgement in mind at a time, so patterns appear — <em>it gets the ward wrong whenever the margin is damaged</em> — which never surfaces when you read across a row and meet twenty unrelated fields at once.</p>
       <p>"Do not fix anything yet" matters because the disagreement rate is itself your result. If you silently correct as you go, you have destroyed your own measurement.</p>
+      <p>The point of the notes is that you see for yourself how often the machine is wrong, and where. Keep them in whatever form you will actually use while the two files are open in front of you.</p>
     
   </div>
 </article>
@@ -664,17 +661,16 @@ Then, in the chat and not in the file, tell me:
 <article class="slide" id="s14" role="tabpanel" aria-labelledby="t14" hidden>
   <div class="slide-h"><span class="no">14</span><h2>Four kinds of disagreement</h2></div>
   <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">Label every disagreement as one of these</p>
+          <p class="big">Label every disagreement as one of these</p>
   </div>
   <div class="tbl">
   <table>
-    <thead><tr><th>Label</th><th>What it looks like</th><th>What you do</th></tr></thead>
+    <thead><tr><th>Label</th><th>What it looks like</th></tr></thead>
     <tbody>
-      <tr><td><strong>Loud</strong></td><td>The output is visibly broken — <code>^^''^^^</code>, <code>Crupiil^^aie</code>, a number where a name should be.</td><td>Correct from the page. Note which zone of the page it came from.</td></tr>
-      <tr><td><strong>Quiet</strong></td><td>Fluent, plausible, and wrong. A real ward name in the right slot — just not the one on the page.</td><td>The one that matters. Quote the page in your log.</td></tr>
-      <tr><td><strong>Rule gap</strong></td><td>You and the machine both defensible. The codebook did not say.</td><td>Write the rule that would have settled it. This goes to the class.</td></tr>
-      <tr><td><strong>You</strong></td><td>You were wrong.</td><td>Record it. This happens and it is not a mark against you.</td></tr>
+      <tr><td><strong>Loud</strong></td><td>The output is visibly broken — <code>^^''^^^</code>, <code>Crupiil^^aie</code>, a number where a name should be.</td></tr>
+      <tr><td><strong>Quiet</strong></td><td>Fluent, plausible, and wrong. A real ward name in the right slot — just not the one on the page.</td></tr>
+      <tr><td><strong>Rule gap</strong></td><td>You and the machine both defensible. The codebook did not say.</td></tr>
+      <tr><td><strong>You</strong></td><td>You were wrong.</td></tr>
     </tbody>
   </table>
   </div>
@@ -686,29 +682,17 @@ Then, in the chat and not in the file, tell me:
   </div>
 </article>
 
-<!-- 15 -->
-<article class="slide" id="s15" role="tabpanel" aria-labelledby="t15" hidden>
-  <div class="slide-h"><span class="no">15</span><h2>The log you hand in</h2></div>
-  <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">One line per disagreement, five columns</p>
-    <p><code>case_number · field · your value · machine value · label · why (from the page)</code></p>
-    <p style="margin-top:14px">The "why" column is the assignment. <strong>"The machine was wrong" is not a why.</strong> "The ward is in a damaged marginal italic and the body sentence says Walbrook" is.</p>
-  </div>
-  <div class="say">    <p>How this is graded: on disagreements <em>found and explained</em>, not on how few you had. A log with three entries for a roll whose margins are visibly wrecked earns a conversation, not a good mark.</p>
-  </div>
-</article>
 
 <!-- 16 -->
 <article class="slide" id="s16" role="tabpanel" aria-labelledby="t16" hidden>
-  <div class="slide-h"><span class="no">16</span><h2>Upload and ask</h2></div>
+  <div class="slide-h"><span class="no">15</span><h2>Upload and ask</h2></div>
   <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">Your CSV, not the machine's</p>
+          <p class="big">Your CSV, not the machine's</p>
     <ul>
       <li>Upload <strong>your own verified CSV</strong> — not the machine's output. Yours is a few kilobytes, well inside any upload limit.</li>
       <li>Ask for the chart <em>and the numbers behind it</em>, in the same message.</li>
       <li>Check the numbers against your spreadsheet <strong>before</strong> you keep the picture.</li>
+      <li><strong>Gemini can create a chart using Python</strong> — it counts your rows, then renders them. <strong>Amplify "draws" a chart, like Firefly</strong> — it cannot run Python, so whatever comes back was generated, not counted.</li>
     </ul>
   </div>
   <div class="say">    <p>The figure is built on your verified rows, not the machine's raw output. Otherwise the whole comparison gets quietly undone at the last step, and you end up charting the errors you just spent twenty minutes finding.</p>
@@ -717,62 +701,45 @@ Then, in the chat and not in the file, tell me:
 
 <!-- 17 -->
 <article class="slide" id="s17" role="tabpanel" aria-labelledby="t17" hidden>
-  <div class="slide-h"><span class="no">17</span><h2>The chart prompt</h2></div>
+  <div class="slide-h"><span class="no">16</span><h2>The chart prompt</h2></div>
   <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">Name the column. Ask for the table. Say n.</p>
+          <p class="big">Name the column. Ask for the table. Say n.</p>
   </div>
   <div class="say">
     <div class="cp">
-      <div class="cp-h"><span class="t">Chart prompt — paste in with your CSV attached</span><button class="copy" type="button">Copy</button></div>
-<pre>The attached CSV is my own hand-verified coding of Roll [ ] of the London
-coroners' rolls, [ ] rows.
+      <div class="cp-h"><span class="t">Chart prompt 1 — with your CSV attached</span><button class="copy" type="button">Copy</button></div>
+<pre>The attached CSV is my own hand-verified coding of Roll {{ROLL_LETTER}} of the London coroners' rolls, [ ] rows.
 
-First, count the values in the column `manner_of_death` and show me the
-counts as a plain table. Do not chart anything yet.
-
-Then, after I confirm the counts, make a single horizontal bar chart of
-those counts, with:
-  - categories sorted from most to least frequent
-  - the count printed at the end of each bar
-  - the title: "Manner of death, Roll [ ] (n = [ ])"
-  - no 3D, no gradient, no drop shadow, no pie chart
-  - one colour for all bars, since the categories are not ranked
-
-Tell me if any rows were excluded from the count and why.</pre>
+Count the values in the column `manner_of_death` and show me the counts as a plain table. Do not chart anything yet.</pre>
+    </div>
+    <div class="cp">
+      <div class="cp-h"><span class="t">Chart prompt 2 — when the counts come back</span><button class="copy" type="button">Copy</button></div>
+<pre>Tell me if any rows were excluded from that count and why.</pre>
+    </div>
+    <div class="cp">
+      <div class="cp-h"><span class="t">Chart prompt 3 — once the counts match your own</span><button class="copy" type="button">Copy</button></div>
+<pre>Make a single horizontal bar chart of those counts, with:
+- categories sorted from most to least frequent
+- the count printed at the end of each bar
+- the title: "Manner of death, Roll {{ROLL_LETTER}} (n = [ ])"
+- no 3D, no gradient, no drop shadow, no pie chart
+- one colour for all bars, since the categories are not ranked</pre>
     </div>    
-      <p>The two-step structure is the whole point: <strong>counts first, picture second.</strong> A chart is a claim about numbers, and once it is a picture nobody checks the numbers again. Asking for the table first makes the claim inspectable while it is still text.</p>
-      <p>The last line catches a real failure. Tools silently drop blank cells and rows they cannot parse, so a chart of 34 rows from a 39-row file is a different finding from the one you think you are reporting.</p>
+      <p>Send them one at a time and read each answer before the next. The order is the whole point: <strong>counts first, picture last.</strong> A chart is a claim about numbers, and once it is a picture nobody checks the numbers again. Asking for the table first makes the claim inspectable while it is still text — and sending the third message is how you confirm the counts, so check them against your own before you do.</p>
+      <p>The second message catches a real failure. Tools silently drop blank cells and rows they cannot parse, so a chart of 34 rows from a 39-row file is a different finding from the one you think you are reporting.</p>
       <p>Swap <code>manner_of_death</code> for whichever column suits your question — <code>weapon</code>, <code>perpetrator_outcome</code>, <code>ward</code>. Same structure every time.</p>
     
   </div>
 </article>
 
-<!-- 18 -->
-<article class="slide" id="s18" role="tabpanel" aria-labelledby="t18" hidden>
-  <div class="slide-h"><span class="no">18</span><h2>The trap</h2></div>
-  <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">An image generator will draw you a chart. Do not let it.</p>
-    <p>Ask Firefly — or any "make me an image" tool — for a bar chart of your data and you will get a well-composed picture with <strong>invented numbers and nonsense axis labels.</strong></p>
-    <p style="margin-top:12px">It cannot read your file. It is drawing what charts look like.</p>
-    <p style="margin-top:12px"><strong>A chart is data. If the tool did not count something, it did not make a chart.</strong></p>
-  </div>
-  <div class="say">    
-      <p>Try it once if you want to see it for yourself: ask an image generator for "a bar chart of causes of death in medieval London" and read the axis labels. They will be nonsense, confidently drawn.</p>
-      <p>The rule underneath: a tool that generates pixels and a tool that computes over your data are different kinds of thing, and the interface does not distinguish them. That distinction will keep mattering long after this course.</p>
-    
-  </div>
-</article>
 
 <!-- 19 -->
 <article class="slide" id="s19" role="tabpanel" aria-labelledby="t19" hidden>
-  <div class="slide-h"><span class="no">19</span><h2>Two routes to a .docx</h2></div>
+  <div class="slide-h"><span class="no">17</span><h2>Two routes to a .docx</h2></div>
   <div class="onscreen">
-    <span class="tag">On screen</span>
-    <p class="big">Either works. Both take under a minute.</p>
+          <p class="big">Either works. Both take under a minute.</p>
     <ul>
-      <li><strong>Route A — ask the tool.</strong> Say <em>"Put this into a Word document I can download"</em> and take the <code>.docx</code>. Gemini has done this directly since April 2026.</li>
+      <li><strong>Route A — ask the tool.</strong> Say <em>"Put this into a Word document I can download"</em> and take the <code>.docx</code>.</li>
       <li><strong>Route B — Google Docs.</strong> Paste your text in, then <strong>File → Download → Microsoft Word (.docx)</strong>.</li>
     </ul>
     <p style="margin-top:14px"><strong>The chart:</strong> download it as an image, then <strong>Insert → Picture</strong>. Caption it with the field, the roll and the n.</p>
@@ -794,7 +761,7 @@ Tell me if any rows were excluded from the count and why.</pre>
       <tr><td>The upload is rejected or stalls</td><td>Whole-volume PDF, or several files at once</td><td>One roll, one file. Split the PDF first, or use the pre-split rolls.</td></tr>
       <tr><td>It summarises instead of coding</td><td>Chat happened before the prompt, or the prompt was trimmed</td><td>New conversation, re-upload, paste the prompt whole and first.</td></tr>
       <tr><td>The CSV has the wrong number of columns</td><td>A column name was edited</td><td>Re-paste the unedited prompt. Do not repair the file by hand.</td></tr>
-      <tr><td>Names look subtly wrong in the spreadsheet</td><td>The table was copied out of the chat window</td><td>Ask for a downloadable file and start again from it.</td></tr>
+      <tr><td>Names look subtly wrong in the spreadsheet</td><td>Copied out of a formatted table in the chat</td><td>Ask for a file; if the tool cannot make one, ask for CSV in a code block and copy from there.</td></tr>
       <tr><td>The chart's total does not match the file</td><td>Blank or unparsed rows dropped silently</td><td>Ask what was excluded and why, then re-run the count.</td></tr>
     </tbody>
   </table>
@@ -812,10 +779,10 @@ Tell me if any rows were excluded from the count and why.</pre>
   <div class="say">
     <span class="tag">Everything to copy, in the order you need it</span>
     <ol class="chk">
-      <li><b>Diagnostic</b> — slide 8, two messages. Run before anything else, with the roll uploaded.</li>
-      <li><b>Coding prompt</b> — slide 10. Fill in <code>ROLL_LETTER</code> and <code>CODER_ID</code>, change nothing else.</li>
-      <li><b>Chart prompt</b> — slide 17. With your own verified CSV attached. Counts first.</li>
-      <li><b>Word file</b> — slide 19. "Put this into a Word document I can download", or Google Docs → File → Download → Microsoft Word.</li>
+      <li><b>Diagnostic</b> — <a class="slink" href="#s08" data-go="s08">slide <span data-num="s08">8</span></a>, two messages. Run before anything else, with the roll uploaded.</li>
+      <li><b>Coding prompt</b> — <a class="slink" href="#s10" data-go="s10">slide <span data-num="s10">10</span></a>. Fill in <code>ROLL_LETTER</code> and <code>CODER_ID</code>, change nothing else.</li>
+      <li><b>Chart prompts</b> — <a class="slink" href="#s17" data-go="s17">slide <span data-num="s17">16</span></a>, three messages in order. Attach your own verified CSV to the first.</li>
+      <li><b>Word file</b> — <a class="slink" href="#s19" data-go="s19">slide <span data-num="s19">17</span></a>. "Put this into a Word document I can download", or Google Docs → File → Download → Microsoft Word.</li>
     </ol>
     <div class="callout good">
       <p><strong>If you only remember one thing.</strong> The machine is fastest exactly where the source is hardest — the margins, the footnotes, the numerals, the money — and it does not slow down or hedge when it reaches them. Your job is not to trust it or to refuse it. Your job is to know where it is weak and go look there.</p>
@@ -825,7 +792,7 @@ Tell me if any rows were excluded from the count and why.</pre>
 
 <div class="nav">
   <button id="prev" type="button">← Previous</button>
-  <span class="pos" id="pos">Slide 1 of 23</span>
+  <span class="pos" id="pos">Slide 1</span>
   <button id="next" type="button">Next →</button>
 </div>
 
@@ -980,6 +947,26 @@ Tell me if any rows were excluded from the count and why.</pre>
   vSlide.addEventListener('click', function(){ setMode('slides', true); });
   vFlow.addEventListener('click',  function(){ setMode('flow',   true); });
 
+  /* ---- in-text "slide N" links: jump in either mode, and keep their own number right ---- */
+  function idx_of(id){
+    for(var i = 0; i < panels.length; i++){ if(panels[i].id === id) return i; }
+    return -1;
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-num]'), function(sp){
+    var p = document.getElementById(sp.getAttribute('data-num'));
+    if(!p) return;
+    var n = p.querySelector('.slide-h .no');
+    if(n) sp.textContent = String(parseInt(n.textContent, 10) || n.textContent.trim());
+  });
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('[data-go]') : null;
+    if(!a) return;
+    var i = idx_of(a.getAttribute('data-go'));
+    if(i < 0) return;
+    e.preventDefault();
+    go(i, false);
+  });
+
   /* Opens on the title slide, matching the markup's resting state; a #sNN link wins. */
   var start = 0;
   if(start < 0) start = 0;
@@ -999,6 +986,36 @@ Tell me if any rows were excluded from the count and why.</pre>
   function arm(){ ready = true; }
   if(document.readyState === 'complete') setTimeout(arm, 0);
   else window.addEventListener('load', function(){ setTimeout(arm, 0); });
+
+  /* ---- ROLL_LETTER and CODER_ID fill the prompts live ---- */
+  (function(){
+    var roll = document.getElementById('roll-letter'),
+        coder = document.getElementById('coder-id');
+    if(!roll || !coder) return;
+    var BLANK = { ROLL_LETTER: '[ROLL LETTER]', CODER_ID: '[CODER ID]' };
+    var targets = [];
+    Array.prototype.forEach.call(document.querySelectorAll('.cp pre'), function(pre){
+      if(pre.textContent.indexOf('{{') > -1) targets.push({ el: pre, tpl: pre.textContent });
+    });
+    function esc(t){
+      return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+    function render(){
+      var v = { ROLL_LETTER: roll.value.trim(), CODER_ID: coder.value.trim() };
+      targets.forEach(function(t){
+        t.el.innerHTML = esc(t.tpl).replace(/\{\{(ROLL_LETTER|CODER_ID)\}\}/g, function(_, k){
+          var filled = v[k];
+          return '<span class="fill' + (filled ? '' : ' empty') + '">' +
+                 esc(filled || BLANK[k]) + '</span>';
+        });
+      });
+    }
+    // never carry one person's values over to the next
+    roll.value = ''; coder.value = '';
+    roll.addEventListener('change', render);
+    coder.addEventListener('input', render);
+    render();
+  })();
 
   /* ---- copy buttons ---- */
   function selectText(pre, btn){
