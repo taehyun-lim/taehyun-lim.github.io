@@ -68,6 +68,11 @@ svg .ax{fill:var(--muted);font-size:11px}
 .steps div{background:var(--panel);border-radius:10px;padding:14px}
 .steps b{font-family:var(--display);font-size:18px;display:block}
 .steps .hot{background:var(--note)}
+.steps .steplinks{margin-top:8px;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.steps .steplinks button{all:unset;cursor:pointer;font:600 12.5px var(--body);color:var(--acad)}
+.steps .steplinks button:hover{text-decoration:underline}
+.tablink{all:unset;cursor:pointer;color:var(--acad);font:inherit;font-weight:600}
+.tablink:hover{text-decoration:underline}
 .muted{color:var(--muted)}
 footer{margin-top:40px;font-size:13px;color:var(--muted)}
 footer p{margin:0 0 8px}
@@ -106,10 +111,18 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
   <p class="lede">Every comparison in this lab runs through the same five steps. Step 2 is the one people skip, and it can change the answer.</p>
   <div class="steps">
     <div><b>1 · Ask</b>One specific research question</div>
-    <div class="hot"><b>2 · Count</b>Decide the unit: items, catalog lots, or presence per test unit</div>
-    <div><b>3 · Describe</b>Cross-tabs, percentages, charts, medians</div>
-    <div><b>4 · Test</b>Could the difference be chance?</div>
-    <div><b>5 · Size it</b>How big is the difference?</div>
+    <div class="hot"><b>2 · Count</b>Decide the unit: items, catalog lots, or presence per test unit
+      <div class="steplinks"><button data-goto="counting">What we count →</button></div>
+    </div>
+    <div><b>3 · Describe</b>Cross-tabs, percentages, charts, medians
+      <div class="steplinks"><button data-goto="descriptive">Descriptive stats →</button><button data-goto="crosstab">Cross-tab →</button><button data-goto="measure">Measurements →</button></div>
+    </div>
+    <div><b>4 · Test</b>Could the difference be chance?
+      <div class="steplinks"><button data-goto="hyptest">Hypothesis testing →</button><button data-goto="chisq">χ² →</button><button data-goto="kw">Kruskal-Wallis →</button></div>
+    </div>
+    <div><b>5 · Size it</b>How big is the difference?
+      <div class="steplinks"><button data-goto="effect">Cramér's V →</button></div>
+    </div>
   </div>
   <div class="grid2 g-tools">
     <div class="box">
@@ -121,12 +134,12 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
     <div class="box">
       <h3>Pick your tool</h3>
       <div class="tbl"><table><thead><tr><th>Question</th><th>Data</th><th>Tool</th></tr></thead><tbody>
-      <tr><td>How do the mixes differ?</td><td>counts</td><td>cross-tab, %</td></tr>
-      <tr><td>Could it be chance?</td><td>counts</td><td>χ² (chi-square)</td></tr>
-      <tr><td>How big is it?</td><td>counts</td><td>Cramér’s V</td></tr>
-      <tr><td>Sizes or condition?</td><td>measurements</td><td>median, histogram</td></tr>
-      <tr><td>Chance? (3+ groups)</td><td>measurements</td><td>Kruskal-Wallis</td></tr>
-      <tr><td>Which pair differs?</td><td>measurements</td><td>Mann-Whitney</td></tr></tbody></table></div>
+      <tr><td>How do the mixes differ?</td><td>counts</td><td><button class="tablink" data-goto="crosstab">cross-tab, %</button></td></tr>
+      <tr><td>Could it be chance?</td><td>counts</td><td><button class="tablink" data-goto="chisq">χ² (chi-square)</button></td></tr>
+      <tr><td>How big is it?</td><td>counts</td><td><button class="tablink" data-goto="effect">Cramér’s V</button></td></tr>
+      <tr><td>Sizes or condition?</td><td>measurements</td><td><button class="tablink" data-goto="measure">median, histogram</button></td></tr>
+      <tr><td>Chance? (3+ groups)</td><td>measurements</td><td><button class="tablink" data-goto="kw">Kruskal-Wallis</button></td></tr>
+      <tr><td>Which pair differs?</td><td>measurements</td><td><button class="tablink" data-goto="kw">Mann-Whitney</button></td></tr></tbody></table></div>
     </div>
   </div>
   <p class="muted">Cleaning tip: Layer labels vary ("B " with a trailing space, "A Waterscreen Upper", "Clean-up"). Reduce them to the stratigraphic letter A–D before comparing levels.</p>
@@ -524,6 +537,7 @@ function show(id,save){panels.forEach(p=>p.hidden=p.id!==id);[...tabs.children].
 tabs.addEventListener('keydown',e=>{const bs=[...tabs.children],i=bs.indexOf(document.activeElement);if(i<0)return;
   if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const j=(i+(e.key==='ArrowRight'?1:bs.length-1))%bs.length;bs[j].focus();bs[j].click();}});
 let start=location.hash.slice(1); if(!panels.some(p=>p.id===start)){try{start=localStorage.getItem('tab')}catch(e){start=null}} if(!panels.some(p=>p.id===start))start='overview';
+document.querySelectorAll('[data-goto]').forEach(el=>{el.onclick=()=>show(el.dataset.goto,true);});
 
 /* stats helpers */
 function chi(O){const R=O.map(r=>r.reduce((a,b)=>a+b,0)),C=O[0].map((_,j)=>O.reduce((a,r)=>a+r[j],0)),N=R.reduce((a,b)=>a+b,0);
