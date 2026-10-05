@@ -36,6 +36,8 @@ h3{font-family:var(--display);font-weight:600;font-size:20px;margin:0 0 8px}
 @media (max-width:1121px){ .g-tools{grid-template-columns:1fr} }
 .box{background:var(--panel);border-radius:10px;padding:18px 20px;min-width:0}
 .g-one{grid-template-columns:1fr}
+.nrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+#nInput{width:120px;font:inherit;font-variant-numeric:tabular-nums;text-align:right;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 6px}
 .note{background:var(--note);border-radius:10px;padding:14px 18px;margin-block:18px}
 .q{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:8px}
 .q div{border-top:2px solid var(--line);padding-top:8px}
@@ -402,8 +404,9 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
   <div class="q"><div><b>Compares</b>The strength of association in a χ² table, 0 (none) to 1 (complete)</div><div><b>Example</b>Type × school V = 0.24; pencil material × school V = 0.36</div></div>
   <div class="note"><b>In one line: p tells you <i>whether</i>, V tells you <i>how much</i>.</b> The χ² test asks whether the pattern is too big to be chance; Cramér’s V says how strong it is. Report both, side by side.</div>
   <div class="box">
-    <label for="scale"><b>Sample size:</b> <span id="scaleLbl"></span></label>
-    <div class="row"><input type="range" id="scale" min="0" max="100" value="67.1" step="0.1"></div>
+    <div class="nrow"><label for="nInput"><b>Sample size:</b> N =</label> <input type="number" id="nInput" min="10" max="1000000" step="1" inputmode="numeric" value="5144"> <span id="scaleLbl" class="muted"></span></div>
+    <div class="row"><input type="range" id="scale" min="0" max="100" value="67.1" step="0.1" aria-label="Sample size slider (50 to 50,000)"></div>
+    <p class="muted" style="margin:0;font-size:13px">Drag the slider (50 to 50,000), or type any N from 10 to 1,000,000.</p>
     <div class="stats" id="effStats"></div>
     <p class="muted" id="effMsg"></p>
   </div>
@@ -411,14 +414,16 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
     <h3>The math</h3>
     <div class="eqs">
       <div class="eq"><span class="lbl">χ²</span>
-        <math display="block"><msup><mi>&#x3C7;</mi><mn>2</mn></msup><mo>=</mo><munder><mo>&#x2211;</mo><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></munder><mfrac><msup><mrow><mo stretchy="false">(</mo><msub><mi>O</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x2212;</mo><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="false">)</mo></mrow><mn>2</mn></msup><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mfrac><mspace width="1.2em"/><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><msub><mi>C</mi><mi>j</mi></msub><mo>&#xD7;</mo><mfrac><msub><mi>R</mi><mi>i</mi></msub><mi>N</mi></mfrac></math>
+        <math display="block"><msup><mi>&#x3C7;</mi><mn>2</mn></msup><mo>=</mo><munder><mo>&#x2211;</mo><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></munder><mfrac><msup><mrow><mo stretchy="false">(</mo><msub><mi>O</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x2212;</mo><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="false">)</mo></mrow><mn>2</mn></msup><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mfrac></math>
+        <math display="block"><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><msub><mi>C</mi><mi>j</mi></msub><mo>&#xD7;</mo><mfrac><msub><mi>R</mi><mi>i</mi></msub><mi>N</mi></mfrac></math>
         <span class="where">Same χ² from the Chi-square tab. Look at <i>E</i>: <i>N</i> is already sitting in its denominator, so <i>N</i> is baked into χ² before V ever touches it.</span></div>
       <div class="eq"><span class="lbl">Cramér’s V</span>
         <math display="block"><mi>V</mi><mo>=</mo><msqrt><mfrac><msup><mi>&#x3C7;</mi><mn>2</mn></msup><mrow><mi>N</mi><mo stretchy="false">(</mo><mi>k</mi><mo>&#x2212;</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></mfrac></msqrt><mspace width="1em"/><mi>k</mi><mo>=</mo><mo>min</mo><mo stretchy="false">(</mo><mi>r</mi><mo>,</mo><mi>c</mi><mo stretchy="false">)</mo></math>
         <span class="where"><i>N</i> shows up a second time here, in V’s own denominator. Those two N’s — one hidden inside χ², one explicit — are what cancel each other, and dividing by <i>k</i> − 1 then keeps V between 0 and 1 for any table size.</span></div>
       <div class="eq"><span class="lbl">Why p shrinks but V doesn’t</span>
-        <math display="block"><mtext>same proportions,&#xA0;</mtext><mi>N</mi><mo>&#xD7;</mo><mi>m</mi><mspace width="0.6em"/><mo>&#x21D2;</mo><mspace width="0.6em"/><msup><mi>&#x3C7;</mi><mn>2</mn></msup><mo>&#xD7;</mo><mi>m</mi><mo>,</mo><mspace width="0.6em"/><mi>V</mi><mtext>&#xA0;unchanged</mtext></math>
-        <span class="where">Multiply every count by <i>m</i> and χ² grows by <i>m</i>, so p falls. V cancels the <i>m</i> out.</span></div>
+        <math display="block"><mi>N</mi><mo>&#xD7;</mo><mi>m</mi><mspace width="0.6em"/><mo>&#x21D2;</mo><mspace width="0.6em"/><msup><mi>&#x3C7;</mi><mn>2</mn></msup><mo>&#xD7;</mo><mi>m</mi></math>
+        <math display="block"><mi>V</mi><mtext>&#xA0;unchanged</mtext></math>
+        <span class="where">Keep the same proportions and multiply every count by <i>m</i>: each gap O − E grows <i>m</i>-fold while √E grows only √<i>m</i>-fold, so χ² grows by <i>m</i> and p falls. V divides by N, which also grew by <i>m</i>, so the <i>m</i> cancels.</span></div>
     </div>
     <div class="worked"><b>Worked: type × school</b>
       <math display="block"><mi>V</mi><mo>=</mo><msqrt><mfrac><mn>307.4</mn><mrow><mn>5,144</mn><mo>&#xD7;</mo><mo stretchy="false">(</mo><mn>2</mn><mo>&#x2212;</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></mfrac></msqrt><mo>=</mo><msqrt><mn>0.0598</mn></msqrt><mo>=</mo><mn>0.24</mn></math></div>
@@ -434,7 +439,7 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
     <h3>Why V doesn't grow with N, even though &#967;² does</h3>
     <p class="muted">Same mechanism, run in reverse — dividing the sample-size dependence back out.</p>
     <ol>
-      <li>Keep the same proportions in the table but multiply every cell by m (same shape, more data), and &#967;² multiplies by m too — more observations just means more terms adding up in the same direction.</li>
+      <li>Keep the same proportions in the table but multiply every cell by m (same shape, more data). Every gap O − E grows m-fold, while the chance wobble √E grows only √m-fold — so each cell’s contribution, and &#967;² with it, grows m-fold. Still six cells; each one just counts for more.</li>
       <li>That's why p keeps shrinking as N grows: &#967;² eventually gets big enough to look "significant" even for a tiny, unimportant difference.</li>
       <li>Cramér's V divides &#967;² by N (and by k−1, the largest number of cells that can vary) before taking a square root: V = √(&#967;² ÷ (N(k−1))).</li>
       <li>Dividing by N exactly cancels that m: &#967;² behaves like N × φ² for some φ that depends only on the proportions in the table, not on how much data you collected.</li>
@@ -637,12 +642,18 @@ $('#obs').addEventListener('input',calc);
 
 /* effect size slider */
 const base=[[781,1265,2191],[232,19,656]];
-function eff(){const t=+$('#scale').value; let Nn=Math.round(50*Math.pow(10,t/100*3)); if(Math.abs(Nn-5144)<60) Nn=5144; /* snap to the real table */ const k=Nn/5144;
+function eff(){const t=+$('#scale').value; let Nn=Math.round(50*Math.pow(10,t/100*3)); if(Math.abs(Nn-5144)<60) Nn=5144; /* snap to the real table */
+  $('#nInput').value=Nn; effN(Nn);}
+function effN(Nn){const k=Nn/5144;
   const O=base.map(r=>r.map(v=>v*k)); const r=chi(O);
-  $('#scaleLbl').textContent=`N = ${fmt(Nn)}`+(Math.abs(Nn-5144)<60?' (the real lab data)':'');
+  $('#scaleLbl').textContent=Nn===5144?'(the real lab data)':'';
   $('#effStats').innerHTML=[['N',fmt(Nn)],['χ²',fmt(r.x,1)],['p',pf(r.p)],['Cramér’s V',r.V.toFixed(3)]].map(a=>`<div class="stat"><span>${a[0]}</span><strong>${a[1]}</strong></div>`).join('');
   $('#effMsg').textContent=r.p<0.05?`Same proportions, and "significant" at N = ${fmt(Nn)}. V stays at ${r.V.toFixed(2)} whatever the sample size.`:`Same proportions, but not significant with only ${fmt(Nn)} items. V is still ${r.V.toFixed(2)}.`;}
 $('#scale').addEventListener('input',eff);
+$('#nInput').addEventListener('input',()=>{const Nn=Math.round(+$('#nInput').value); if(!(Nn>=10&&Nn<=1e6)) return;
+  $('#scale').value=Math.max(0,Math.min(100,Math.log10(Nn/50)/3*100)); effN(Nn);});
+$('#nInput').addEventListener('change',()=>{let Nn=Math.round(+$('#nInput').value); if(!isFinite(Nn)) Nn=5144; Nn=Math.max(10,Math.min(1e6,Nn));
+  $('#nInput').value=Nn; $('#scale').value=Math.max(0,Math.min(100,Math.log10(Nn/50)/3*100)); effN(Nn);});
 
 /* histogram */
 const BINS=['<4','4–6','6–8','8–10','10–12','12–14','14–16','16–20','20+'];
