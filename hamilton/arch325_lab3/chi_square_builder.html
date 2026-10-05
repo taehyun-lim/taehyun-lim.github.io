@@ -111,8 +111,8 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
   <p class="sub">This is the real-data version of the Z's you've been squaring and stacking above.</p>
   <div class="eqs">
     <div class="eq"><span class="lbl">Expected count for row <i>i</i>, column <i>j</i></span>
-      <math display="block"><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mi>R</mi><mi>i</mi></msub><mo>&#xD7;</mo><msub><mi>C</mi><mi>j</mi></msub></mrow><mi>N</mi></mfrac></math>
-      <span class="where"><i>R</i> = row total, <i>C</i> = column total, <i>N</i> = grand total</span></div>
+      <math display="block"><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><msub><mi>C</mi><mi>j</mi></msub><mo>&#xD7;</mo><mfrac><msub><mi>R</mi><mi>i</mi></msub><mi>N</mi></mfrac></math>
+      <span class="where"><i>C</i> = column total (that school’s items) · <i>R</i> ÷ <i>N</i> = the row’s share of the grand total. If school made no difference, each school gets the overall share of its own items.</span></div>
     <div class="eq"><span class="lbl">Pearson residual</span>
       <math display="block"><msub><mi>r</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mi>O</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x2212;</mo><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><msqrt><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></msqrt></mfrac></math>
       <span class="where">This is the piece that behaves like one of the Z's above, once N is reasonably large.</span></div>

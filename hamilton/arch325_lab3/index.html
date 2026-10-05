@@ -334,7 +334,7 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
   <div class="q"><div><b>Compares</b>Whether category proportions differ between groups more than chance allows</div><div><b>Example</b>Type × school: χ² = 307.4, df = 2, p &lt; .001</div></div>
   <div class="grid2">
     <div class="box"><h3>Observed (editable)</h3><div class="tbl"><table id="obs"></table></div>
-      <h3 style="margin-top:14px">Expected</h3><div class="tbl"><table id="exp"></table></div></div>
+      <h3 style="margin-top:14px">Expected</h3><div class="tbl"><table id="exp"></table></div><p class="muted" id="expNote"></p></div>
     <div class="box"><h3>Residuals: which cells drive it</h3><div class="tbl"><table id="res"></table></div>
       <p class="muted">Positive (copper) = more than expected; negative (blue) = fewer. Beyond ±2 is worth discussing.</p>
       <div class="stats" id="chiStats"></div></div>
@@ -343,17 +343,17 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
     <h3>The math</h3>
     <div class="eqs">
       <div class="eq"><span class="lbl">Expected count for row <i>i</i>, column <i>j</i></span>
-        <math display="block"><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mi>R</mi><mi>i</mi></msub><mo>&#xD7;</mo><msub><mi>C</mi><mi>j</mi></msub></mrow><mi>N</mi></mfrac></math>
-        <span class="where"><i>R</i> = row total, <i>C</i> = column total, <i>N</i> = grand total</span></div>
+        <math display="block"><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><msub><mi>C</mi><mi>j</mi></msub><mo>&#xD7;</mo><mfrac><msub><mi>R</mi><mi>i</mi></msub><mi>N</mi></mfrac></math>
+        <span class="where"><i>C</i> = column total (that school’s items) · <i>R</i> ÷ <i>N</i> = the row’s share of the grand total. If school made no difference, each school gets the overall share of its own items.</span></div>
       <div class="eq"><span class="lbl">Pearson residual</span>
         <math display="block"><msub><mi>r</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mi>O</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x2212;</mo><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><msqrt><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></msqrt></mfrac></math>
         <span class="where">Squaring and summing the residuals gives χ².</span></div>
       <div class="eq"><span class="lbl">χ² statistic</span>
-        <math display="block"><msup><mi>&#x3C7;</mi><mn>2</mn></msup><mo>=</mo><munder><mo>&#x2211;</mo><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></munder><mfrac><msup><mrow><mo stretchy="false">(</mo><msub><mi>O</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x2212;</mo><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="false">)</mo></mrow><mn>2</mn></msup><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mfrac><mspace width="1em"/><mtext>df</mtext><mo>=</mo><mo stretchy="false">(</mo><mi>r</mi><mo>&#x2212;</mo><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mi>c</mi><mo>&#x2212;</mo><mn>1</mn><mo stretchy="false">)</mo></math>
-        <span class="where"><i>O</i> = observed, <i>r</i> and <i>c</i> = number of rows and columns</span></div>
+        <math display="block"><msup><mi>&#x3C7;</mi><mn>2</mn></msup><mo>=</mo><munder><mo>&#x2211;</mo><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></munder><mfrac><msup><mrow><mo stretchy="false">(</mo><msub><mi>O</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x2212;</mo><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="false">)</mo></mrow><mn>2</mn></msup><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mfrac></math>
+        <span class="where"><i>O</i> = observed. Compare it with a χ² distribution with df = (<i>r</i> − 1)(<i>c</i> − 1), where <i>r</i> and <i>c</i> are the numbers of rows and columns.</span></div>
     </div>
     <div class="worked"><b>Worked cell: Bethel, academic</b>
-      <math display="block"><mi>E</mi><mo>=</mo><mfrac><mrow><mn>4,237</mn><mo>&#xD7;</mo><mn>1,013</mn></mrow><mn>5,144</mn></mfrac><mo>=</mo><mn>834.4</mn><mspace width="1.2em"/><mfrac><msup><mrow><mo stretchy="false">(</mo><mn>781</mn><mo>&#x2212;</mo><mn>834.4</mn><mo stretchy="false">)</mo></mrow><mn>2</mn></msup><mn>834.4</mn></mfrac><mo>=</mo><mn>3.42</mn><mspace width="1.2em"/><mi>r</mi><mo>=</mo><mfrac><mrow><mn>781</mn><mo>&#x2212;</mo><mn>834.4</mn></mrow><msqrt><mn>834.4</mn></msqrt></mfrac><mo>=</mo><mo>&#x2212;</mo><mn>1.85</mn></math>
+      <math display="block"><mi>E</mi><mo>=</mo><mn>1,013</mn><mo>&#xD7;</mo><mfrac><mn>4,237</mn><mn>5,144</mn></mfrac><mo>=</mo><mn>1,013</mn><mo>&#xD7;</mo><mn>0.8237</mn><mo>=</mo><mn>834.4</mn><mspace width="1.2em"/><mfrac><msup><mrow><mo stretchy="false">(</mo><mn>781</mn><mo>&#x2212;</mo><mn>834.4</mn><mo stretchy="false">)</mo></mrow><mn>2</mn></msup><mn>834.4</mn></mfrac><mo>=</mo><mn>3.42</mn><mspace width="1.2em"/><mi>r</mi><mo>=</mo><mfrac><mrow><mn>781</mn><mo>&#x2212;</mo><mn>834.4</mn></mrow><msqrt><mn>834.4</mn></msqrt></mfrac><mo>=</mo><mo>&#x2212;</mo><mn>1.85</mn></math>
       <span class="where">Do this for all six cells and add the middle terms: χ² = 307.4, df = (2 − 1)(3 − 1) = 2.</span></div>
   </div>
   <div class="box interactive">
@@ -366,7 +366,7 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
   <div class="grid2">
     <div class="box tool"><h3>χ² formulas <span class="chip">Excel = Sheets</span></h3><ol>
       <li>Observed table in <code>B2:D3</code> — the Summary sheet from the Cross-tab tab, with row totals in column E and column totals in row 4.</li>
-      <li>Expected: type in B7, copy across B7:D8<span class="code">=$E2*B$4/$E$4</span></li>
+      <li>Expected: type in B7, copy across B7:D8<span class="code">=B$4*($E2/$E$4)</span></li>
       <li>p-value<span class="code">=CHISQ.TEST(B2:D3, B7:D8)</span></li>
       <li>χ² statistic for your report<span class="code">=SUMPRODUCT((B2:D3-B7:D8)^2/B7:D8)</span></li>
       <li>Residual for each cell<span class="code">=(B2-B7)/SQRT(B7)</span></li></ol></div>
@@ -404,7 +404,7 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
     <h3>The math</h3>
     <div class="eqs">
       <div class="eq"><span class="lbl">χ²</span>
-        <math display="block"><msup><mi>&#x3C7;</mi><mn>2</mn></msup><mo>=</mo><munder><mo>&#x2211;</mo><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></munder><mfrac><msup><mrow><mo stretchy="false">(</mo><msub><mi>O</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x2212;</mo><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="false">)</mo></mrow><mn>2</mn></msup><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mfrac><mspace width="1.2em"/><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mi>R</mi><mi>i</mi></msub><mo>&#xD7;</mo><msub><mi>C</mi><mi>j</mi></msub></mrow><mi>N</mi></mfrac></math>
+        <math display="block"><msup><mi>&#x3C7;</mi><mn>2</mn></msup><mo>=</mo><munder><mo>&#x2211;</mo><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></munder><mfrac><msup><mrow><mo stretchy="false">(</mo><msub><mi>O</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x2212;</mo><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="false">)</mo></mrow><mn>2</mn></msup><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mfrac><mspace width="1.2em"/><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><msub><mi>C</mi><mi>j</mi></msub><mo>&#xD7;</mo><mfrac><msub><mi>R</mi><mi>i</mi></msub><mi>N</mi></mfrac></math>
         <span class="where">Same χ² from the Chi-square tab. Look at <i>E</i>: <i>N</i> is already sitting in its denominator, so <i>N</i> is baked into χ² before V ever touches it.</span></div>
       <div class="eq"><span class="lbl">Cramér’s V</span>
         <math display="block"><mi>V</mi><mo>=</mo><msqrt><mfrac><msup><mi>&#x3C7;</mi><mn>2</mn></msup><mrow><mi>N</mi><mo stretchy="false">(</mo><mi>k</mi><mo>&#x2212;</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></mfrac></msqrt><mspace width="1em"/><mi>k</mi><mo>=</mo><mo>min</mo><mo stretchy="false">(</mo><mi>r</mi><mo>,</mo><mi>c</mi><mo stretchy="false">)</mo></math>
@@ -620,7 +620,10 @@ const head='<thead><tr><th></th>'+SITES.map(s=>`<th>${s}</th>`).join('')+'</tr><
 $('#obs').innerHTML=head+'<tbody>'+ROWS.map((r,i)=>`<tr><td>${r}</td>`+obs[i].map((v,j)=>`<td><input id="o${i}${j}" type="number" min="0" step="1" value="${v}" aria-label="${r} at ${SITES[j]}"></td>`).join('')+'</tr>').join('')+'</tbody>';
 function calc(){for(let i=0;i<2;i++)for(let j=0;j<3;j++){const v=Math.max(0,parseFloat($(`#o${i}${j}`).value)||0);obs[i][j]=v;}
   if(obs.flat().reduce((a,b)=>a+b,0)===0)return; const r=chi(obs); if(!isFinite(r.x)){$('#chiStats').innerHTML='<p class="muted">Every row and column needs at least one item.</p>';return;}
-  $('#exp').innerHTML=head+'<tbody>'+ROWS.map((n,i)=>`<tr><td>${n}</td>`+r.E[i].map(v=>`<td>${fmt(v,1)}</td>`).join('')+'</tr>').join('')+'</tbody>';
+  const eCol=[0,1,2].map(j=>r.E[0][j]+r.E[1][j]), eTot=eCol.reduce((a,b)=>a+b,0);
+  $('#exp').innerHTML=head+'<tbody>'+ROWS.map((n,i)=>`<tr><td>${n}</td>`+r.E[i].map((v,j)=>`<td>${fmt(v,1)} <span class="muted">(${(v/eCol[j]*100).toFixed(1)}%)</span></td>`).join('')+'</tr>').join('')+'</tbody>';
+  const rowPct=ROWS.map((n,i)=>((r.E[i].reduce((a,b)=>a+b,0))/eTot*100).toFixed(1));
+  $('#expNote').textContent=`Percent = share of that school's items. If school made no difference, every school would have the same mix as the whole table: ${rowPct[0]}% academic, ${rowPct[1]}% industrial.`;
   $('#res').innerHTML=head+'<tbody>'+ROWS.map((n,i)=>`<tr><td>${n}</td>`+r.res[i].map(v=>`<td class="${rc(v)}">${v>0?'+':''}${v.toFixed(2)}</td>`).join('')+'</tr>').join('')+'</tbody>';
   $('#chiStats').innerHTML=[['χ²',fmt(r.x,1)],['df',r.df],['p',pf(r.p)],['Cramér’s V',r.V.toFixed(3)],['Min expected',fmt(r.minE,1)]].map(a=>`<div class="stat"><span>${a[0]}</span><strong>${a[1]}</strong></div>`).join('')+(r.minE<5?'<p class="neg">An expected count is under 5. Use Fisher’s exact test instead.</p>':'');}
 $('#obs').addEventListener('input',calc);
