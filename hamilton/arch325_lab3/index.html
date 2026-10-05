@@ -95,7 +95,9 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
 .box.interactive p{margin:0;color:var(--muted);font-size:13.5px}
 </style>
 
-</head><body><div class="wrap">
+</head><body>
+
+<div class="wrap">
 <header>
   <p class="eyebrow">ARCH 325 · Lab 3 companion</p>
   <h1>Comparing Assemblages</h1>
@@ -142,7 +144,7 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
       <tr><td>Which pair differs?</td><td>measurements</td><td><button class="tablink" data-goto="kw">Mann-Whitney</button></td></tr></tbody></table></div>
     </div>
   </div>
-  <p class="muted">Cleaning tip: Layer labels vary ("B " with a trailing space, "A Waterscreen Upper", "Clean-up"). Reduce them to the stratigraphic letter A–D before comparing levels.</p>
+  <p class="muted">Cleaning tip: the raw Layer column mixes the four real strata — A (227 rows), B (542), C (125), D (13) — with waterscreen notes stapled onto the same field (A Waterscreen, A Waterscreen Lower, A Waterscreen Upper, B Waterscreen, C Waterscreen — 656 rows combined), plus a long tail of one-offs: "B " with a trailing space, "Baulk," "Clean-up"/"Clean up," "B and C," "BII," "C South 1/2," and a misspelled "A Waterscren." Strip all of it down to the leading stratigraphic letter before comparing levels — <code>TRIM()</code> plus <code>LEFT(cell,1)</code> catches nearly all of it in one formula.</p>
 </section>
 
 <section id="counting" data-label="What we count" role="tabpanel" hidden>
