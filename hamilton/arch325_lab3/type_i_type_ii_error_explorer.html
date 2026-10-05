@@ -45,11 +45,13 @@ footer{margin-top:30px;font-size:13px;color:var(--muted)}
 .hint{font-size:12.5px;color:var(--muted);margin:6px 0 0}
 </style>
 
-</head><body><div class="wrap">
+</head><body>
+
+<div class="wrap">
 <header>
   <p class="eyebrow">Why "fail to reject" is not "H₀ is true"</p>
   <h1>Type I &amp; Type II Error Explorer</h1>
-  <p>Two simplified pictures, overlapping: what the test statistic looks like if H₀ is true (blue), and what it looks like if there's a real difference of size δ (copper). Drag the threshold, or move the sliders, and watch both error rates respond.</p>
+  <p>Two simplified pictures, overlapping: what the test statistic looks like if H₀ is true (blue), and what it looks like if there's a real difference of size δ (copper). Drag the threshold to trade α against β. Then raise n or δ: the line stays at the same α, and β shrinks.</p>
 </header>
 
 <div class="controls">
@@ -100,7 +102,7 @@ function zForAlpha(a){ // one-tailed upper critical z for small set of alphas vi
 const Z05 = zForAlpha(0.05), Z01 = zForAlpha(0.01);
 
 let delta = 0.5, n = 10;
-let threshold = null; // absolute x-domain value
+let zc = null; // cutoff stored in z units, so α stays fixed when n or δ changes
 let dragging=false;
 
 const W=900,H=320,PAD={l:36,r:30,t:24,b:40};
@@ -111,14 +113,16 @@ function svgEl(tag,attrs){ const e=document.createElementNS('http://www.w3.org/2
   for(const k in attrs) e.setAttribute(k,attrs[k]); return e; }
 
 function se(){ return 1/Math.sqrt(n); }
+function thr(){ return zc*se(); } // where the line sits on the x axis
 
-function initThreshold(){ threshold = Z05*se(); }
+function initThreshold(){ zc = Z05; }
 initThreshold();
 
 function render(){
   const svg=$('#svgDist'); svg.innerHTML='';
   const line=css('--line'), muted=css('--muted'), ink=css('--ink'), accent=css('--accent'), accent2=css('--accent2'), surface=css('--surface');
   const s = se();
+  const threshold = thr();
   const peak = 1/(s*Math.sqrt(2*Math.PI));
   const ymax = peak*1.18;
   function yOf(p){ return H-PAD.b - (p/ymax)*(H-PAD.t-PAD.b); }
@@ -164,6 +168,7 @@ function render(){
 }
 
 function updateStats(s){
+  const threshold = thr();
   const alpha = 1-Phi(threshold/s);
   const beta = Phi((threshold-delta)/s);
   const power = 1-beta;
@@ -181,27 +186,26 @@ function updateStats(s){
   $('#readout').innerHTML = '<b>'+msg+'</b>';
 }
 
-function wireInteraction(svg){
-  const hit = svg.querySelector('#hitrect');
-  function fromEvent(e){
-    const rect = svg.getBoundingClientRect();
-    const scaleX = W/rect.width;
-    const px = (e.clientX - rect.left)*scaleX;
-    threshold = Math.max(XMIN, Math.min(XMAX, vOf(px)));
-    render();
-  }
-  hit.addEventListener('pointerdown', e=>{ dragging=true; hit.setPointerCapture(e.pointerId); fromEvent(e); });
-  hit.addEventListener('pointermove', e=>{ if(dragging) fromEvent(e); });
-  hit.addEventListener('pointerup', ()=>{ dragging=false; });
-  hit.addEventListener('pointercancel', ()=>{ dragging=false; });
-  const handle = svg.querySelector('#handle');
-  if(handle) handle.addEventListener('pointerdown', e=>{ dragging=true; hit.setPointerCapture(e.pointerId); e.stopPropagation(); });
+function fromEvent(e){
+  const svg = $('#svgDist');
+  const rect = svg.getBoundingClientRect();
+  const scaleX = W/rect.width;
+  const px = (e.clientX - rect.left)*scaleX;
+  zc = Math.max(XMIN, Math.min(XMAX, vOf(px))) / se();
+  render();
 }
+function wireInteraction(svg){ /* listeners are attached once below, not per render */ }
+// The <svg> element itself persists (only its children are rebuilt each render),
+// so pointerdown goes on it once; move/up go on window so a drag survives rebuilds.
+$('#svgDist').addEventListener('pointerdown', e=>{ dragging=true; e.preventDefault(); fromEvent(e); });
+window.addEventListener('pointermove', e=>{ if(dragging) fromEvent(e); });
+window.addEventListener('pointerup', ()=>{ dragging=false; });
+window.addEventListener('pointercancel', ()=>{ dragging=false; });
 
 $('#deltaR').addEventListener('input', e=>{ delta=parseFloat(e.target.value); $('#deltaVal').textContent=delta.toFixed(1); render(); });
 $('#nR').addEventListener('input', e=>{ n=parseInt(e.target.value,10); $('#nVal').textContent=n; render(); });
-$('#snap05').onclick=()=>{ threshold = Z05*se(); render(); };
-$('#snap01').onclick=()=>{ threshold = Z01*se(); render(); };
+$('#snap05').onclick=()=>{ zc = Z05; render(); };
+$('#snap01').onclick=()=>{ zc = Z01; render(); };
 
 $('#deltaVal').textContent = delta.toFixed(1);
 $('#nVal').textContent = n;

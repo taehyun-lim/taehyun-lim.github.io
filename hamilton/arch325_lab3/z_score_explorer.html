@@ -50,7 +50,9 @@ footer{margin-top:30px;font-size:13px;color:var(--muted)}
 .hint{font-size:12.5px;color:var(--muted);margin:6px 0 0}
 </style>
 
-</head><body><div class="wrap">
+</head><body>
+
+<div class="wrap">
 <header>
   <p class="eyebrow">Standard normal distribution</p>
   <h1>Z-Score &amp; P-Value Explorer</h1>
@@ -61,7 +63,7 @@ footer{margin-top:30px;font-size:13px;color:var(--muted)}
   <div class="seg" role="group" aria-label="Kind of test" id="modeSeg"></div>
   <div class="field"><label for="zInput">z =</label><input id="zInput" type="number" step="0.01" value="1.50"></div>
   <div class="presets">
-    <button class="btn" data-z="1.645" data-mode="upper">z = 1.645 (α = .10, one-tailed)</button>
+    <button class="btn" data-z="1.645" data-mode="upper">z = 1.645 (α = .05, one-tailed)</button>
     <button class="btn" data-z="1.96" data-mode="two">z = 1.96 (α = .05, two-tailed)</button>
     <button class="btn" data-z="2.576" data-mode="two">z = 2.576 (α = .01, two-tailed)</button>
   </div>
@@ -203,27 +205,26 @@ function updateStats(){
     ['Percentile', pct.toFixed(1)+'%']
   ].map(a=>'<div class="stat"><span>'+a[0]+'</span><strong>'+a[1]+'</strong></div>').join('');
   const sig05 = p<0.05;
+  const atLine = Math.abs(p-0.05) < 0.0005; // e.g. z = 1.960 two-tailed, 1.645 one-tailed
   $('#readout').innerHTML = '<b>'+labelForMode(mode,z)+' = '+(p<0.0001?'&lt; .0001':p.toFixed(4))+'.</b> '
-    + (sig05 ? 'That clears the conventional p &lt; .05 threshold.' : 'That does not clear the conventional p &lt; .05 threshold.');
+    + (atLine ? 'That sits right on the conventional .05 line — this z is the critical value itself.'
+       : sig05 ? 'That clears the conventional p &lt; .05 threshold.' : 'That does not clear the conventional p &lt; .05 threshold.');
 }
 
-function wireInteraction(svg){
-  const hit = svg.querySelector('#hitrect');
-  function fromEvent(e){
-    const rect = svg.getBoundingClientRect();
-    const scaleX = W/rect.width;
-    const px = (e.clientX - rect.left)*scaleX;
-    setZ(zOf(px));
-  }
-  hit.addEventListener('pointerdown', e=>{ dragging=true; hit.setPointerCapture(e.pointerId); fromEvent(e); });
-  hit.addEventListener('pointermove', e=>{ if(dragging) fromEvent(e); });
-  hit.addEventListener('pointerup', ()=>{ dragging=false; });
-  hit.addEventListener('pointercancel', ()=>{ dragging=false; });
-  const handle = svg.querySelector('#handle');
-  if(handle){
-    handle.addEventListener('pointerdown', e=>{ dragging=true; hit.setPointerCapture(e.pointerId); e.stopPropagation(); });
-  }
+function fromEvent(e){
+  const svg = $('#svgNorm');
+  const rect = svg.getBoundingClientRect();
+  const scaleX = W/rect.width;
+  const px = (e.clientX - rect.left)*scaleX;
+  setZ(zOf(px));
 }
+function wireInteraction(svg){ /* listeners are attached once below, not per render */ }
+// The <svg> element itself persists (only its children are rebuilt each render),
+// so pointerdown goes on it once; move/up go on window so a drag survives rebuilds.
+$('#svgNorm').addEventListener('pointerdown', e=>{ dragging=true; e.preventDefault(); fromEvent(e); });
+window.addEventListener('pointermove', e=>{ if(dragging) fromEvent(e); });
+window.addEventListener('pointerup', ()=>{ dragging=false; });
+window.addEventListener('pointercancel', ()=>{ dragging=false; });
 
 // ---------- controls ----------
 const MODES=[['two','Two-tailed'],['upper','Upper tail (Z ≥ z)'],['lower','Lower tail (Z ≤ z)']];

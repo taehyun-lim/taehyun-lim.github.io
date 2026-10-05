@@ -47,7 +47,9 @@ footer{margin-top:30px;font-size:13px;color:var(--muted)}
 .wrap :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
 
-</head><body><div class="wrap">
+</head><body>
+
+<div class="wrap">
 <header>
   <p class="eyebrow">What Kruskal-Wallis and Mann-Whitney actually run on</p>
   <h1>From Raw Values to Ranks</h1>
@@ -164,9 +166,11 @@ function render(animate){
   const H_stat = (12/(N*(N+1)))*sumRsqOverN - 3*(N+1);
   $('#hFormula').innerHTML = '<msup><mi>H</mi><mn></mn></msup><mo>=</mo><mfrac><mn>12</mn><mrow><mi>N</mi><mo>(</mo><mi>N</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow></mfrac><munder><mo>&#x2211;</mo><mi>j</mi></munder><mfrac><msubsup><mi>R</mi><mi>j</mi><mn>2</mn></msubsup><msub><mi>n</mi><mi>j</mi></msub></mfrac><mo>&#x2212;</mo><mn>3</mn><mo>(</mo><mi>N</mi><mo>+</mo><mn>1</mn><mo>)</mo><mo>=</mo><mn>'+H_stat.toFixed(2)+'</mn>';
   $('#hNote').textContent = 'df = (number of groups) − 1 = 2. Compare H = '+H_stat.toFixed(2)+' against a χ² distribution with df = 2 — the same reference distribution the χ² Builder tool draws.';
+  const big = data.reduce((m,p,i)=> p.v>data[m].v ? i : m, 0);
+  const bigV = data[big].v.toFixed(1), bigR = ranks[big], bigG = GROUPS[data[big].g];
   $('#readout').innerHTML = view==='raw'
-    ? '<b>These are the actual numbers.</b> Glenns/Dragon has one huge fragment (14.0 mm) that would dominate any test that used raw values directly.'
-    : '<b>Ranked, that 14.0 mm fragment is just "rank 15."</b> It still counts as the largest, but it can no longer drag a mean or a sum around by sheer size — only by rank position.';
+    ? '<b>These are the raw values.</b> '+bigG+' has one huge fragment ('+bigV+' mm) that would dominate any test that used raw values directly.'
+    : '<b>Ranked, that '+bigV+' mm fragment is just "rank '+bigR+'."</b> It still counts as the largest, but it can no longer drag a mean or a sum around by sheer size — only by rank position.';
 }
 
 function draw(xs, ranks, laneY, line, muted, surface){
@@ -201,7 +205,7 @@ const seg=$('#viewSeg');
 });
 
 $('#shuffleBtn').onclick=()=>{
-  data = freshData().map(p=>({...p, v: Math.round((p.v + (Math.random()*4-2))*10)/10 }));
+  data = freshData().map(p=>({...p, v: Math.min(XMAX, Math.max(XMIN, Math.round((p.v + (Math.random()*4-2))*10)/10)) }));
   $('#svgLine').removeAttribute('data-xs');
   render(false);
 };

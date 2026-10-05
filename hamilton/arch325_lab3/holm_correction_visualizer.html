@@ -43,7 +43,9 @@ footer{margin-top:30px;font-size:13px;color:var(--muted)}
 .wrap :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
 
-</head><body><div class="wrap">
+</head><body>
+
+<div class="wrap">
 <header>
   <p class="eyebrow">Why you can't just compare each p to .05</p>
   <h1>Holm Correction, Step by Step</h1>
@@ -139,12 +141,20 @@ function render(){
   body+='</tbody>';
   $('#stepTable').innerHTML = head+body;
 
+  const NUM=['zero','one','two','three','four','five','six'];
+  const cap=w=>w.charAt(0).toUpperCase()+w.slice(1);
+  const nRawSig = rows.filter(r=>r.p<ALPHA).length;
+  const survivors = sorted.filter(r=>r.final<ALPHA).map(r=>r.name);
+  const losers = sorted.filter(r=>r.final>=ALPHA).map(r=>r.name);
+  const list = a=> a.length<=1 ? (a[0]||'') : a.slice(0,-1).join(', ')+(a.length>2?',':'')+' and '+a[a.length-1];
+  const finalCall = (survivors.length? list(survivors)+(survivors.length===1?' survives':' survive')+' Holm correction' : 'Nothing survives Holm correction')
+    + (losers.length? '; '+list(losers)+(losers.length===1?' does not.':' do not.') : '.');
   const notes = [
-    'Three tests, three raw p-values. All three look "significant" at the usual α = .05 — but running three tests inflates the chance that at least one clears .05 by luck alone.',
+    cap(NUM[m])+' tests, '+NUM[m]+' raw p-values. '+(nRawSig===m ? 'All '+NUM[m]+' look' : cap(NUM[nRawSig])+' of the '+NUM[m]+' look'+(nRawSig===1?'s':''))+' "significant" at the usual α = .05 — but running '+NUM[m]+' tests inflates the chance that at least one clears .05 by luck alone.',
     'Ranking fixes an order. The smallest raw p — the one we\'re least willing to be wrong about — goes first.',
     'Rank 1 is penalized the most (×'+m+'), rank '+m+' the least (×1). This is already less harsh than plain Bonferroni, which would multiply every single one by '+m+'.',
     'Taking the running maximum guarantees the adjusted values never decrease down the sorted list — without it, a later rank could end up smaller than an earlier one, which would not make sense.',
-    'Final call: Bethel–Glenns/Dragon and Bethel–Woodville both survive Holm correction; Glenns/Dragon–Woodville was never close and still is not.',
+    'Final call: '+finalCall,
   ];
   $('#readout').innerHTML = '<b>'+notes[step]+'</b>';
 }

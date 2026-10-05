@@ -129,7 +129,7 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
   <div class="grid2 g-tools">
     <div class="box">
       <h3>The data</h3>
-      <p>Two sheets, one row per catalog lot. The <code>Count</code> column holds the number of items in each lot.</p>
+      <p>Two sheets, one row per catalog lot. The <code>Count</code> column holds the number of items in each lot. Academic and industrial finds are on separate sheets, so there is no Type column: the sheet is the type. Both sheets use the same columns: B = Site, F = Layer, J = Count, L = Material, M = Form, AF = Pencil length.</p>
       <div class="tbl"><table><thead><tr><th>School</th><th>Academic</th><th>Industrial</th><th>Units with finds</th></tr></thead>
       <tbody><tr><td>Bethel</td><td>781</td><td>232</td><td>15</td></tr><tr><td>Glenns/Dragon</td><td>1,265</td><td>19</td><td>16</td></tr><tr><td>Woodville</td><td>2,191</td><td>656</td><td>69</td></tr><tr><td><b>Total</b></td><td><b>4,237</b></td><td><b>907</b></td><td></td></tr></tbody></table></div>
     </div>
@@ -144,7 +144,7 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
       <tr><td>Which pair differs?</td><td>measurements</td><td><button class="tablink" data-goto="kw">Mann-Whitney</button></td></tr></tbody></table></div>
     </div>
   </div>
-  <p class="muted">Cleaning tip: the raw Layer column mixes the four real strata — A (227 rows), B (542), C (125), D (13) — with waterscreen notes stapled onto the same field (A Waterscreen, A Waterscreen Lower, A Waterscreen Upper, B Waterscreen, C Waterscreen — 656 rows combined), plus a long tail of one-offs: "B " with a trailing space, "Baulk," "Clean-up"/"Clean up," "B and C," "BII," "C South 1/2," and a misspelled "A Waterscren." Strip all of it down to the leading stratigraphic letter before comparing levels — <code>TRIM()</code> plus <code>LEFT(cell,1)</code> catches nearly all of it in one formula.</p>
+  <p class="muted">Cleaning tip: the raw Layer column (F on both sheets) mixes the four real strata — A (227 rows), B (542), C (125), D (13) — with waterscreen notes stapled onto the same field (A Waterscreen, A Waterscreen Lower, A Waterscreen Upper, B Waterscreen, C Waterscreen — 656 rows combined), small variants like "B " with a trailing space, "BII," "C South 1/2" and a misspelled "A Waterscren," and entries that are not one stratum at all: "Baulk" (4 rows), "Clean-up"/"Clean up" (3), "B and C" (1), plus 272 blank cells, mostly finds from features. Put the letter in a new Level column — the first empty one, BN — with <code>=LEFT(TRIM(F2),1)</code>, but first set the Baulk, clean-up, "B and C" and blank rows aside — the formula would quietly turn Baulk into B and Clean-up into C. It matters: one Baulk lot at Woodville holds 81 jar fragments, and leaving it in level B moves the type × level Cramér’s V from 0.33 to 0.28.</p>
 </section>
 
 <section id="counting" data-label="What we count" role="tabpanel" hidden>
@@ -160,34 +160,51 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
 </section>
 
 <section id="descriptive" data-label="Descriptive stats" role="tabpanel" hidden>
-  <h2>Before any test: a table like Betti’s</h2>
-  <p class="lede">Betti (2023, Table 6.7) reports raw counts and counts standardized by excavated area. Raw totals mostly reflect how much ground was dug.</p>
-  <div class="q"><div><b>Compares</b>Raw counts vs. counts adjusted for unequal excavation effort</div><div><b>Example</b>Woodville’s totals look enormous until you divide by its excavated area</div></div>
+  <h2>Before any test: Betti’s Table 6.7</h2>
+  <p class="lede">Betti (2023:281, Table 6.7) counts school-supply artifacts at each school and also standardizes them by excavated area. Raw totals mostly reflect how much ground was dug.</p>
+  <div class="q"><div><b>Compares</b>Raw counts vs. counts adjusted for unequal excavation effort</div><div><b>Example</b>Woodville has the most school supplies (2,179) but the lowest density (137 per 100 sq ft)</div></div>
+  <div class="box">
+    <h3>Table 6.7. School Supply Artifacts from Each School Site</h3>
+    <p class="muted">Reproduced from Betti (2023:281). Standardized count = artifacts per square foot excavated × 100.</p>
+    <div class="tbl"><table><thead><tr><th></th><th colspan="2">Glenns/Dragon</th><th colspan="2">Woodville</th><th colspan="2">Bethel</th></tr>
+    <tr><th></th><th>Count</th><th>Std.</th><th>Count</th><th>Std.</th><th>Count</th><th>Std.</th></tr></thead><tbody>
+    <tr><td>Chalk</td><td>–</td><td>–</td><td>8</td><td>0.50</td><td>28</td><td>8.96</td></tr>
+    <tr><td>Desk</td><td>–</td><td>–</td><td>1</td><td>0.63*</td><td>9</td><td>2.88</td></tr>
+    <tr><td>Eraser</td><td>–</td><td>–</td><td>3</td><td>0.19</td><td>1</td><td>0.32</td></tr>
+    <tr><td>Ink Bottle</td><td>–</td><td>–</td><td>9</td><td>0.56</td><td>6</td><td>1.92</td></tr>
+    <tr><td>Mechanical Pencil or Pen</td><td>–</td><td>–</td><td>–</td><td>–</td><td>5</td><td>1.6</td></tr>
+    <tr><td>Wooden Pencil</td><td>55</td><td>16.60</td><td>363</td><td>22.78</td><td>648</td><td>207.36</td></tr>
+    <tr><td>Slate Pencil</td><td>11</td><td>3.32</td><td>85</td><td>5.33</td><td>–</td><td>–</td></tr>
+    <tr><td>Staple</td><td>–</td><td>–</td><td>–</td><td>–</td><td>2</td><td>0.64</td></tr>
+    <tr><td>Tack</td><td>–</td><td>–</td><td>–</td><td>–</td><td>51</td><td>16.32</td></tr>
+    <tr><td>Writing Slate</td><td>1190</td><td>359.25</td><td>1695</td><td>106.35</td><td>1</td><td>0.32</td></tr>
+    <tr><td>Other</td><td>25</td><td>7.55</td><td>15</td><td>0.94</td><td>10</td><td>3.2</td></tr>
+    <tr><td><b>Total</b></td><td><b>1281</b></td><td><b>386.72</b></td><td><b>2179</b></td><td><b>137.28*</b></td><td><b>761</b></td><td><b>243.52</b></td></tr></tbody></table></div>
+    <p class="muted">* Every other Woodville row works out to 1,593.75 sq ft, which puts 1 desk at 0.06, not 0.63 — most likely a slipped decimal. The Woodville total (137.28) is the sum of the column including that 0.63; 2,179 ÷ 1,593.75 × 100 gives 136.72.</p>
+  </div>
   <div class="box">
     <h3>Excavated area, back-calculated from Table 6.7</h3>
-    <p class="muted">Betti reports both a count and a standardized count for the same artifacts. Dividing one by the other (×100) recovers the area she excavated at each school — it comes out consistent across every row of her table.</p>
-    <div class="tbl"><table><thead><tr><th>School</th><th>Excavated area</th><th>Test units</th></tr></thead><tbody>
-    <tr><td>Bethel</td><td>312.5 sq ft</td><td>15</td></tr>
-    <tr><td>Glenns/Dragon</td><td>331.25 sq ft</td><td>16</td></tr>
-    <tr><td>Woodville</td><td>1,593.75 sq ft</td><td>69</td></tr></tbody></table></div>
+    <p class="muted">Count ÷ standardized count × 100 recovers the area Betti excavated at each school. Every row gives the same answer within rounding, apart from the Woodville desk row above.</p>
+    <div class="tbl"><table><thead><tr><th>School</th><th>Excavated area</th><th>Test units</th><th>Worked from</th></tr></thead><tbody>
+    <tr><td>Glenns/Dragon</td><td>331.25 sq ft</td><td>16</td><td>1281 ÷ 386.72 × 100</td></tr>
+    <tr><td>Woodville</td><td>1,593.75 sq ft</td><td>69</td><td>1695 ÷ 106.35 × 100</td></tr>
+    <tr><td>Bethel</td><td>312.5 sq ft</td><td>15</td><td>761 ÷ 243.52 × 100</td></tr></tbody></table></div>
   </div>
+  <div class="note"><b>Read it:</b> by raw count, Woodville has the most school supplies. Standardized, it has the fewest per 100 sq ft, and Glenns/Dragon the most — almost all of it writing-slate fragments. The raw gap was mostly excavation effort, not what was deposited. Betti’s Table 6.12 does the same for industrial artifacts: 5.44 per 100 sq ft at Glenns/Dragon, 24.47 at Woodville, 63.04 at Bethel.</div>
   <div class="box">
-    <h3>Type × school, raw and standardized (per 100 sq ft)</h3>
-    <div class="tbl"><table><thead><tr><th></th><th>Bethel</th><th></th><th>Glenns/Dragon</th><th></th><th>Woodville</th><th></th></tr>
-    <tr><th></th><th>Count</th><th>Std.</th><th>Count</th><th>Std.</th><th>Count</th><th>Std.</th></tr></thead><tbody>
-    <tr><td>Academic</td><td>781</td><td>249.9</td><td>1,265</td><td>381.9</td><td>2,191</td><td>137.5</td></tr>
-    <tr><td>Industrial</td><td>232</td><td>74.2</td><td>19</td><td>5.7</td><td>656</td><td>41.2</td></tr></tbody></table></div>
+    <h3>Building it from the lab file</h3>
+    <p>The lab spreadsheet comes from the same catalog, but its categories don’t line up one-to-one with Betti’s rows, so your counts will be close but not identical. Her Wooden Pencil row, for example, combines pencil leads with pencil bodies, ferrules and erasers (her Tables 6.10–6.11), which the lab file lists under several Material values; Glenns/Dragon’s writing slates come out at 1,197 in the lab file against her 1,190. Say which grouping you used.</p>
   </div>
-  <div class="note"><b>Read it:</b> by raw count, Woodville dwarfs the other two schools. Standardized, Glenns/Dragon actually has the densest academic assemblage — the raw gap was mostly excavation effort, not what was really deposited there.</div>
   <div class="grid2">
     <div class="box tool"><h3>Excel <span class="chip">SUMIFS</span></h3><ol>
-      <li>Count for one cell:</li></ol>
-      <span class="code">=SUMIFS(I:I, A:A, "Bethel", E:E, "Academic")</span>
-      <ol start="2"><li>Standardized (area in a small lookup table, e.g. named range or a cell reference):</li></ol>
-      <span class="code">=[count cell] / 312.5 * 100</span></div>
+      <li>One row of the table: add a Form (M) condition. School supplies are on the Academic sheet (B = Site, J = Count):</li></ol>
+      <span class="code">=SUMIFS('Academic Education Artifacts'!J:J, 'Academic Education Artifacts'!B:B, "Glenns/Dragon", 'Academic Education Artifacts'!M:M, "writing slate/blackboard")</span>
+      <ol start="2"><li>Standardized: divide by that school’s area.</li></ol>
+      <span class="code">=[count cell] / 331.25 * 100</span></div>
     <div class="box tool"><h3>Google Sheets</h3>
-      <p>SUMIFS works the same. Keep the three areas in a small table and pull the right one with a lookup instead of typing the number each time:</p>
-      <span class="code">=SUMIFS(I:I, A:A, "Bethel", E:E, "Academic") / VLOOKUP("Bethel", AreaTable, 2, FALSE) * 100</span></div>
+      <p>The same SUMIFS work as written — keep the single quotes around sheet names that contain spaces. Keep the three areas in a small table and pull the right one with a lookup instead of typing the number each time:</p>
+      <span class="code">=[count cell] / VLOOKUP("Glenns/Dragon", AreaTable, 2, FALSE) * 100</span>
+      <p class="muted">AreaTable is a named range (Data → Named ranges) with the school in its first column and the area in its second.</p></div>
   </div>
 </section>
 
@@ -201,7 +218,7 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
       <ol>
         <li><b>Null hypothesis, H<sub>0</sub>:</b> assume there’s no real difference — school made no difference to the mix, or to pencil length. Any pattern you see is just noise. This is the hypothesis the math actually works from.</li>
         <li><b>Alternative hypothesis, H<sub>1</sub>:</b> school does make a difference. This is what you suspect going in, but the test never assumes it, computes anything under it, or hands you a probability for it.</li>
-        <li><b>p-value:</b> if H<sub>0</sub> were true, how surprising would data this extreme (or more) be, just from random sampling? In plain terms: assuming there really is no difference, how often would random sampling alone throw up a result this far from "no difference" — or farther?</li>
+        <li><b>p-value:</b> the probability of getting a test statistic at least as extreme as the one observed, computed assuming H<sub>0</sub> is true. In plain terms: assuming there really is no difference, how often would random sampling alone throw up a result this far from "no difference" — or farther?</li>
         <li><b>Threshold:</b> p &lt; .05 is a convention for "surprising enough to doubt H<sub>0</sub>," not a law of nature.</li>
       </ol>
     </div>
@@ -270,21 +287,18 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
   <tr><td>Industrial</td><td>232</td><td>19</td><td>656</td><td>907</td></tr>
   <tr><td><b>% industrial</b></td><td class="pos">22.9%</td><td class="pos">1.5%</td><td class="pos">23.0%</td><td>17.6%</td></tr></tbody></table></div>
   <div class="grid2">
-    <div class="box tool"><h3>Excel <span class="chip">pivot</span></h3><ol>
-      <li>Select the data, then Insert → PivotTable.</li>
-      <li>Rows: <code>Type</code> · Columns: <code>Site</code> · Values: Sum of <code>Count</code>.</li>
-      <li>Value Field Settings → Show Values As → % of Column Total.</li>
-      <li>One cell at a time instead:</li></ol>
-      <span class="code">=SUMIFS(I:I, E:E, "Industrial", A:A, "Bethel")</span></div>
-    <div class="box tool"><h3>Google Sheets <span class="chip">pivot or QUERY</span></h3><ol>
-      <li>Insert → Pivot table, same fields.</li>
-      <li>Summarize by SUM, show as → % of column.</li>
-      <li>Or build the whole table in one formula:</li></ol>
-      <span class="code">=QUERY(A:I, "select E, sum(I)
-  where E is not null
-  group by E pivot A", 1)</span></div>
+    <div class="box tool"><h3>Excel <span class="chip">SUMIFS</span></h3>
+      <p>Academic and industrial finds are on separate sheets, so build the table on a new sheet (say, <code>Summary</code>) one row at a time:</p><ol>
+      <li>Type the school names in B1:D1, <code>Academic</code> in A2 and <code>Industrial</code> in A3.</li>
+      <li>Academic row: type in B2, copy across to D2<span class="code">=SUMIFS('Academic Education Artifacts'!$J:$J, 'Academic Education Artifacts'!$B:$B, B$1)</span></li>
+      <li>Industrial row: the same formula pointed at the other sheet. Type in B3, copy across to D3<span class="code">=SUMIFS('Industrial Education Artifacts'!$J:$J, 'Industrial Education Artifacts'!$B:$B, B$1)</span></li>
+      <li>Totals: <code>=SUM(B2:D2)</code> in E2 (copy to E3), <code>=SUM(B2:B3)</code> in B4 (copy to E4).</li>
+      <li>% industrial: <code>=B3/B4</code> in B5, copy to E5, format as percent.</li></ol></div>
+    <div class="box tool"><h3>Google Sheets <span class="chip">same formulas</span></h3>
+      <p>The SUMIFS above work as written — keep the single quotes around sheet names that contain spaces. Format → Number → Percent for row 5.</p>
+      <p><b>Or with pivot tables:</b> on each lab sheet, Insert → Pivot table with Rows: <code>Site</code> and Values: <code>Count</code> (summarized by SUM). Each pivot gives one row of the table — three school totals — to copy into the Summary sheet. Excel’s Insert → PivotTable works the same way.</p></div>
   </div>
-  <p class="muted">Columns assume the workbook’s Combined data tab: A = Site, E = Type, F = Form, G = Material, I = Count, J = Pencil length. Chart the percentages as a 100% stacked bar, one bar per school.</p>
+  <p class="muted">Both lab sheets use the same columns: B = Site, F = Layer, J = Count, L = Material, M = Form, AF = Pencil length. Chart the percentages as a 100% stacked bar, one bar per school.</p>
 </section>
 
 <section id="chisq" data-label="χ²" role="tabpanel" hidden>
@@ -319,12 +333,12 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
     <span class="ico">⚒</span>
     <div class="txt">
       <h3><a href="chi_square_builder.html" target="_blank" rel="noopener">Try it: χ² Builder →</a></h3>
-      <p>Build your own observed table, pick a shape, and watch expected counts, residuals, χ², df and p update live.</p>
+      <p>Draw standard-normal Z’s, square them and stack them, and watch the χ² distribution for df 1–6 take shape — the picture behind the p-value on this tab.</p>
     </div>
   </div>
   <div class="grid2">
     <div class="box tool"><h3>χ² formulas <span class="chip">Excel = Sheets</span></h3><ol>
-      <li>Observed table in <code>B2:D3</code>, row totals in column E, column totals in row 4.</li>
+      <li>Observed table in <code>B2:D3</code> — the Summary sheet from the Cross-tab tab, with row totals in column E and column totals in row 4.</li>
       <li>Expected: type in B7, copy across B7:D8<span class="code">=$E2*B$4/$E$4</span></li>
       <li>p-value<span class="code">=CHISQ.TEST(B2:D3, B7:D8)</span></li>
       <li>χ² statistic for your report<span class="code">=SUMPRODUCT((B2:D3-B7:D8)^2/B7:D8)</span></li>
@@ -380,7 +394,7 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
       <span class="code">=SQRT(chi2 / (N * (MIN(rows, cols) - 1)))</span>
       <p>For a 2 × 3 table, MIN(rows, cols) − 1 = 1, so V = √(χ² ÷ N).</p></div>
     <div class="box"><h3>Rough reading</h3><div class="tbl"><table><thead><tr><th>V</th><th>Strength</th><th>Lab example</th></tr></thead><tbody>
-      <tr><td>≈ 0.1</td><td>weak</td><td></td></tr><tr><td>≈ 0.3</td><td>moderate</td><td>0.24 type × school · 0.28 type × Woodville level</td></tr><tr><td>≥ 0.5</td><td>strong</td><td></td></tr></tbody></table></div></div>
+      <tr><td>≈ 0.1</td><td>weak</td><td></td></tr><tr><td>≈ 0.3</td><td>moderate</td><td>0.24 type × school · 0.33 type × Woodville level (A–C)</td></tr><tr><td>≥ 0.5</td><td>strong</td><td></td></tr></tbody></table></div></div>
   </div>
   <div class="box">
     <h3>Why V doesn't grow with N, even though &#967;² does</h3>
@@ -415,16 +429,18 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
       <p>Drag one fragment length out to 30 mm and watch the mean chase it while the median barely moves.</p>
     </div>
   </div>
+  <div class="note"><b>Convert the lengths first.</b> In the lab file, 934 of the 940 graphite pencil lengths in column AF are stored as text ("10.29", not 10.29). AVERAGEIFS, MEDIAN, STDEV and RANK.AVG skip text without warning, so you get a wrong number or an error. Excel: select column AF, then Data → Text to Columns → Finish. Google Sheets: select column AF, then Data → Split text to columns. If a value still sits left-aligned in its cell, it is still text; a helper column with <code>=VALUE(AF2)</code> converts it.</div>
   <div class="grid2">
     <div class="box tool"><h3>Excel</h3>
-      <span class="code">=COUNTIFS(A:A,"Bethel",G:G,"graphite",F:F,"pencil",J:J,"&lt;&gt;")
-=AVERAGEIFS(J:J,A:A,"Bethel",G:G,"graphite",F:F,"pencil")</span>
-      <p>Median (Excel 365):</p><span class="code">=MEDIAN(FILTER(J:J,(A:A="Bethel")*(G:G="graphite")*(F:F="pencil")*(J:J&lt;&gt;"")))</span>
+      <p>Graphite pencils are all on the Academic sheet. Type these in an empty column to the right of the data on that sheet (B = Site, L = Material, M = Form, AF = Pencil length):</p>
+      <span class="code">=COUNTIFS(B:B,"Bethel",L:L,"graphite",M:M,"pencil",AF:AF,"&lt;&gt;")
+=AVERAGEIFS(AF:AF,B:B,"Bethel",L:L,"graphite",M:M,"pencil")</span>
+      <p>Median (Excel 365):</p><span class="code">=MEDIAN(FILTER(AF:AF,(B:B="Bethel")*(L:L="graphite")*(M:M="pencil")*(AF:AF&lt;&gt;"")))</span>
       <p>Older Excel: <code>=MEDIAN(IF(...))</code>, entered with Ctrl+Shift+Enter. Histogram: Insert → Chart → Histogram.</p></div>
     <div class="box tool"><h3>Google Sheets</h3>
       <p>COUNTIFS and AVERAGEIFS work the same. FILTER takes separate conditions:</p>
-      <span class="code">=MEDIAN(FILTER(J:J, A:A="Bethel", G:G="graphite", F:F="pencil", J:J&lt;&gt;""))
-=STDEV(FILTER(J:J, A:A="Bethel", G:G="graphite", F:F="pencil", J:J&lt;&gt;""))</span>
+      <span class="code">=MEDIAN(FILTER(AF:AF, B:B="Bethel", L:L="graphite", M:M="pencil", AF:AF&lt;&gt;""))
+=STDEV(FILTER(AF:AF, B:B="Bethel", L:L="graphite", M:M="pencil", AF:AF&lt;&gt;""))</span>
       <p>Histogram: Insert → Chart → Chart type: Histogram.</p></div>
   </div>
 </section>
@@ -464,7 +480,7 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
   </div>
   <div class="grid2">
     <div class="box tool"><h3>Kruskal-Wallis <span class="chip">Excel = Sheets</span></h3>
-      <p>Put the graphite pencils with a length on their own sheet: A = Site, B = Length (940 rows).</p><ol>
+      <p>First convert the lengths to numbers (see the Measurements tab), then make a sheet of just the graphite pencils that have a length: on the Academic sheet, filter Material (L) = graphite, Form (M) = pencil and Pencil Length (AF) not blank, then copy Site (B) and Pencil Length (AF) into a new sheet as columns A and B, with headers in row 1 (940 rows).</p><ol>
       <li>Rank every fragment, shortest = 1 (column C)<span class="code">=RANK.AVG(B2, $B$2:$B$941, 1)</span></li>
       <li>For each school: n and the sum of ranks R<span class="code">=COUNTIF(A:A, "Bethel")
 =SUMIF(A:A, "Bethel", C:C)</span></li>
