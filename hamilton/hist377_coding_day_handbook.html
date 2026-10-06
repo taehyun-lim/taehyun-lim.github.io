@@ -88,6 +88,14 @@
   .rail-sec{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
     color:var(--ink-3);margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--rule-soft)}
   .rail-sec:first-child{margin-top:0}
+  .rail-group{display:contents}
+  .rail-group[hidden]{display:none!important}
+  .sec-toggle{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:6px;width:100%;
+    font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit}
+  .sec-toggle:hover{color:var(--ink)}
+  .sec-toggle:focus-visible{outline:2px solid var(--rubric);outline-offset:2px;border-radius:2px}
+  .sec-toggle .chev{display:inline-block;width:9px;transition:transform .15s}
+  .sec-toggle[aria-expanded="false"] .chev{transform:rotate(-90deg)}
   .railitem{display:grid;grid-template-columns:92px minmax(0,1fr);gap:10px;align-items:center;
     width:100%;text-align:left;background:transparent;border:0;padding:5px;margin-bottom:3px;
     border-radius:3px;cursor:pointer;color:inherit;font:inherit}
@@ -284,11 +292,11 @@
     <span class="rlab">Three ways in</span>
   </button>
   <button class="railitem" role="tab" id="t06" aria-controls="s06" aria-selected="false" tabindex="-1">
-    <span class="thumb" aria-hidden="true"><span class="thn">07</span><span class="tht">Our "text layer" is not text. It is OCR from December 2011.</span></span>
+    <span class="thumb" aria-hidden="true"><span class="thn">07</span><span class="tht">Our text layer was never typed. It is OCR, in a file made in December 2011.</span></span>
     <span class="rlab">The twist in our PDF</span>
   </button>
   <button class="railitem" role="tab" id="t07" aria-controls="s07" aria-selected="false" tabindex="-1">
-    <span class="thumb" aria-hidden="true"><span class="thn">08</span><span class="tht">The fields you need sit in the worst type on the page</span></span>
+    <span class="thumb" aria-hidden="true"><span class="thn">08</span><span class="tht">Several fields you code sit where the OCR often fails</span></span>
     <span class="rlab">What breaks, and where</span>
   </button>
   <button class="railitem" role="tab" id="t08" aria-controls="s08" aria-selected="false" tabindex="-1">
@@ -309,20 +317,22 @@
     <span class="thumb" aria-hidden="true"><span class="thn">12</span><span class="tht">Check these four things before you look at any row</span></span>
     <span class="rlab">What should come back</span>
   </button>
-  <button class="railitem" role="tab" id="t12" aria-controls="s12" aria-selected="false" tabindex="-1">
-    <span class="thumb" aria-hidden="true"><span class="thn">13</span><span class="tht">Ask for a file. If none comes, copy with your eyes open.</span></span>
-    <span class="rlab">Getting the file out intact</span>
-  </button>
+  <p class="rail-sec"><button type="button" class="sec-toggle" aria-expanded="true" aria-controls="grp-compare"><span class="chev" aria-hidden="true">▾</span>5 · Comparing (Optional)</button></p>
+  <div class="rail-group" id="grp-compare">
+    <button class="railitem" role="tab" id="t12" aria-controls="s12" aria-selected="false" tabindex="-1">
+      <span class="thumb" aria-hidden="true"><span class="thn">13</span><span class="tht">Ask for a file. If none comes, copy with your eyes open.</span></span>
+      <span class="rlab">Getting the file out intact</span>
+    </button>
+    <button class="railitem" role="tab" id="t13" aria-controls="s13" aria-selected="false" tabindex="-1">
+      <span class="thumb" aria-hidden="true"><span class="thn">14</span><span class="tht">Side by side, field by field, by case number</span></span>
+      <span class="rlab">How to line them up</span>
+    </button>
+    <button class="railitem" role="tab" id="t14" aria-controls="s14" aria-selected="false" tabindex="-1">
+      <span class="thumb" aria-hidden="true"><span class="thn">15</span><span class="tht">Label every disagreement as one of these</span></span>
+      <span class="rlab">Four kinds of disagreement</span>
+    </button>
 
-  <p class="rail-sec">5 · Comparing</p>
-  <button class="railitem" role="tab" id="t13" aria-controls="s13" aria-selected="false" tabindex="-1">
-    <span class="thumb" aria-hidden="true"><span class="thn">14</span><span class="tht">Side by side, field by field, by case number</span></span>
-    <span class="rlab">How to line them up</span>
-  </button>
-  <button class="railitem" role="tab" id="t14" aria-controls="s14" aria-selected="false" tabindex="-1">
-    <span class="thumb" aria-hidden="true"><span class="thn">15</span><span class="tht">Label every disagreement as one of these</span></span>
-    <span class="rlab">Four kinds of disagreement</span>
-  </button>
+  </div>
 
   <p class="rail-sec">6 · From your rows to a figure</p>
   <button class="railitem" role="tab" id="t16" aria-controls="s16" aria-selected="false" tabindex="-1">
@@ -336,7 +346,7 @@
 
   <p class="rail-sec">7 · Into a Word file</p>
   <button class="railitem" role="tab" id="t19" aria-controls="s19" aria-selected="false" tabindex="-1">
-    <span class="thumb" aria-hidden="true"><span class="thn">18</span><span class="tht">Either works. Both take under a minute.</span></span>
+    <span class="thumb" aria-hidden="true"><span class="thn">18</span><span class="tht">Route A depends on your tool. Route B works with any.</span></span>
     <span class="rlab">Two routes to a .docx</span>
   </button>
 
@@ -375,7 +385,7 @@
     </ul>
   </div>
   <div class="say">    
-      <p>You are not learning to use AI today. You are learning to check it — and the only way to check a machine is to have done the work yourself first, which you have.</p>
+      <p>You are not learning to use AI today. You are learning to check it — and checking it means having done the work yourself first, which you have.</p>
     
   </div>
 </article>
@@ -387,14 +397,14 @@
           <p class="big">Two tools, and one to avoid</p>
     <p>Both are on the <a href="https://www.hamilton.edu/offices/lits/tech-lab/artificial-intelligence/tools">LITS AI tools page</a> and both take your Hamilton credentials. <strong>Pick one and work in it.</strong></p>
     <ul>
-      <li><strong>Amplify</strong> — <a href="http://amplify.hamilton.edu/"><code>amplify.hamilton.edu</code></a> — Hamilton-hosted, with several models to choose from. <strong>It does not run Python.</strong></li>
-      <li><strong>Gemini</strong> — <a href="https://gemini.google.com/app"><code>gemini.google.com</code></a> — Google's model. <strong>It can run Python internally</strong>, which is how it counts and charts.</li>
-      <li><strong>Adobe Firefly</strong> — <strong>not for charts.</strong> It draws pictures. It will happily draw something that looks like a bar chart, with numbers it invented.</li>
+      <li><strong>Amplify</strong> — <a href="http://amplify.hamilton.edu/"><code>amplify.hamilton.edu</code></a> — hosted by Hamilton LITS, with models from Anthropic, OpenAI and Mistral to choose from. <strong>It does not run Python.</strong></li>
+      <li><strong>Gemini</strong> — <a href="https://gemini.google.com/app"><code>gemini.google.com</code></a> — Google's model. <strong>It can run Python</strong>, so it can calculate counts and draw charts from a file you upload.</li>
+      <li><strong>Adobe Firefly</strong> — <strong>not for charts.</strong> It makes images and does not read your data, so any numbers in a chart it draws did not come from your file.</li>
     </ul>
   </div>
   <div class="say">    
-      <p>The Firefly warning is the one to remember. An image generator has no idea what your data says — it produces a plausible <em>picture</em> of a chart, with numbers it invented. Never reach for one when you are asked to make a figure.</p>
-      <p>NotebookLM is worth knowing about too. It is genuinely good for asking questions of the roll — <em>which entries mention a church?</em> — but not for coding, because it answers in prose and will not give you a table you can trust row by row.</p>
+      <p>The Firefly warning is the one to remember. An image generator does not read your data — it produces a <em>picture</em> of a chart, and any numbers in it are generated, not counted. Do not use one when you are asked to make a figure.</p>
+      <p>NotebookLM — listed on the LITS page as Gemini Notebook — is useful for asking questions of the roll: <em>which entries mention a church?</em> Since December 2025 it can also build tables from your sources. It is not part of today's workflow, and anything it gives you needs the same check against the page.</p>
     
   </div>
 </article>
@@ -413,7 +423,7 @@
   </div>
   <div class="say">    
       <p>The point of a new conversation is to start the model with as little extra information or context as possible. It is not a clean slate. Depending on the tool and its settings, a model may still draw on your earlier chats or files, and no setting removes what it absorbed in training — Sharpe's edition has been online for years. A name the model "knows" looks exactly like a name it read. The only check is the page.</p>
-      <p>Step 4 matters for a duller reason: small talk before the prompt changes what the model does with the prompt. Paste it cold.</p>
+      <p>Step 4 matters for a duller reason: anything typed before the prompt becomes part of what the model works from and can change what it does with the prompt. Paste it cold.</p>
     
   </div>
 </article>
@@ -423,7 +433,7 @@
   <div class="slide-h"><span class="no">05</span><h2>What a PDF is</h2></div>
   <div class="onscreen">
           <p class="big">First, what is a PDF?</p>
-    <p>A PDF records <strong>what a page looks like</strong>, not what the document is. A Word file knows <em>this is a sentence, this is a paragraph, this is a heading</em>. A PDF mostly stores <em>draw this character, at this spot, in this font</em>.</p>
+    <p>A PDF records <strong>what a page looks like</strong>, not what the document is. A Word file knows <em>this is a paragraph, this is a heading, this is a list</em>. A PDF mostly stores <em>draw this character, at this spot, in this font</em>.</p>
     <p>And a PDF can be made in three different ways.</p>
   </div>
   <div class="tbl">
@@ -437,8 +447,8 @@
   </table>
   </div>
   <div class="say">
-      <p><strong>Ours is the third kind.</strong> What you see on screen is a photograph of a 1913 book; what a tool pulls out of the file is a machine's guess at it. <a class="slink" href="#s06" data-go="s06">Slide <span data-num="s06">7</span></a> shows how we know.</p>
-      <p><strong>PDF</strong> stands for <em>Portable Document Format</em>. "Portable" means it is built to look the same on any screen or printer — which is exactly why it stores where each character goes rather than what the text means.</p>
+      <p><strong>Ours is the third kind.</strong> What you see on screen is a scanned image of the 1913 book; what a tool pulls out of the file is an OCR program's guess at that image. <a class="slink" href="#s06" data-go="s06">Slide <span data-num="s06">7</span></a> shows how we know.</p>
+      <p><strong>PDF</strong> stands for <em>Portable Document Format</em>. "Portable" means it is built to look the same on any screen or printer — which is why it mostly stores where each character goes rather than how the text is organised.</p>
       <p><strong>OCR</strong> stands for <em>optical character recognition</em>: software that looks at a picture of text and guesses which character each shape is.</p>
   </div>
 </article>
@@ -449,11 +459,11 @@
   <div class="onscreen">
           <p class="big">A PDF can be read three different ways</p>
     <ul>
-      <li><strong>Embedded text layer.</strong> The characters are already stored in the file. Instant, free, exact — <em>if</em> the PDF was made from a word processor. <em>Needs no program to run.</em></li>
-      <li><strong>The tool runs its own OCR</strong> — <em>optical character recognition</em>. Used when there is no text layer. A machine cuts the page into letter-sized pieces and guesses each one from its pixels. <strong>Needs to run a program.</strong></li>
-      <li><strong>The model looks at the page.</strong> A multimodal model treats the page as an image and reads it the way you would. <em>Needs no program to run.</em></li>
+      <li><strong>Embedded text layer.</strong> The characters are already stored in the file, and the platform's PDF reader pulls them out. Exact if the PDF was exported from a word processor; only as good as the OCR if it was a scan. <em>The model runs no code.</em></li>
+      <li><strong>The tool runs its own OCR.</strong> Usually used when there is no text layer. An OCR program finds the lines of text in the page image and guesses the characters from their shapes. <strong>It needs an OCR program</strong> — run by the platform when you upload, or by the model as code.</li>
+      <li><strong>The model looks at the page.</strong> The page goes to a multimodal model as an image, and the model writes out the text it recognises. <em>No OCR program, and the model runs no code.</em></li>
     </ul>
-    <p style="margin-top:14px"><strong>Nothing in the answer tells you which one happened.</strong></p>
+    <p style="margin-top:14px"><strong>You cannot tell which method was used from the output alone.</strong></p>
   </div>
   <div class="say">    <p>The last line is the one that matters. The chat window hands you text whichever route the tool took, with no label saying where it came from. Everything else today follows from that.</p>
   </div>
@@ -463,23 +473,23 @@
 <article class="slide" id="s06" role="tabpanel" aria-labelledby="t06" hidden>
   <div class="slide-h"><span class="no">07</span><h2>The twist in our PDF</h2></div>
   <div class="onscreen">
-          <p class="big">Our "text layer" is not text. It is OCR from December 2011.</p>
-    <p>The file says so itself. Ask it, with <code>pdfinfo</code>:</p>
+          <p class="big">Our text layer was never typed. It is OCR, in a file made in December 2011.</p>
+    <p>Here is what the full-volume file reports about itself, with <code>pdfinfo</code>:</p>
 <pre>Creator:      Digitized by the Internet Archive
 Producer:     Recoded by LuraDocument PDF v2.28
 CreationDate: <b>Mon Dec  5 01:20:43 2011 EST</b>
 ModDate:      <b>Mon Dec  5 02:32:45 2011 EST</b></pre>
     <ul>
-      <li>Created at 01:20, finished at 02:32 — <strong>72 minutes of machine processing</strong> on a 366-page book.</li>
-      <li><code>pdffonts</code> reports one font, Courier: not embedded, no character map. That is the signature of an <strong>invisible layer laid over a picture</strong>, not of typed text.</li>
-      <li><code>pdfimages</code> reports every page as a 400 ppi image with a one-bit black-and-white mask over it. <strong>That mask is what the OCR read.</strong></li>
-      <li>Note what the metadata does <em>not</em> say: which program read the letters. LuraDocument is the compressor. <strong>The engine is not named anywhere in the file.</strong></li>
+      <li>Created at 01:20 and last modified at 02:32 (EST) on 5 December 2011. Your roll file, cut from it, shows its own dates. The full volume has <strong>366 pages</strong>.</li>
+      <li>On every page that has text, the text is set in <strong>text rendering mode 3</strong>, which the PDF specification defines as invisible: it can be searched and copied, but it is never drawn. <code>pdffonts</code> lists one font for all of it — Courier, not embedded.</li>
+      <li><code>pdfimages</code> lists three images on every page: a low-resolution colour background (about 133 ppi), a 400 ppi colour image, and a one-bit black-and-white mask for that image. <strong>Together they are the picture you see.</strong></li>
+      <li>Note what the file does <em>not</em> say: which program read the letters. LuraDocument, named as Producer, recoded the file. <strong>The OCR program is not named anywhere in it.</strong></li>
     </ul>
-    <p style="margin-top:14px">Extracting the text layer does not get you Sharpe's edition. <strong>It gets you a fifteen-year-old machine's guess at it.</strong></p>
+    <p style="margin-top:14px">Extracting the text layer does not get you Sharpe's printed text. <strong>It gets you a machine's guess at it, in a file made almost fifteen years ago.</strong></p>
   </div>
   <div class="say">    
-      <p>The chain between the clerk and you has four links, and every one of them can introduce error: the clerk's roll, Sharpe's 1913 translation, a 2011 scan, a 2011 OCR pass. The AI is the fifth link. You are the sixth.</p>
-      <p>How we know: <code>pdffonts</code> and <code>pdfimages</code>, two command-line tools, report the fonts and images inside a PDF in about a second.</p>
+      <p>The chain between the clerk and you has four links, and every one of them can introduce error: the clerk's Latin roll, Sharpe's 1913 English calendar of it, the scan of Sharpe's book, and the OCR pass. The AI is the fifth link. You are the sixth.</p>
+      <p>How we know: <code>pdfinfo</code>, <code>pdffonts</code> and <code>pdfimages</code> are command-line tools from the free Poppler package (on a Mac, installed with Homebrew); they report a PDF's metadata, fonts and images. No Python is needed. The invisible text shows in each page's drawing instructions, which <code>qpdf</code> can decompress.</p>
     
   </div>
 </article>
@@ -488,24 +498,25 @@ ModDate:      <b>Mon Dec  5 02:32:45 2011 EST</b></pre>
 <article class="slide" id="s07" role="tabpanel" aria-labelledby="t07" hidden>
   <div class="slide-h"><span class="no">08</span><h2>What breaks, and where</h2></div>
   <div class="onscreen">
-          <p class="big">The fields you need sit in the worst type on the page</p>
+          <p class="big">Several fields you code sit where the OCR often fails</p>
   </div>
   <div class="tbl">
   <table>
-    <thead><tr><th>Field</th><th>Where it physically sits</th><th>What the text layer gives</th></tr></thead>
+    <thead><tr><th>What</th><th>Where it sits on the page</th><th>What the text layer gives (page reads)</th></tr></thead>
     <tbody>
-      <tr><td>Ward</td><td>Outer margin, small italic</td><td class="mono">Nfiii^aif · Crupiil^^aie · iVaiebroke · ^^''^^^</td></tr>
-      <tr><td>Chattel value</td><td>Italic fractions, <code>s.</code>/<code>d.</code> marks</td><td class="mono">9^. 6d. · 2^. · 107 los. 4^.</td></tr>
-      <tr><td>Entry number</td><td>An isolated numeral, no neighbours</td><td class="mono">14 … Freesto?ie</td></tr>
-      <tr><td>Occupation</td><td>Sometimes only glossed in a footnote</td><td class="mono">smallest type on the page</td></tr>
-      <tr><td>Names, places</td><td>Body prose</td><td class="mono">William de Sfnte · Robertde Bat eldand</td></tr>
-      <tr><td>Cause, outcome</td><td>Body prose</td><td>Generally good</td></tr>
+      <tr><td>Marginal note, usually the ward</td><td>Outer margin, small italic</td><td class="mono">Nfiii^aif (Neugate) · Crupiil^^aie (Crupulgate) · iVaiebroke (Walebroke) · ^^''^^^ (Bridge)</td></tr>
+      <tr><td>Money</td><td>Figures followed by italic <em>s.</em> and <em>d.</em></td><td class="mono">9^. 6d. (9s. 6d.) · los. 4^. (10s. 4d.)</td></tr>
+      <tr><td>Entry number</td><td>Start of each entry</td><td class="mono">I. (1) · ID. (10) · II. (11)</td></tr>
+      <tr><td>Page number</td><td>Top of the page</td><td class="mono">lOI (101) · Ill (111)</td></tr>
+      <tr><td>Footnotes, where occupations are sometimes glossed</td><td>Bottom of the page, smallest type</td><td class="mono">a maker of labours (tabours)</td></tr>
+      <tr><td>Names in italic headings</td><td>Head of each roll</td><td class="mono">Sfnte (Strete) · Bat/eld (Hatfeld) · Sta/'lc (Stable)</td></tr>
+      <tr><td>Names, cause, outcome</td><td>Body prose</td><td>Mostly accurate, with occasional slips: <code>Ricliard</code> (Richard)</td></tr>
     </tbody>
   </table>
   </div>
   <div class="say">    
-      <p>The pattern is the point. The fields you have to code do not live in the body prose. They live in the margins, the footnotes, the isolated numerals and the abbreviated money — the parts set in the smallest and most awkward type. A page can be 97% character-accurate and still have an unreadable ward.</p>
-      <p>One counter-intuitive detail: the money fails on <em>cleanly printed</em> pages. It is not faint ink. It is italic fractions. The failure is typographic, not a question of damage — which is the opposite of what you would assume about a scan of a 1913 book.</p>
+      <p>The pattern is the point. Several fields you code — entry numbers, page numbers, money, and the footnotes that explain occupations — sit in parts of the page where the OCR often fails: italic abbreviations, small numerals, footnotes. Most of the story is in the body prose, which is mostly accurate. The marginal ward notes are often garbled, which is why rule 4 of the prompt takes the ward from the sentence, not the margin.</p>
+      <p>One counter-intuitive detail: money can be garbled even on <em>cleanly printed</em> pages. It is not faint ink. It is the italic <em>s.</em> and <em>d.</em> — <em>9s. 6d.</em> comes out as <code>9^. 6d.</code> The failure is typographic, not damage to the page.</p>
     
   </div>
 </article>
@@ -526,12 +537,12 @@ ModDate:      <b>Mon Dec  5 02:32:45 2011 EST</b></pre>
       <div class="cp-h"><span class="t">Diagnostic — message 2</span><button class="copy" type="button">Copy</button></div>
       <pre>List the headings of entries 1 to 5 in this roll, exactly as they appear, character for character. Do not add or remove spaces, and do not correct spelling. If a heading is unclear, write it as you see it.</pre>
     </div>    
-      <p>Every heading in the volume reads <em>On the death of [name]</em>. The stored text layer joins the <code>of</code> to the name, and it does it in every roll — <code>ofJohn</code>, <code>ofCristina</code>, <code>ofElena</code>, <code>ofGerardle Friiyter</code>. At least one of your first five entries will have it.</p>
-      <p>So: if the headings come back joined, the tool is reading the text layer and reporting it honestly. If all five come back with a clean space after <code>of</code>, it either looked at the page images or it tidied the text without telling you — and the second of those is the thing this whole session is about.</p>
-      <p>The tell is a single space. That is how small a quiet failure can be.</p>
+      <p>Message 1 gets the tool's own account of what it did. Treat it as a claim, not a fact: in a test run, a model said it had extracted the text layer when it had been given only page images.</p>
+      <p>For message 2, put three versions of each heading side by side: the page as you see it; the text layer, which you get by selecting the heading in your PDF viewer and copying it; and the tool's answer. Compare the letters, not the spaces — different programs put spaces in different places when they pull text out of the same file.</p>
+      <p>If the tool repeats a misreading that is in the text layer — in Roll D, <code>Friiyter</code> where the page prints <em>Fruyter</em> — it was almost certainly reading the text layer. If it gives a different wrong spelling (the same test model wrote <code>Frayser</code>), it was not simply copying the text layer, and it got the name wrong. If it matches the page exactly, you cannot tell which route it took — only that it got those five right.</p>
       
     
-    <div class="demo"><b>Do this first</b> Run both messages before you paste the coding prompt, and note which of the two outcomes you got.</div>
+    <div class="demo"><b>Do this first</b> Run both messages before you paste the coding prompt, and note what you found.</div>
   </div>
 </article>
 
@@ -542,13 +553,13 @@ ModDate:      <b>Mon Dec  5 02:32:45 2011 EST</b></pre>
           <p class="big">Five things, or it will improvise</p>
     <ul>
       <li><strong>The exact columns</strong>, named and in order.</li>
-      <li><strong>The value lists</strong>, closed, with an explicit option for "not stated".</li>
+      <li><strong>The value lists</strong>, closed, with explicit <code>NOT STATED</code> and <code>ILLEGIBLE</code> options.</li>
       <li><strong>The decision rules</strong> for the traps you already know about.</li>
       <li><strong>Evidence.</strong> A quoted phrase and a page number for every row.</li>
       <li><strong>A file, not a chat table.</strong></li>
     </ul>
   </div>
-  <div class="say">    <p>This is prompt <em>design</em>, not prompt tricks. Every item on the list is there because leaving it out produced a specific failure. No closed list and you get 104 spellings of the ward. No "not stated" option and the model invents a relationship rather than leaving a blank. No evidence quote and you cannot settle a disagreement without reopening the page.</p>
+  <div class="say">    <p>This is prompt <em>design</em>, not prompt tricks. Each item closes off one way the output can go wrong. Without closed lists, the same value comes back spelled several ways and cannot be counted. Without <code>NOT STATED</code> and <code>ILLEGIBLE</code>, a model has no way to leave a cell empty and may fill it with a guess. Without an evidence quote, you have to search the whole entry to see what the model based its answer on.</p>
   </div>
 </article>
 
@@ -587,7 +598,7 @@ manner_of_death: natural | accident | assault | suicide | undetermined | none
 victim_gender: male | female | not given
 victim_status: gentleman/woman | craftsman/woman | servant/labourer | apprentice | prisoner | destitute | cleric/religious | unknown
 weapon: bare hands | knife/dagger | club/staff | axe | sword | bow and arrow | stone or thrown object | other | no weapon
-perpetrator_outcome: captured | surrendered | abjured the realm | took sanctuary then escaped | fled, never taken | jury found no felony | perpetrator died | outlawed | not stated | no perpetrator
+perpetrator_outcome: captured | surrendered | abjured the realm | took sanctuary then escaped | fled, never taken | jury found no felony | perpetrator died | outlawed | NOT STATED | no perpetrator
 within_without: within | without | not specified | not applicable
 
 RULES
@@ -597,7 +608,7 @@ RULES
 3. "lay dead of a death OTHER THAN his rightful death" = an UNNATURAL death. "DIED his rightful death" = a NATURAL death. These mean opposite things. Read the phrase carefully before coding manner_of_death.
 4. Take the ward from the SENTENCE that names it, never from the marginal note. Put the raw spelling in ward_verbatim, modernised in ward.
 5. inquest_date is the date at the head of the entry. That is when the body was viewed, NOT necessarily when the person died. Write it as M/YYYY.
-6. date_verbatim: the date exactly as the entry gives it, feast day and regnal year included — for example "Tuesday next after the Purification B.V.Mary [2 Feb.] the year aforesaid".
+6. date_verbatim: the date exactly as the entry gives it, feast day and regnal year included — for example "Thursday after the Feast of St. Michael [29 Sept.] a° 18 Edward II".
 7. printed_page: the number printed at the top of the page. These are often mis-transcribed (lOI for 101, Ill for 111). If you cannot read it cleanly, write ILLEGIBLE rather than guessing.
 8. The five _verbatim columns: copy what the page says, exactly as printed, including damaged characters. Do not tidy, modernise or correct.
 9. Any value you cannot read, write exactly: ILLEGIBLE. Any value the entry does not state, write exactly: NOT STATED. Never infer, never fill a gap from context, never guess a name.
@@ -615,8 +626,8 @@ Then, in the chat and not in the file, tell me:
 - which case_numbers you could not read
 - which fields you most often had to mark ILLEGIBLE</pre>
     </div>    
-      <p>Read rules 1 and 4 twice. Rule 1 is the trap you have already met by hand. Rule 4 decides whether the output is usable at all: a model that quietly fills gaps produces a beautiful CSV you cannot check, and a model that marks <code>ILLEGIBLE</code> tells you exactly where to look.</p>
-      <p>Do not skip the three questions at the end. The row count is how you detect a dropped entry, and the <code>ILLEGIBLE</code> summary is a free map of where to spend your verification time.</p>
+      <p>Read rules 3 and 9 twice. Rule 3 is the trap you have already met by hand. Rule 9 is what makes the output checkable: a model that quietly fills gaps gives you a clean-looking CSV with no sign of where it guessed, and a model that marks <code>ILLEGIBLE</code> shows you some of the places to look.</p>
+      <p>Do not skip the three questions at the end. Compare the row count it reports with the rows you actually received and with the entry numbers in the PDF. The <code>ILLEGIBLE</code> summary shows where the tool says it could not read — not everywhere it misread.</p>
     
     <div class="demo"><b>Do this now</b> Paste and run. If the upload stalls, check that you uploaded one roll and not the whole volume.</div>
   </div>
@@ -634,33 +645,33 @@ Then, in the chat and not in the file, tell me:
       <li><strong>Some cells say <code>ILLEGIBLE</code>.</strong> If none do, be suspicious, not pleased.</li>
     </ul>
   </div>
-  <div class="say">    <p>The last check is counter-intuitive enough to be worth stating twice. A perfectly clean CSV from a page whose margins are visibly wrecked means the gaps were filled, not read. Clean output is evidence of a problem here, not evidence of success.</p>
+  <div class="say">    <p>The last check is counter-intuitive enough to be worth stating twice. No <code>ILLEGIBLE</code> anywhere does not mean everything was read. In a test run on Roll D, a model marked nothing <code>ILLEGIBLE</code> and still misspelled names, misdated an inquest and recorded a killer as the victim.</p>
   </div>
 </article>
 
 <!-- 12 -->
 <article class="slide" id="s12" role="tabpanel" aria-labelledby="t12" hidden>
-  <div class="slide-h"><span class="no">13</span><h2>Getting the file out intact</h2></div>
+  <div class="slide-h"><span class="no">13</span><h2>Getting the file out intact (Optional)</h2></div>
   <div class="onscreen">
           <p class="big">Ask for a file. If none comes, copy with your eyes open.</p>
-    <p>The prompt asks for a downloadable CSV. <strong>Amplify cannot make one</strong> — it does not run Python. Send the prompt anyway and read what comes back instead: how a tool behaves when it cannot do what you asked is part of what you are measuring.</p>
+    <p>The prompt asks for a downloadable CSV. <strong>Amplify cannot make one.</strong> Send the prompt anyway and read what comes back instead: how a tool behaves when it cannot do what you asked is part of what you are measuring.</p>
     <ul>
       <li><strong>If you get a file:</strong> download it, open it, read the first row and the last row.</li>
       <li><strong>If you get rows in the chat:</strong> the prompt told it to print CSV inside a code block. Copy from the code block. If it handed you a formatted table instead, ask again for the code block.</li>
     </ul>
-    <p style="margin-top:14px"><strong>Four ways a copied table breaks</strong></p>
+    <p style="margin-top:14px"><strong>Four ways rows go wrong between the model and your spreadsheet</strong></p>
     <ul>
-      <li>A comma <em>inside</em> a field pushes that row's columns one cell to the left. One row out of line, and nothing looks wrong.</li>
-      <li>Excel rewrites whatever it thinks it recognises — <code>3/1300</code> becomes a date, <code>04</code> becomes <code>4</code>. The quietest of the four.</li>
-      <li>A markdown table lands in a single column, pipes and all, with <code>|---|</code> sitting in it as a data row.</li>
-      <li>The table stops early and whole rows never arrive. <strong>Count the rows.</strong></li>
+      <li>If a field that contains a comma is not in quotes, the comma splits it in two and pushes the rest of that row one cell to the right. That is why the prompt says <em>quote every field</em>.</li>
+      <li>Excel reformats some values when it opens a CSV: it drops leading zeros (<code>04</code> becomes <code>4</code>) and can turn text such as <code>JAN-1</code> into a date.</li>
+      <li>A table copied as raw text — cells separated by <code>|</code> — pastes into a single column, pipes and all, with the <code>|---|</code> line as a row of its own.</li>
+      <li>The output can stop early, so whole rows never arrive. <strong>Count the rows.</strong></li>
     </ul>
-    <p style="margin-top:14px">Characters already damaged in the <code>_verbatim</code> columns take one more hit on every one of these routes.</p>
+    
     <p style="margin-top:14px"><strong>Either route: check the row count, the first row, the last row, and every name against the page.</strong></p>
   </div>
   <div class="say">    
-      <p>Be precise about the cause, because it changes what you should trust. Not one of those four is the model being wrong — its rows were fine, and the damage happened between the chat window and your spreadsheet. That is why the fix is the route and not a better prompt: a downloaded file avoids the whole class of problem, a code block avoids most of it, a formatted table avoids none of it.</p>
-      <p>The Excel one deserves a second look, because it is the only one that leaves no trace. A date silently rewritten is indistinguishable from a date you coded that way, and it survives every check except comparing against the page. If <code>inquest_date</code> comes back tidier than you left it, something edited it.</p>
+      <p>Be precise about the cause, because it changes what you should trust. The comma problem starts in the model's output — a field left without quotes — and shows up when the spreadsheet splits the row. The Excel and raw-text problems happen after the model has finished. The fourth is in the model's own output, and so is other damage: in a test run, a model printing CSV left fields out of 23 of its 45 rows. A downloaded file avoids the copying problems and a code block avoids most of them; neither stops a spreadsheet from reformatting values when it opens the file.</p>
+      <p>The Excel one deserves a second look, because it leaves no visible trace: a reformatted value looks like any other value, and only comparing against the page will catch it. Your <code>inquest_date</code> values are not at risk in Excel, which keeps dates before 1900 as text.</p>
       <p>Write down what your tool actually did with the file instruction. Did it tell you it could not make one, or did it quietly hand you a table as though that were what you asked for? Substituting one format for another without saying so is the same habit as filling in a ward name you could not read. You will meet it again on <a class="slink" href="#s14" data-go="s14">slide <span data-num="s14">15</span></a> as a <em>quiet</em> error, and it is worth writing down while you are there.</p>
     
   </div>
@@ -668,7 +679,7 @@ Then, in the chat and not in the file, tell me:
 
 <!-- 13 -->
 <article class="slide" id="s13" role="tabpanel" aria-labelledby="t13" hidden>
-  <div class="slide-h"><span class="no">14</span><h2>How to line them up</h2></div>
+  <div class="slide-h"><span class="no">14</span><h2>How to line them up (Optional)</h2></div>
   <div class="onscreen">
           <p class="big">Side by side, field by field, by case number</p>
     <ul>
@@ -679,7 +690,7 @@ Then, in the chat and not in the file, tell me:
     </ul>
   </div>
   <div class="say">    
-      <p>Comparing down a column rather than across a row is a small change with a large effect. It keeps one kind of judgement in mind at a time, so patterns appear — <em>it gets the ward wrong whenever the margin is damaged</em> — which never surfaces when you read across a row and meet twenty unrelated fields at once.</p>
+      <p>Comparing down a column rather than across a row is a small change with a large effect. It keeps one kind of judgement in mind at a time, so patterns appear — in a test run on Roll D, a model coded six of the eight <em>died his rightful death</em> entries as no death at all — which are hard to see when you read across a row and meet twenty-one unrelated fields at once.</p>
       <p>"Do not fix anything yet" matters because the disagreement rate is itself your result. If you silently correct as you go, you have destroyed your own measurement.</p>
       <p>The point of the notes is that you see for yourself how often the machine is wrong, and where. Keep them in whatever form you will actually use while the two files are open in front of you.</p>
     
@@ -688,7 +699,7 @@ Then, in the chat and not in the file, tell me:
 
 <!-- 14 -->
 <article class="slide" id="s14" role="tabpanel" aria-labelledby="t14" hidden>
-  <div class="slide-h"><span class="no">15</span><h2>Four kinds of disagreement</h2></div>
+  <div class="slide-h"><span class="no">15</span><h2>Four kinds of disagreement (Optional)</h2></div>
   <div class="onscreen">
           <p class="big">Label every disagreement as one of these</p>
   </div>
@@ -705,7 +716,7 @@ Then, in the chat and not in the file, tell me:
   </div>
   <div class="say">    
       <p>Most of your time goes on <strong>quiet</strong>, because it is the category you will find nothing in unless you go hunting. Loud errors announce themselves. Quiet ones look exactly like correct answers, and the only way to find them is to have the page open next to the row.</p>
-      <p>Here is the shape of one. The transcription says <code>St. Mary atte Naxe</code>. There is a real London church called St Mary Axe, and a model under pressure produces the real one: the right kind of word, in the right place, and not what the page says.</p>
+      <p>Here is the shape of one. The page says <em>St. Mary atte Naxe</em>, and Sharpe's own footnote identifies it as St. Mary Axe. A model that writes <code>St Mary Axe</code> in a <code>_verbatim</code> column has the right place and the wrong text: fluent, plausible, and not what the page says.</p>
       <p>A high count of rule gaps is a good outcome, not a messy one. Those are the amendments that improve the codebook for everyone.</p>
     
   </div>
@@ -718,13 +729,13 @@ Then, in the chat and not in the file, tell me:
   <div class="onscreen">
           <p class="big">Your CSV, not the machine's</p>
     <ul>
-      <li>Upload <strong>your own verified CSV</strong> — not the machine's output. Yours is a few kilobytes, well inside any upload limit.</li>
-      <li>Ask for the chart <em>and the numbers behind it</em>, in the same message.</li>
+      <li>Upload <strong>your own verified CSV</strong> — not the machine's output. A roll's CSV is small — well under 100 KB.</li>
+      <li>Ask for the counts first and the chart last — the three prompts on the next slide.</li>
       <li>Check the numbers against your spreadsheet <strong>before</strong> you keep the picture.</li>
-      <li><strong>Gemini can create a chart using Python</strong> — it counts your rows, then renders them. <strong>Amplify "draws" a chart, like Firefly</strong> — it cannot run Python, so whatever comes back was generated, not counted.</li>
+      <li><strong>When Gemini runs Python</strong>, the counts are calculated from your file and the chart is drawn from those counts. <strong>Amplify can draw a chart too, but it cannot run Python</strong>: the counts and the bars come from the model, not from a calculation — check every one against your own.</li>
     </ul>
   </div>
-  <div class="say">    <p>The figure is built on your verified rows, not the machine's raw output. Otherwise the whole comparison gets quietly undone at the last step, and you end up charting the errors you just spent twenty minutes finding.</p>
+  <div class="say">    <p>The figure is built on your verified rows, not the machine's raw output. Otherwise the whole comparison gets quietly undone at the last step, and you end up charting the errors you just found.</p>
   </div>
 </article>
 
@@ -754,9 +765,9 @@ Count the values in the column `manner_of_death` and show me the counts as a pla
 - no 3D, no gradient, no drop shadow, no pie chart
 - one colour for all bars, since the categories are not ranked</pre>
     </div>    
-      <p>Send them one at a time and read each answer before the next. The order is the whole point: <strong>counts first, picture last.</strong> A chart is a claim about numbers, and once it is a picture nobody checks the numbers again. Asking for the table first makes the claim inspectable while it is still text — and sending the third message is how you confirm the counts, so check them against your own before you do.</p>
-      <p>The second message catches a real failure. Tools silently drop blank cells and rows they cannot parse, so a chart of 34 rows from a 39-row file is a different finding from the one you think you are reporting.</p>
-      <p>Swap <code>manner_of_death</code> for whichever column suits your question — <code>weapon</code>, <code>perpetrator_outcome</code>, <code>ward</code>. Same structure every time.</p>
+      <p>Send them one at a time and read each answer before the next. The order is the whole point: <strong>counts first, picture last.</strong> A chart is a claim about numbers, and once it is a picture the numbers are hard to check. Asking for the table first makes the claim inspectable while it is still text — and sending the third message is how you confirm the counts, so check them against your own before you do.</p>
+      <p>The second message catches a real failure. Tools can drop blank cells and rows they cannot parse without saying so, so a chart of 34 rows from a 39-row file is a different finding from the one you think you are reporting.</p>
+      <p>Swap <code>manner_of_death</code> for whichever column suits your question — <code>weapon</code>, <code>perpetrator_outcome</code>, <code>ward</code> — and change the chart title to match. Same structure every time.</p>
     
   </div>
 </article>
@@ -766,16 +777,16 @@ Count the values in the column `manner_of_death` and show me the counts as a pla
 <article class="slide" id="s19" role="tabpanel" aria-labelledby="t19" hidden>
   <div class="slide-h"><span class="no">18</span><h2>Two routes to a .docx</h2></div>
   <div class="onscreen">
-          <p class="big">Either works. Both take under a minute.</p>
+          <p class="big">Route A depends on your tool. Route B works with any.</p>
     <ul>
-      <li><strong>Route A — ask the tool.</strong> Say <em>"Put this into a Word document I can download"</em> and take the <code>.docx</code>.</li>
+      <li><strong>Route A — ask the tool.</strong> Say <em>"Put this into a Word document I can download"</em> and take the <code>.docx</code>. Gemini makes the file. Amplify's documentation lists Word document creation and a download-as-Word option on each message — check the message for it.</li>
       <li><strong>Route B — Google Docs.</strong> Paste your text in, then <strong>File → Download → Microsoft Word (.docx)</strong>.</li>
     </ul>
-    <p style="margin-top:14px"><strong>The chart:</strong> download it as an image, then <strong>Insert → Picture</strong>. Caption it with the field, the roll and the n.</p>
+    <p style="margin-top:14px"><strong>The chart:</strong> download it as an image, then insert it — in Google Docs, <strong>Insert → Image → Upload from computer</strong>; in Word, <strong>Insert → Pictures</strong>. Caption it with the field, the roll and the n.</p>
   </div>
   <div class="say">    
-      <p>Use Route B for anything with a chart in it. Route A is faster, but it re-flows the layout and sometimes drops an image; Google Docs lets you see the document before it becomes a file.</p>
-      <p>One rule on captions, and it is a research habit rather than a formatting rule: the caption must name the field, the roll and the n. A figure that does not say what it counted, or how many, is not evidence of anything.</p>
+      <p>Route B lets you see and fix the document before it becomes a file. With Route A, open the <code>.docx</code> and check that the chart and its caption made it in.</p>
+      <p>One rule on captions, and it is a research habit rather than a formatting rule: the caption must name the field, the roll and the n. A figure that does not say what it counted, or how many, cannot be checked by anyone who reads it.</p>
     
   </div>
 </article>
@@ -785,17 +796,17 @@ Count the values in the column `manner_of_death` and show me the counts as a pla
   <div class="slide-h"><span class="no ref">Ref</span><h2>If something goes wrong</h2></div>
   <div class="tbl">
   <table>
-    <thead><tr><th>Symptom</th><th>Cause</th><th>Fix</th></tr></thead>
+    <thead><tr><th>Symptom</th><th>Likely cause</th><th>What to try</th></tr></thead>
     <tbody>
-      <tr><td>The upload is rejected or stalls</td><td>Whole-volume PDF, or several files at once</td><td>One roll, one file. Split the PDF first, or use the pre-split rolls.</td></tr>
+      <tr><td>The upload is rejected or stalls</td><td>The file is larger than the tool accepts, or several files went at once</td><td>One roll, one file. Split the PDF first, or use the pre-split rolls.</td></tr>
       <tr><td>It summarises instead of coding</td><td>Chat happened before the prompt, or the prompt was trimmed</td><td>New conversation, re-upload, paste the prompt whole and first.</td></tr>
-      <tr><td>The CSV has the wrong number of columns</td><td>A column name was edited</td><td>Re-paste the unedited prompt. Do not repair the file by hand.</td></tr>
-      <tr><td>Names look subtly wrong in the spreadsheet</td><td>Copied out of a formatted table in the chat</td><td>Ask for a file; if the tool cannot make one, ask for CSV in a code block and copy from there.</td></tr>
+      <tr><td>Some rows have the wrong number of fields</td><td>A column name was edited, or the model left a field out of some rows</td><td>Find the short rows (start with the first and last row). Ask the tool to reprint them, or start again with the unedited prompt. Do not repair the file by hand.</td></tr>
+      <tr><td>Names look subtly wrong</td><td>The model misread or "corrected" them — a quiet error</td><td>Check against the page and note it as a disagreement.</td></tr>
       <tr><td>The chart's total does not match the file</td><td>Blank or unparsed rows dropped silently</td><td>Ask what was excluded and why, then re-run the count.</td></tr>
     </tbody>
   </table>
   </div>
-  <div class="say">    <p>The five failures most likely to hit you while twenty people work at once. Keep this tab open while you work.</p>
+  <div class="say">    <p>Common problems and what to try first. Keep this tab open while you work.</p>
     <div class="callout good">
       <p><strong>Still stuck?</strong> Email Tae Hyun Lim at <a href="mailto:tlim@hamilton.edu">tlim@hamilton.edu</a>, or ask a <a href="https://libguides.hamilton.edu/c.php?g=132443&amp;p=8194735">Data Science Tutor</a> — tutors are in Burke Library and take questions by chat, phone, email or appointment.</p>
     </div>
@@ -814,7 +825,7 @@ Count the values in the column `manner_of_death` and show me the counts as a pla
       <li><b>Word file</b> — <a class="slink" href="#s19" data-go="s19">slide <span data-num="s19">18</span></a>. "Put this into a Word document I can download", or Google Docs → File → Download → Microsoft Word.</li>
     </ol>
     <div class="callout good">
-      <p><strong>If you only remember one thing.</strong> The machine is fastest exactly where the source is hardest — the margins, the footnotes, the numerals, the money — and it does not slow down or hedge when it reaches them. Your job is not to trust it or to refuse it. Your job is to know where it is weak and go look there.</p>
+      <p><strong>If you only remember one thing.</strong> The text layer is often wrong exactly where several coded fields live — the margins, the footnotes, the numerals, the money — and a model's answer does not tell you when it is working from those places. Your job is not to trust it or to refuse it. Your job is to know where it is weak and go look there.</p>
     </div>
   </div>
 </article>
@@ -830,7 +841,7 @@ Count the values in the column `manner_of_death` and show me the counts as a pla
 
 <footer>
   <p class="contact end">Questions? Email Data Science/Analysis Research Librarian Tae Hyun Lim at <a href="mailto:tlim@hamilton.edu">tlim@hamilton.edu</a>, or ask a <a href="https://libguides.hamilton.edu/c.php?g=132443&amp;p=8194735">Data Science Tutor</a>.</p>
-  <p>Built on the pilot coding of Roll D and a whole-volume analysis of printed pages 1–277 of the Internet Archive scan of R. R. Sharpe, ed., <em>Calendar of Coroners Rolls of the City of London, A.D. 1300–1378</em> (1913). Tool availability from the Hamilton LITS generative AI tools page; Gemini upload limits and Word-file generation from Google's own documentation, checked September 2026. The 20-column prompt is a teaching subset of the full 32-column instrument.</p>
+  <p>Built on the pilot coding of Roll D and an analysis of the text layer of printed pages 1–277 of the Internet Archive scan of R. R. Sharpe, ed., <em>Calendar of Coroners Rolls of the City of London, A.D. 1300–1378</em> (1913). Tool descriptions from the Hamilton LITS AI tools page; Gemini's file generation from Google's announcement of 29 April 2026; both checked October 2026. The test runs mentioned on these slides used Claude Haiku 4.5 on Roll D. The 21-column prompt is a teaching subset of the full coding instrument.</p>
 </footer>
 </div>
 
@@ -947,8 +958,27 @@ Count the values in the column `manner_of_death` and show me the counts as a pla
     if(save) store('hist377.view', m);
   }
 
+  /* ---- collapsible rail sections ---- */
+  function setGroup(btn, grp, open){
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    grp.hidden = !open;
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.sec-toggle'), function(btn){
+    var grp = document.getElementById(btn.getAttribute('aria-controls'));
+    if(!grp) return;
+    btn.addEventListener('click', function(){ setGroup(btn, grp, grp.hidden); });
+  });
+  function openGroupFor(i){
+    var g = tabs[i] && tabs[i].closest ? tabs[i].closest('.rail-group') : null;
+    if(g && g.hidden){
+      var b = document.querySelector('.sec-toggle[aria-controls="' + g.id + '"]');
+      if(b) setGroup(b, g, true);
+    }
+  }
+
   function go(i, focusTab){
     if(i < 0 || i >= tabs.length) return;
+    openGroupFor(i);
     if(mode === 'slides'){
       show(i, focusTab, true);
     } else {
