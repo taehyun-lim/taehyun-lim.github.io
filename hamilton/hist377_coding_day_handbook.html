@@ -255,7 +255,7 @@
 <header class="head">
   <p class="eyebrow">Everything for today, and the reference to keep open while you work.</p>
   <h1>Coding Day Handbook</h1>
-  <p class="standfirst">You code a portion of a roll by hand, give the same roll to a machine, and turn your own rows into a chart and a Word file — with an optional step comparing your rows with the machine's. Every prompt you need is on this page, ready to copy, so there is nothing to transcribe. Work straight down it, and come back to it whenever you need it afterwards.</p>
+  <p class="standfirst">You code a portion of a roll by hand, give the same roll to a machine, and turn your own rows into a chart and a Word file — with an optional step comparing your rows with the machine's. Every prompt you need is on this page, ready to copy, so there is nothing to transcribe. Work straight down it, and come back to it whenever you need it afterward.</p>
   <p class="contact">Questions? Email Data Science/Analysis Research Librarian Tae Hyun Lim at <a href="mailto:tlim@hamilton.edu">tlim@hamilton.edu</a>, or ask a <a href="https://libguides.hamilton.edu/c.php?g=132443&amp;p=8194735">Data Science Tutor</a>.</p>
 </header>
 
@@ -304,7 +304,7 @@
     <span class="rlab">Find out how yours read it</span>
   </button>
 
-  <p class="rail-sec">4 · Try it your way</p>
+  <p class="rail-sec">4 · Try it your own way</p>
   <button class="railitem" role="tab" id="t09p" aria-controls="s09p" aria-selected="false" tabindex="-1">
     <span class="thumb" aria-hidden="true"><span class="thn">10</span><span class="tht">Try it your own way</span></span>
     <span class="rlab">Play with it</span>
@@ -378,7 +378,7 @@
   <div class="onscreen">
           <p class="big">Coding Day</p>
     <p>Rolls A–I · <em>Calendar of Coroners Rolls of the City of London, 1300–1378</em></p>
-    <p>You code. Then the machine codes. Then you find out who was right.</p>
+    <p>You code. Then the machine codes. Then you check it against the page.</p>
   </div>
 </article>
 
@@ -389,7 +389,7 @@
           <p class="big">Three jobs, one session</p>
     <ul>
       <li><strong>Code it.</strong> You have already done this by hand.</li>
-      <li><strong>Make the machine code it.</strong> Same roll, same categories.</li>
+      <li><strong>Make the machine code it.</strong> Same roll — your own way, or with the ready-made prompt.</li>
       <li><strong>Chart it.</strong> Your rows become a figure and a Word file. Comparing your rows with the machine's is optional (<a class="slink" href="#s12" data-go="s12">slides <span data-num="s12">14</span>–<span data-num="s14">16</span></a>).</li>
     </ul>
   </div>
@@ -432,7 +432,7 @@
   </div>
   <div class="say">    
       <p>The point of a new conversation is to start the model with as little extra information or context as possible. It is not a clean slate. Depending on the tool and its settings, a model may still draw on your earlier chats or files, and no setting removes what it absorbed in training — Sharpe's edition has been online for years. A name the model "knows" looks exactly like a name it read. The only check is the page.</p>
-      <p>If you use the ready-made prompt, paste it first: anything typed before it becomes part of what the model works from and can change what it does with the prompt. Paste it cold.</p>
+      <p>If you use the ready-made prompt, send it straight after the two diagnostic messages (<a class="slink" href="#s08" data-go="s08">slide <span data-num="s08">9</span></a>), with nothing else in between: anything else typed before it becomes part of what the model works from and can change what it does with the prompt.</p>
     
   </div>
 </article>
@@ -457,7 +457,7 @@
   </div>
   <div class="say">
       <p><strong>Ours is the third kind.</strong> What you see on screen is a scanned image of the 1913 book; what a tool pulls out of the file is an OCR program's guess at that image. <a class="slink" href="#s06" data-go="s06">Slide <span data-num="s06">7</span></a> shows how we know.</p>
-      <p><strong>PDF</strong> stands for <em>Portable Document Format</em>. "Portable" means it is built to look the same on any screen or printer — which is why it mostly stores where each character goes rather than how the text is organised.</p>
+      <p><strong>PDF</strong> stands for <em>Portable Document Format</em>. "Portable" means it is built to look the same on any screen or printer — which is why it mostly stores where each character goes rather than how the text is organized.</p>
       <p><strong>OCR</strong> stands for <em>optical character recognition</em>: software that looks at a picture of text and guesses which character each shape is.</p>
   </div>
 </article>
@@ -470,7 +470,7 @@
     <ul>
       <li><strong>Embedded text layer.</strong> The characters are already stored in the file, and the platform's PDF reader pulls them out. Exact if the PDF was exported from a word processor; only as good as the OCR if it was a scan. <em>The model runs no code.</em></li>
       <li><strong>The tool runs its own OCR.</strong> Usually used when there is no text layer. An OCR program finds the lines of text in the page image and guesses the characters from their shapes. <strong>It needs an OCR program</strong> — run by the platform when you upload, or by the model as code.</li>
-      <li><strong>The model looks at the page.</strong> The page goes to a multimodal model as an image, and the model writes out the text it recognises. <em>No OCR program, and the model runs no code.</em></li>
+      <li><strong>The model looks at the page.</strong> The page goes to a multimodal model as an image, and the model writes out the text it recognizes. <em>No OCR program, and the model runs no code.</em></li>
     </ul>
     <p style="margin-top:14px"><strong>You cannot tell which method was used from the output alone.</strong></p>
   </div>
@@ -486,12 +486,12 @@
     <p>Here is what the full-volume file reports about itself, with <code>pdfinfo</code>:</p>
 <pre>Creator:      Digitized by the Internet Archive
 Producer:     Recoded by LuraDocument PDF v2.28
-CreationDate: <b>Mon Dec  5 01:20:43 2011 EST</b>
-ModDate:      <b>Mon Dec  5 02:32:45 2011 EST</b></pre>
+CreationDate: <b>Mon Dec  5 06:20:43 2011 UTC</b>
+ModDate:      <b>Mon Dec  5 07:32:45 2011 UTC</b></pre>
     <ul>
-      <li>Created at 01:20 and last modified at 02:32 (EST) on 5 December 2011. A roll file cut from it may show different dates. The full volume has <strong>366 pages</strong>.</li>
+      <li>Created at 6:20 a.m. and last modified at 7:32 a.m. on December 5, 2011, in UTC, the time the file records. <code>pdfinfo</code> shows these times in your computer's time zone, so yours may read differently. A roll file cut from it may show different dates. The full volume has <strong>366 pages</strong>.</li>
       <li>On every page that has text, the text is set in <strong>text rendering mode 3</strong>, which the PDF specification defines as invisible: it can be searched and copied, but it is never drawn. <code>pdffonts</code> lists one font for all of it — Courier, not embedded.</li>
-      <li><code>pdfimages</code> lists three images on every page: a low-resolution colour background (about 133 ppi), a 400 ppi colour image, and a one-bit black-and-white mask for that image. <strong>Together they are the picture you see.</strong></li>
+      <li><code>pdfimages</code> lists three images on every page: a low-resolution color background (about 133 ppi), a 400 ppi color image, and a one-bit black-and-white mask for that image. <strong>Together they are the picture you see.</strong></li>
       <li>Note what the file does <em>not</em> say: which program read the letters. LuraDocument, named as Producer, recoded the file. <strong>The OCR program is not named anywhere in it.</strong></li>
     </ul>
     <p style="margin-top:14px">Extracting the text layer does not get you Sharpe's printed text. <strong>It gets you a machine's guess at it, in a file made almost fifteen years ago.</strong></p>
@@ -560,7 +560,7 @@ ModDate:      <b>Mon Dec  5 02:32:45 2011 EST</b></pre>
   <div class="slide-h"><span class="no">10</span><h2>Play with it</h2></div>
   <div class="onscreen">
           <p class="big">Try it your own way</p>
-    <p>The coding prompt in the next section is one way to do this — organised so that the AI pulls out a defined "right answer" in a fixed format. <strong>Use it as a reference, not a rule.</strong> What we want is for you to try different ways yourself and see what changes.</p>
+    <p>The coding prompt in the next section is one way to do this — organized so that the AI pulls out a defined "right answer" in a fixed format. <strong>Use it as a reference, not a rule.</strong> What we want is for you to try different ways yourself and see what changes.</p>
     <ul>
       <li>Ask in plain words, with no instructions: <em>"Code this roll."</em></li>
       <li>Ask your own question about the roll — the kind a historian would ask.</li>
@@ -570,8 +570,8 @@ ModDate:      <b>Mon Dec  5 02:32:45 2011 EST</b></pre>
     <p style="margin-top:14px"><strong>Whatever you try, check what comes back against the page.</strong></p>
   </div>
   <div class="say">
-      <p>The ready-made prompt (<a class="slink" href="#s09" data-go="s09">slides <span data-num="s09">11</span></a>–<span data-num="s11">13</span>) shows what it takes to get rows that can be compared and checked: fixed columns, closed lists, rules for the known traps. Trying your own requests first can show you why each of those is there — you can see what the tool does without them.</p>
-      <p>To keep one attempt from shaping the next, start a new conversation for each. That gives the model less to go on from before — though, as <a class="slink" href="#s04" data-go="s04">slide <span data-num="s04">4</span></a> says, not a clean slate.</p>
+      <p>The ready-made prompt (<a class="slink" href="#s09" data-go="s09">slides <span data-num="s09">11</span>–<span data-num="s11">13</span></a>) shows what it takes to get rows that can be compared and checked: fixed columns, closed lists, rules for the known traps. Trying your own requests first can show you why each of those is there — you can see what the tool does without them.</p>
+      <p>To keep one attempt from shaping the next, start a new conversation for each and upload the roll again. That gives the model less to go on from before — though, as <a class="slink" href="#s04" data-go="s04">slide <span data-num="s04">4</span></a> says, not a clean slate.</p>
     <div class="demo"><b>Your turn</b> Try at least two different requests and keep what came back.</div>
   </div>
 </article>
@@ -583,7 +583,7 @@ ModDate:      <b>Mon Dec  5 02:32:45 2011 EST</b></pre>
           <p class="big">Five things, or it will improvise</p>
     <ul>
       <li><strong>The exact columns</strong>, named and in order.</li>
-      <li><strong>The value lists</strong>, closed, with explicit <code>NOT STATED</code> and <code>ILLEGIBLE</code> options.</li>
+      <li><strong>The value lists</strong>, closed — plus <code>NOT STATED</code> and <code>ILLEGIBLE</code> for anything the entry does not give or you cannot read.</li>
       <li><strong>The decision rules</strong> for the traps you already know about.</li>
       <li><strong>Evidence.</strong> A quoted phrase and a page number for every row.</li>
       <li><strong>A file, not a chat table.</strong></li>
@@ -598,7 +598,7 @@ ModDate:      <b>Mon Dec  5 02:32:45 2011 EST</b></pre>
   <div class="slide-h"><span class="no">12</span><h2>The prompt (Optional)</h2></div>
   <div class="onscreen">
           <p class="big">Fill in two blanks at the top. Paste the whole thing.</p>
-    <p>Change <code>ROLL_LETTER</code> and <code>CODER_ID</code> and nothing else. If you edit the columns, your rows stop lining up with everyone else's and the class dataset breaks.</p>
+    <p>If you use it as given, change only <code>ROLL_LETTER</code> and <code>CODER_ID</code>. Edited columns stop lining up with everyone else's rows, and the class dataset breaks.</p>
   </div>
   <div class="say">
     <div class="fillrow">
@@ -606,9 +606,9 @@ ModDate:      <b>Mon Dec  5 02:32:45 2011 EST</b></pre>
         <select id="roll-letter"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option><option>I</option></select>
       </label>
       <label for="coder-id">Coder ID
-        <input id="coder-id" type="text" autocomplete="off" spellcheck="false" placeholder="student">
+        <input id="coder-id" type="text" autocomplete="off" spellcheck="false" placeholder="gemini or amplify">
       </label>
-      <span class="hint">Type these once and they fill in below. Use <code>student</code> for your own coding, or the tool's name — <code>gemini</code>, <code>claude</code>, <code>amplify</code>.</span>
+      <span class="hint">Type these once and they fill in below. For the coder ID use the tool doing the coding — <code>gemini</code> or <code>amplify</code>. (<code>student</code> is for your own hand-coded rows.)</span>
     </div>
     <div class="cp">
       <div class="cp-h"><span class="t">Coding prompt — paste in after uploading the roll</span><button class="copy" type="button">Copy</button></div>
@@ -626,7 +626,7 @@ VALUES
 entry_type: homicide | accident | death in custody | suicide | cause undetermined | no death recorded
 manner_of_death: natural | accident | assault | suicide | undetermined | none
 victim_gender: male | female | NOT STATED
-victim_status: gentleman/woman | craftsman/woman | servant/labourer | apprentice | prisoner | destitute | cleric/religious | unknown
+victim_status: gentleman/woman | craftsman/woman | servant/laborer | apprentice | prisoner | destitute | cleric/religious | NOT STATED
 weapon: bare hands | knife/dagger | club/staff | axe | sword | bow and arrow | stone or thrown object | other | no weapon
 perpetrator_outcome: captured | surrendered | abjured the realm | took sanctuary then escaped | fled, never taken | jury found no felony | perpetrator died | outlawed | NOT STATED | no perpetrator
 within_without: within | without | NOT STATED | not applicable
@@ -635,13 +635,13 @@ RULES
 
 1. coder_id and roll are the same in every row: the two values given at the top. coder_id names who or what did the coding — student, gemini, claude, amplify.
 2. entry_type says what kind of RECORD this is. manner_of_death says how the person died. They are not the same question: an entry can be "no death recorded", and then manner_of_death is "none".
-3. "lay dead of a death OTHER THAN his rightful death" = an UNNATURAL death. "DIED his rightful death" = a NATURAL death. These mean opposite things. Read the phrase carefully before coding manner_of_death.
-4. Take the ward from the SENTENCE that names it, never from the marginal note. Put the raw spelling in ward_verbatim, modernised in ward.
-5. inquest_date is the date at the head of the entry. That is when the body was viewed, NOT necessarily when the person died. Write it as M/YYYY.
-6. date_verbatim: the date exactly as the entry gives it, feast day and regnal year included — for example "Thursday after the Feast of St. Michael [29 Sept.] a° 18 Edward II".
+3. "lay dead of a death OTHER THAN his rightful death" means the death was NOT natural: choose accident, assault, suicide or undetermined from what the jurors go on to say. "died ... his rightful death" (for example, "died in Neugate his rightful death") means natural. The two phrases differ by a few words and mean opposite things; read them carefully before coding manner_of_death.
+4. Take the ward from the SENTENCE that names it, never from the marginal note. Put the raw spelling in ward_verbatim, modernized in ward.
+5. inquest_date is the date at the head of the entry. That is when the body was viewed, NOT necessarily when the person died. Write it as M/YYYY. Work the month out from the feast and the weekday, using the Julian calendar: "Thursday after the Feast of St. Michael [29 Sept.] ... [A.D. 1324]" is October 4, 1324, so 10/1324. Where Sharpe gives two years, as in [A.D. 1324-5], use the second.
+6. date_verbatim: the date exactly as the entry gives it, feast day and regnal year included — for example "Thursday after the Feast of St. Michael [29 Sept.] a° 18 Edward II. [A.D. 1324]".
 7. printed_page: the number printed at the top of the page. These are often mis-transcribed (lOI for 101, Ill for 111). If you cannot read it cleanly, write ILLEGIBLE rather than guessing.
-8. The five _verbatim columns: copy what the page says, exactly as printed, including damaged characters. Do not tidy, modernise or correct.
-9. Any value you cannot read, write exactly: ILLEGIBLE. Any value the entry does not state, write exactly: NOT STATED. Never infer, never fill a gap from context, never guess a name.
+8. The five _verbatim columns: copy the words as Sharpe printed them, keeping his spelling (ward_verbatim "Bredstret", not "Breadstreet"). Do not tidy, modernize or correct. If you cannot make out what is printed, write ILLEGIBLE (rule 9); do not copy garbled characters.
+9. Any value you cannot read, write exactly: ILLEGIBLE. Any value the entry does not state, write exactly: NOT STATED. Apart from working out the month in rule 5, never infer, never fill a gap from context, never guess a name.
 10. evidence_quote: 5 to 15 words from the entry supporting manner_of_death.
 
 OUTPUT
@@ -659,7 +659,7 @@ Then, in the chat and not in the file, tell me:
       <p>Read rules 3 and 9 twice. Rule 3 is the trap you have already met by hand. Rule 9 is what makes the output checkable: a model that quietly fills gaps gives you a clean-looking CSV with no sign of where it guessed, and a model that marks <code>ILLEGIBLE</code> shows you some of the places to look.</p>
       <p>Do not skip the three questions at the end. Compare the row count it reports with the rows you actually received and with the entry numbers in the PDF. The <code>ILLEGIBLE</code> summary shows where the tool says it could not read — not everywhere it misread.</p>
     
-    <div class="demo"><b>Do this now</b> Paste and run. If the upload stalls, check that you uploaded one roll and not the whole volume.</div>
+    <div class="demo"><b>If you use it</b> Paste and run. If it stalls or fails, check that you uploaded one roll and not the whole volume.</div>
   </div>
 </article>
 
@@ -684,7 +684,7 @@ Then, in the chat and not in the file, tell me:
   <div class="slide-h"><span class="no">14</span><h2>Getting the file out intact (Optional)</h2></div>
   <div class="onscreen">
           <p class="big">Ask for a file. If none comes, copy with your eyes open.</p>
-    <p>The prompt asks for a downloadable CSV. <strong>Amplify cannot make one.</strong> Send the prompt anyway and read what comes back instead: how a tool behaves when it cannot do what you asked is part of what you are measuring.</p>
+    <p>The ready-made prompt asks for a downloadable CSV. <strong>Amplify cannot make one.</strong> Send the prompt anyway and read what comes back instead: how a tool behaves when it cannot do what you asked is part of what you are measuring.</p>
     <ul>
       <li><strong>If you get a file:</strong> download it, open it, read the first row and the last row.</li>
       <li><strong>If you get rows in the chat:</strong> the prompt told it to print CSV inside a code block. Copy from the code block. If it handed you a formatted table instead, ask again for the code block.</li>
@@ -720,7 +720,7 @@ Then, in the chat and not in the file, tell me:
     </ul>
   </div>
   <div class="say">    
-      <p>Comparing down a column rather than across a row is a small change with a large effect. It keeps one kind of judgement in mind at a time, so patterns appear — in a test run on Roll D, a model coded six of the eight <em>died his rightful death</em> entries as no death at all — which are hard to see when you read across a row and meet twenty-one unrelated fields at once.</p>
+      <p>Comparing down a column rather than across a row is a small change with a large effect. It keeps one kind of judgment in mind at a time, so patterns appear. In a test run on Roll D, for example, a model coded six of the eight "died … his rightful death" entries as no death at all. A pattern like that is hard to see when you read across a row and meet twenty-one unrelated fields at once.</p>
       <p>"Do not fix anything yet" matters because the disagreement rate is itself your result. If you silently correct as you go, you have destroyed your own measurement.</p>
       <p>The point of the notes is that you see for yourself how often the machine is wrong, and where. Keep them in whatever form you will actually use while the two files are open in front of you.</p>
     
@@ -739,7 +739,7 @@ Then, in the chat and not in the file, tell me:
     <tbody>
       <tr><td><strong>Loud</strong></td><td>The output is visibly broken — <code>^^''^^^</code>, <code>Crupiil^^aie</code>, a number where a name should be.</td></tr>
       <tr><td><strong>Quiet</strong></td><td>Fluent, plausible, and wrong. A real ward name in the right slot — just not the one on the page.</td></tr>
-      <tr><td><strong>Rule gap</strong></td><td>You and the machine both defensible. The codebook did not say.</td></tr>
+      <tr><td><strong>Rule gap</strong></td><td>You and the machine are both defensible. The codebook did not say.</td></tr>
       <tr><td><strong>You</strong></td><td>You were wrong.</td></tr>
     </tbody>
   </table>
@@ -776,6 +776,7 @@ Then, in the chat and not in the file, tell me:
           <p class="big">Name the column. Ask for the table. Say n.</p>
   </div>
   <div class="say">
+    <p>Before you send: replace each <code>[ ]</code> with the number of rows in your CSV — that number is <em>n</em> — and replace <code>[ROLL LETTER]</code> with your roll if you did not pick it on <a class="slink" href="#s10" data-go="s10">slide <span data-num="s10">12</span></a>.</p>
     <div class="cp">
       <div class="cp-h"><span class="t">Chart prompt 1 — with your CSV attached</span><button class="copy" type="button">Copy</button></div>
 <pre>The attached CSV is my own hand-verified coding of Roll {{ROLL_LETTER}} of the London coroners' rolls, [ ] rows.
@@ -793,7 +794,7 @@ Count the values in the column `manner_of_death` and show me the counts as a pla
 - the count printed at the end of each bar
 - the title: "Manner of death, Roll {{ROLL_LETTER}} (n = [ ])"
 - no 3D, no gradient, no drop shadow, no pie chart
-- one colour for all bars, since the categories are not ranked</pre>
+- one color for all bars, since the categories are not ranked</pre>
     </div>    
       <p>Send them one at a time and read each answer before the next. The order is the whole point: <strong>counts first, picture last.</strong> A chart is a claim about numbers, and once it is a picture the numbers are hard to check. Asking for the table first makes the claim inspectable while it is still text — and sending the third message is how you confirm the counts, so check them against your own before you do.</p>
       <p>The second message catches a real failure. Tools can drop blank cells and rows they cannot parse without saying so, so a chart of 34 rows from a 39-row file is a different finding from the one you think you are reporting.</p>
@@ -829,7 +830,7 @@ Count the values in the column `manner_of_death` and show me the counts as a pla
     <thead><tr><th>Symptom</th><th>Likely cause</th><th>What to try</th></tr></thead>
     <tbody>
       <tr><td>The upload is rejected or stalls</td><td>The file is larger than the tool accepts, or several files went at once</td><td>One roll, one file. Split the PDF first, or use the pre-split rolls.</td></tr>
-      <tr><td>It summarises instead of coding</td><td>Chat happened before the prompt, or the prompt was trimmed</td><td>New conversation, re-upload, paste the prompt whole and first.</td></tr>
+      <tr><td>It summarizes instead of coding</td><td>Chat happened before the prompt, or the prompt was trimmed</td><td>New conversation, re-upload, run the diagnostic, then paste the whole prompt with nothing else in between.</td></tr>
       <tr><td>Some rows have the wrong number of fields</td><td>A column name was edited, or the model left a field out of some rows</td><td>Find the short rows (start with the first and last row). Ask the tool to reprint them, or start again with the unedited prompt. Do not repair the file by hand.</td></tr>
       <tr><td>Names look subtly wrong</td><td>The model misread or "corrected" them — a quiet error</td><td>Check against the page and note it as a disagreement.</td></tr>
       <tr><td>The chart's total does not match the file</td><td>Blank or unparsed rows dropped silently</td><td>Ask what was excluded and why, then re-run the count.</td></tr>
@@ -847,10 +848,10 @@ Count the values in the column `manner_of_death` and show me the counts as a pla
 <article class="slide" id="s22" role="tabpanel" aria-labelledby="t22" hidden>
   <div class="slide-h"><span class="no ref">Ref</span><h2>Prompt sheet</h2></div>
   <div class="say">
-    <span class="tag">Everything to copy, in the order you need it</span>
+    <span class="tag">Where to find each prompt, in the order you need them</span>
     <ol class="chk">
       <li><b>Diagnostic</b> — <a class="slink" href="#s08" data-go="s08">slide <span data-num="s08">9</span></a>, two messages. Run before anything else, with the roll uploaded.</li>
-      <li><b>Coding prompt (optional)</b> — <a class="slink" href="#s10" data-go="s10">slide <span data-num="s10">12</span></a>. Fill in <code>ROLL_LETTER</code> and <code>CODER_ID</code>, change nothing else.</li>
+      <li><b>Coding prompt (optional)</b> — <a class="slink" href="#s10" data-go="s10">slide <span data-num="s10">12</span></a>. If you use it as given, fill in <code>ROLL_LETTER</code> and <code>CODER_ID</code> and change nothing else.</li>
       <li><b>Chart prompts</b> — <a class="slink" href="#s17" data-go="s17">slide <span data-num="s17">18</span></a>, three messages in order. Attach your own verified CSV to the first.</li>
       <li><b>Word file</b> — <a class="slink" href="#s19" data-go="s19">slide <span data-num="s19">19</span></a>. "Put this into a Word document I can download", or Google Docs → File → Download → Microsoft Word.</li>
     </ol>
@@ -871,7 +872,7 @@ Count the values in the column `manner_of_death` and show me the counts as a pla
 
 <footer>
   <p class="contact end">Questions? Email Data Science/Analysis Research Librarian Tae Hyun Lim at <a href="mailto:tlim@hamilton.edu">tlim@hamilton.edu</a>, or ask a <a href="https://libguides.hamilton.edu/c.php?g=132443&amp;p=8194735">Data Science Tutor</a>.</p>
-  <p>Built on the pilot coding of Roll D and an analysis of the text layer of printed pages 1–277 of the Internet Archive scan of R. R. Sharpe, ed., <em>Calendar of Coroners Rolls of the City of London, A.D. 1300–1378</em> (1913). Tool descriptions from the Hamilton LITS AI tools page; Gemini's file generation from Google's announcement of 29 April 2026; both checked October 2026. The test runs mentioned on these slides used Claude Haiku 4.5 on Roll D. The 21-column prompt is a teaching subset of the full coding instrument.</p>
+  <p>Built on the pilot coding of Roll D and an analysis of the text layer of printed pages 1–277 of the Internet Archive scan of R. R. Sharpe, ed., <em>Calendar of Coroners Rolls of the City of London, A.D. 1300–1378</em> (1913). Tool descriptions from the Hamilton LITS AI tools page; Gemini's file generation from Google's announcement of April 29, 2026; both checked October 2026. The test runs mentioned on these slides used Claude Haiku 4.5 on Roll D, with an earlier draft of the coding prompt. The 21-column prompt is a teaching subset of the full coding instrument.</p>
 </footer>
 </div>
 
