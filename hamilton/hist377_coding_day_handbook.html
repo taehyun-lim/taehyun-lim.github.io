@@ -275,14 +275,14 @@
   <p class="rail-sec">2 · Getting in</p>
   <button class="railitem" role="tab" id="t03" aria-controls="s03" aria-selected="false" tabindex="-1">
     <span class="thumb" aria-hidden="true"><span class="thn">03</span><span class="tht">Two tools, and one to avoid</span></span>
-    <span class="rlab">Which tool for which job</span>
+    <span class="rlab">Which tool to use</span>
   </button>
   <button class="railitem" role="tab" id="t04" aria-controls="s04" aria-selected="false" tabindex="-1">
     <span class="thumb" aria-hidden="true"><span class="thn">04</span><span class="tht">Before you prompt anything</span></span>
     <span class="rlab">Set up, four steps</span>
   </button>
 
-  <p class="rail-sec">3 · How a machine reads a PDF</p>
+  <p class="rail-sec">3 · Let the machine read the PDF</p>
   <button class="railitem" role="tab" id="t05p" aria-controls="s05p" aria-selected="false" tabindex="-1">
     <span class="thumb" aria-hidden="true"><span class="thn">05</span><span class="tht">First, what is a PDF?</span></span>
     <span class="rlab">What a PDF is</span>
@@ -303,15 +303,13 @@
     <span class="thumb" aria-hidden="true"><span class="thn">09</span><span class="tht">You cannot tell from the answer. So test it.</span></span>
     <span class="rlab">Find out how yours read it</span>
   </button>
-
-  <p class="rail-sec">4 · Try it your own way</p>
   <button class="railitem" role="tab" id="t09p" aria-controls="s09p" aria-selected="false" tabindex="-1">
     <span class="thumb" aria-hidden="true"><span class="thn">10</span><span class="tht">Try it your own way</span></span>
     <span class="rlab">Play with it</span>
   </button>
 
-  <p class="rail-sec"><button type="button" class="sec-toggle" aria-expanded="true" aria-controls="grp-machine"><span class="chev" aria-hidden="true">▾</span>5 · Making the machine code (Optional)</button></p>
-  <div class="rail-group" id="grp-machine">
+  <p class="rail-sec"><button type="button" class="sec-toggle" aria-expanded="false" aria-controls="grp-machine"><span class="chev" aria-hidden="true">▾</span>4 · Making the machine code (Optional)</button></p>
+  <div class="rail-group" id="grp-machine" hidden>
     <button class="railitem" role="tab" id="t09" aria-controls="s09" aria-selected="false" tabindex="-1">
       <span class="thumb" aria-hidden="true"><span class="thn">11</span><span class="tht">Five things, or it will improvise</span></span>
       <span class="rlab">What a good prompt carries</span>
@@ -326,8 +324,8 @@
     </button>
   </div>
 
-  <p class="rail-sec"><button type="button" class="sec-toggle" aria-expanded="true" aria-controls="grp-compare"><span class="chev" aria-hidden="true">▾</span>6 · Comparing (Optional)</button></p>
-  <div class="rail-group" id="grp-compare">
+  <p class="rail-sec"><button type="button" class="sec-toggle" aria-expanded="false" aria-controls="grp-compare"><span class="chev" aria-hidden="true">▾</span>5 · Comparing (Optional)</button></p>
+  <div class="rail-group" id="grp-compare" hidden>
     <button class="railitem" role="tab" id="t12" aria-controls="s12" aria-selected="false" tabindex="-1">
       <span class="thumb" aria-hidden="true"><span class="thn">14</span><span class="tht">Ask for a file. If none comes, copy with your eyes open.</span></span>
       <span class="rlab">Getting the file out intact</span>
@@ -343,7 +341,7 @@
 
   </div>
 
-  <p class="rail-sec">7 · From your rows to a figure</p>
+  <p class="rail-sec">6 · From your rows to a figure</p>
   <button class="railitem" role="tab" id="t16" aria-controls="s16" aria-selected="false" tabindex="-1">
     <span class="thumb" aria-hidden="true"><span class="thn">17</span><span class="tht">Your CSV, not the machine's</span></span>
     <span class="rlab">Upload and ask</span>
@@ -352,8 +350,6 @@
     <span class="thumb" aria-hidden="true"><span class="thn">18</span><span class="tht">Name the column. Ask for the table. Say n.</span></span>
     <span class="rlab">The chart prompt</span>
   </button>
-
-  <p class="rail-sec">8 · Into a Word file</p>
   <button class="railitem" role="tab" id="t19" aria-controls="s19" aria-selected="false" tabindex="-1">
     <span class="thumb" aria-hidden="true"><span class="thn">19</span><span class="tht">Route A depends on your tool. Route B works with any.</span></span>
     <span class="rlab">Two routes to a .docx</span>
@@ -402,7 +398,7 @@
 
 <!-- 03 -->
 <article class="slide" id="s03" role="tabpanel" aria-labelledby="t03" hidden>
-  <div class="slide-h"><span class="no">03</span><h2>Which tool for which job</h2></div>
+  <div class="slide-h"><span class="no">03</span><h2>Which tool to use</h2></div>
   <div class="onscreen">
           <p class="big">Two tools, and one to avoid</p>
     <p>Both are on the <a href="https://www.hamilton.edu/offices/lits/tech-lab/artificial-intelligence/tools">LITS AI tools page</a> and both take your Hamilton credentials. <strong>Pick one and work in it.</strong></p>
@@ -428,7 +424,7 @@
       <li><strong>1.</strong> Open <strong>either</strong> <a href="http://amplify.hamilton.edu/"><code>amplify.hamilton.edu</code></a> or <a href="https://gemini.google.com/app"><code>gemini.google.com</code></a> and sign in with your Hamilton account.</li>
       <li><strong>2.</strong> Start a <strong>new conversation</strong>.</li>
       <li><strong>3.</strong> Upload <strong>your roll PDF only</strong> — one roll, not the whole volume.</li>
-      <li><strong>4.</strong> Ask it to code the roll — your own way (<a class="slink" href="#s09p" data-go="s09p">slide <span data-num="s09p">10</span></a>), or with the ready-made prompt (<a class="slink" href="#s10" data-go="s10">slide <span data-num="s10">12</span></a>).</li>
+      <li><strong>4.</strong> Send the two diagnostic messages (<a class="slink" href="#s08" data-go="s08">slide <span data-num="s08">9</span></a>), then ask it to code the roll — your own way (<a class="slink" href="#s09p" data-go="s09p">slide <span data-num="s09p">10</span></a>), or with the ready-made prompt (<a class="slink" href="#s10" data-go="s10">slide <span data-num="s10">12</span></a>).</li>
     </ul>
   </div>
   <div class="say">    
@@ -469,7 +465,7 @@
   <div class="onscreen">
           <p class="big">A PDF can be read three different ways</p>
     <ul>
-      <li><strong>Embedded text layer.</strong> The characters are already stored in the file, and the platform's PDF reader pulls them out. Exact if the PDF was exported from a word processor; only as good as the OCR if it was a scan. <em>The model runs no code.</em></li>
+      <li><strong>Embedded text layer.</strong> The characters are already stored in the file, and the platform's PDF reader pulls them out. Almost exact if the PDF was exported from a word processor; only as good as the OCR if it was a scan. <em>The model runs no code.</em></li>
       <li><strong>The tool runs its own OCR.</strong> Usually used when there is no text layer. An OCR program finds the lines of text in the page image and guesses the characters from their shapes. <strong>It needs an OCR program</strong> — run by the platform when you upload, or by the model as code.</li>
       <li><strong>The model looks at the page.</strong> The page goes to a multimodal model as an image, and the model writes out the text it recognizes. <em>No OCR program, and the model runs no code.</em></li>
     </ul>
@@ -590,7 +586,7 @@ ModDate:      <b>Mon Dec  5 07:32:45 2011 UTC</b></pre>
       <li><strong>A file, not a chat table.</strong></li>
     </ul>
   </div>
-  <div class="say">    <p>This is prompt <em>design</em>, not prompt tricks. Each item closes off one way the output can go wrong. Without closed lists, the same value comes back spelled several ways and cannot be counted without cleaning. Without <code>NOT STATED</code> and <code>ILLEGIBLE</code>, a model has no way to leave a cell empty and may fill it with a guess. Without an evidence quote, you have to search the whole entry to see what the model based its answer on.</p>
+  <div class="say">    <p>This is prompt <em>design</em>, not prompt tricks. Each item closes off one way the output can go wrong. Without closed lists, the same value comes back spelled several ways and cannot be counted without cleaning. Without <code>NOT STATED</code> and <code>ILLEGIBLE</code>, a model has no agreed way to mark a value as missing or unreadable, and may fill the cell with a guess. Without an evidence quote, you have to search the whole entry to see what the model based its answer on.</p>
   </div>
 </article>
 
@@ -609,7 +605,7 @@ ModDate:      <b>Mon Dec  5 07:32:45 2011 UTC</b></pre>
       <label for="coder-id">Coder ID
         <input id="coder-id" type="text" autocomplete="off" spellcheck="false" placeholder="gemini or amplify">
       </label>
-      <span class="hint">Type these once and they fill in below. For the coder ID use the tool doing the coding — <code>gemini</code> or <code>amplify</code>. (<code>student</code> is for your own hand-coded rows.)</span>
+      <span class="hint">Set these once and they fill in below. For the coder ID use the tool doing the coding — <code>gemini</code> or <code>amplify</code>. (<code>student</code> is for your own hand-coded rows.)</span>
     </div>
     <div class="cp">
       <div class="cp-h"><span class="t">Coding prompt — paste in after uploading the roll</span><button class="copy" type="button">Copy</button></div>
@@ -637,7 +633,7 @@ RULES
 1. coder_id and roll are the same in every row: the two values given at the top. coder_id names who or what did the coding — student, gemini, claude, amplify.
 2. entry_type says what kind of RECORD this is. manner_of_death says how the person died. They are not the same question: an entry can be "no death recorded", and then manner_of_death is "none".
 3. "lay dead of a death OTHER THAN his rightful death" means the death was NOT natural: choose accident, assault, suicide or undetermined from what the jurors go on to say. "died ... his rightful death" (for example, "died in Neugate his rightful death") means natural. The two phrases differ by a few words and mean opposite things; read them carefully before coding manner_of_death.
-4. Take the ward from the SENTENCE that names it, never from the marginal note. Put the raw spelling in ward_verbatim, modernized in ward.
+4. Take the ward from the SENTENCE that names it, never from the marginal note. Put the raw spelling in ward_verbatim, modernized in ward. within_without applies only to Farringdon, Cripplegate and Aldgate: if that same sentence says Within or Without ("in the Ward of Farndone Without"), write within or without, and keep it out of ward (ward is Farringdon). If it names one of those three wards without saying which, write NOT STATED. For any other ward, or a place that is not a ward, write not applicable. Ignore "within" and "without" anywhere else: in a parish name ("St. Botolph without Aldresgate"), in the list of nearest wards, or in phrases such as "within the tenement of".
 5. inquest_date is the date at the head of the entry. That is when the body was viewed, NOT necessarily when the person died. Write it as M/YYYY. Work the month out from the feast and the weekday, using the Julian calendar: "Thursday after the Feast of St. Michael [29 Sept.] ... [A.D. 1324]" is October 4, 1324, so 10/1324. Where Sharpe gives two years, as in [A.D. 1324-5], use the second.
 6. date_verbatim: the date exactly as the entry gives it, feast day and regnal year included — for example "Thursday after the Feast of St. Michael [29 Sept.] a° 18 Edward II. [A.D. 1324]".
 7. printed_page: the number printed at the top of the page. These are often mis-transcribed (lOI for 101, Ill for 111). If you cannot read it cleanly, write ILLEGIBLE rather than guessing.
@@ -953,7 +949,7 @@ Count the values in the column `manner_of_death` and show me the counts as a pla
         var top = panels[i].getBoundingClientRect().top;
         if(top <= 140 && top > bestTop){ bestTop = top; best = i; }
       }
-      if(best !== cur){ mark(best); railReveal(tabs[best]); }
+      if(best !== cur){ openGroupFor(best); mark(best); railReveal(tabs[best]); }
     });
   }
 
