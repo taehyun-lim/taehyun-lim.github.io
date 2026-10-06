@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Coding Day for HIST-377W-01 at Hamilton College: how to code a roll of the London coroners' rolls, give the same pages to a generative AI tool, compare the two, and turn your rows into a chart and a Word file.">
+<meta name="description" content="Coding Day for HIST-377W-01 at Hamilton College: how to code a roll of the London coroners' rolls, give the same roll to a generative AI tool, turn your rows into a chart and a Word file, and, optionally, compare your rows with the AI's.">
 <meta name="color-scheme" content="light dark">
 <meta property="og:title" content="Coding Day Handbook">
-<meta property="og:description" content="Coding Day for HIST-377W-01 at Hamilton College: how to code a roll of the London coroners' rolls, give the same pages to a generative AI tool, compare the two, and turn your rows into a chart and a Word file.">
+<meta property="og:description" content="Coding Day for HIST-377W-01 at Hamilton College: how to code a roll of the London coroners' rolls, give the same roll to a generative AI tool, turn your rows into a chart and a Word file, and, optionally, compare your rows with the AI's.">
 <meta property="og:type" content="article">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='2' fill='%238f2a24'/%3E%3Crect x='3.5' y='4' width='9' height='1.4' fill='%23fff'/%3E%3Crect x='3.5' y='7.3' width='9' height='1.4' fill='%23fff'/%3E%3Crect x='3.5' y='10.6' width='6' height='1.4' fill='%23fff'/%3E%3C/svg%3E">
 <title>Coding Day Handbook</title>
@@ -255,7 +255,7 @@
 <header class="head">
   <p class="eyebrow">Everything for today, and the reference to keep open while you work.</p>
   <h1>Coding Day Handbook</h1>
-  <p class="standfirst">You code a portion of a roll by hand, give the same pages to a machine, compare the two, and turn your own rows into a chart and a Word file. Every prompt you need is on this page, ready to copy, so there is nothing to transcribe. Work straight down it, and come back to it whenever you need it afterwards.</p>
+  <p class="standfirst">You code a portion of a roll by hand, give the same roll to a machine, and turn your own rows into a chart and a Word file — with an optional step comparing your rows with the machine's. Every prompt you need is on this page, ready to copy, so there is nothing to transcribe. Work straight down it, and come back to it whenever you need it afterwards.</p>
   <p class="contact">Questions? Email Data Science/Analysis Research Librarian Tae Hyun Lim at <a href="mailto:tlim@hamilton.edu">tlim@hamilton.edu</a>, or ask a <a href="https://libguides.hamilton.edu/c.php?g=132443&amp;p=8194735">Data Science Tutor</a>.</p>
 </header>
 
@@ -380,8 +380,8 @@
           <p class="big">Three jobs, one session</p>
     <ul>
       <li><strong>Code it.</strong> You have already done this by hand.</li>
-      <li><strong>Make the machine code it.</strong> Same pages, same codebook.</li>
-      <li><strong>Compare, then chart.</strong> Your rows become a figure and a Word file.</li>
+      <li><strong>Make the machine code it.</strong> Same roll, same categories.</li>
+      <li><strong>Chart it.</strong> Your rows become a figure and a Word file. Comparing your rows with the machine's is optional (<a class="slink" href="#s12" data-go="s12">slides <span data-num="s12">13</span>–<span data-num="s14">15</span></a>).</li>
     </ul>
   </div>
   <div class="say">    
@@ -480,7 +480,7 @@ Producer:     Recoded by LuraDocument PDF v2.28
 CreationDate: <b>Mon Dec  5 01:20:43 2011 EST</b>
 ModDate:      <b>Mon Dec  5 02:32:45 2011 EST</b></pre>
     <ul>
-      <li>Created at 01:20 and last modified at 02:32 (EST) on 5 December 2011. Your roll file, cut from it, shows its own dates. The full volume has <strong>366 pages</strong>.</li>
+      <li>Created at 01:20 and last modified at 02:32 (EST) on 5 December 2011. A roll file cut from it may show different dates. The full volume has <strong>366 pages</strong>.</li>
       <li>On every page that has text, the text is set in <strong>text rendering mode 3</strong>, which the PDF specification defines as invisible: it can be searched and copied, but it is never drawn. <code>pdffonts</code> lists one font for all of it — Courier, not embedded.</li>
       <li><code>pdfimages</code> lists three images on every page: a low-resolution colour background (about 133 ppi), a 400 ppi colour image, and a one-bit black-and-white mask for that image. <strong>Together they are the picture you see.</strong></li>
       <li>Note what the file does <em>not</em> say: which program read the letters. LuraDocument, named as Producer, recoded the file. <strong>The OCR program is not named anywhere in it.</strong></li>
@@ -559,7 +559,7 @@ ModDate:      <b>Mon Dec  5 02:32:45 2011 EST</b></pre>
       <li><strong>A file, not a chat table.</strong></li>
     </ul>
   </div>
-  <div class="say">    <p>This is prompt <em>design</em>, not prompt tricks. Each item closes off one way the output can go wrong. Without closed lists, the same value comes back spelled several ways and cannot be counted. Without <code>NOT STATED</code> and <code>ILLEGIBLE</code>, a model has no way to leave a cell empty and may fill it with a guess. Without an evidence quote, you have to search the whole entry to see what the model based its answer on.</p>
+  <div class="say">    <p>This is prompt <em>design</em>, not prompt tricks. Each item closes off one way the output can go wrong. Without closed lists, the same value comes back spelled several ways and cannot be counted without cleaning. Without <code>NOT STATED</code> and <code>ILLEGIBLE</code>, a model has no way to leave a cell empty and may fill it with a guess. Without an evidence quote, you have to search the whole entry to see what the model based its answer on.</p>
   </div>
 </article>
 
@@ -595,11 +595,11 @@ VALUES
 
 entry_type: homicide | accident | death in custody | suicide | cause undetermined | no death recorded
 manner_of_death: natural | accident | assault | suicide | undetermined | none
-victim_gender: male | female | not given
+victim_gender: male | female | NOT STATED
 victim_status: gentleman/woman | craftsman/woman | servant/labourer | apprentice | prisoner | destitute | cleric/religious | unknown
 weapon: bare hands | knife/dagger | club/staff | axe | sword | bow and arrow | stone or thrown object | other | no weapon
 perpetrator_outcome: captured | surrendered | abjured the realm | took sanctuary then escaped | fled, never taken | jury found no felony | perpetrator died | outlawed | NOT STATED | no perpetrator
-within_without: within | without | not specified | not applicable
+within_without: within | without | NOT STATED | not applicable
 
 RULES
 
@@ -670,7 +670,7 @@ Then, in the chat and not in the file, tell me:
     <p style="margin-top:14px"><strong>Either route: check the row count, the first row, the last row, and every name against the page.</strong></p>
   </div>
   <div class="say">    
-      <p>Be precise about the cause, because it changes what you should trust. The comma problem starts in the model's output — a field left without quotes — and shows up when the spreadsheet splits the row. The Excel and raw-text problems happen after the model has finished. The fourth is in the model's own output, and so is other damage: in a test run, a model printing CSV left fields out of 23 of its 45 rows. A downloaded file avoids the copying problems and a code block avoids most of them; neither stops a spreadsheet from reformatting values when it opens the file.</p>
+      <p>Be precise about the cause, because it changes what you should trust. The comma and raw-text problems start in the model's output — a field left without quotes, or a table instead of CSV — and show up when the text is pasted or opened. The Excel problem happens after the model has finished. The fourth is in the model's own output, and so is other damage: in a test run, a model printing CSV left fields out of 23 of its 45 rows. A downloaded file avoids the copying problems and a code block avoids most of them; neither stops a spreadsheet from reformatting values when it opens the file.</p>
       <p>The Excel one deserves a second look, because it leaves no visible trace: a reformatted value looks like any other value, and only comparing against the page will catch it. Your <code>inquest_date</code> values are not at risk in Excel, which keeps dates before 1900 as text.</p>
       <p>Write down what your tool actually did with the file instruction. Did it tell you it could not make one, or did it quietly hand you a table as though that were what you asked for? Substituting one format for another without saying so is the same habit as filling in a ward name you could not read. You will meet it again on <a class="slink" href="#s14" data-go="s14">slide <span data-num="s14">15</span></a> as a <em>quiet</em> error, and it is worth writing down while you are there.</p>
     
@@ -732,10 +732,10 @@ Then, in the chat and not in the file, tell me:
       <li>Upload <strong>your own verified CSV</strong> — not the machine's output. A roll's CSV is small — well under 100 KB.</li>
       <li>Ask for the counts first and the chart last — the three prompts on the next slide.</li>
       <li>Check the numbers against your spreadsheet <strong>before</strong> you keep the picture.</li>
-      <li><strong>When Gemini runs Python</strong>, the counts are calculated from your file and the chart is drawn from those counts. <strong>Amplify can draw a chart too, but it cannot run Python</strong>: the counts and the bars come from the model, not from a calculation — check every one against your own.</li>
+      <li><strong>When Gemini runs Python</strong>, the counts are calculated from your file and the chart is drawn from those counts. <strong>Amplify draws a chart from a Vega-Lite specification</strong>: a block of text in which the model writes out the data and describes the chart, which the page then draws. The bars match the data in that text exactly, but the model wrote that data, so it can differ from your file. Ask to see the specification and check its numbers against your own counts.</li>
     </ul>
   </div>
-  <div class="say">    <p>The figure is built on your verified rows, not the machine's raw output. Otherwise the whole comparison gets quietly undone at the last step, and you end up charting the errors you just found.</p>
+  <div class="say">    <p>The figure is built on your verified rows, not the machine's raw output. Otherwise you end up charting the machine's errors.</p>
   </div>
 </article>
 
@@ -782,7 +782,7 @@ Count the values in the column `manner_of_death` and show me the counts as a pla
       <li><strong>Route A — ask the tool.</strong> Say <em>"Put this into a Word document I can download"</em> and take the <code>.docx</code>. Gemini makes the file. Amplify's documentation lists Word document creation and a download-as-Word option on each message — check the message for it.</li>
       <li><strong>Route B — Google Docs.</strong> Paste your text in, then <strong>File → Download → Microsoft Word (.docx)</strong>.</li>
     </ul>
-    <p style="margin-top:14px"><strong>The chart:</strong> download it as an image, then insert it — in Google Docs, <strong>Insert → Image → Upload from computer</strong>; in Word, <strong>Insert → Pictures</strong>. Caption it with the field, the roll and the n.</p>
+    <p style="margin-top:14px"><strong>The chart:</strong> save it as an image (a screenshot works if there is no download option), then insert it — in Google Docs, <strong>Insert → Image → Upload from computer</strong>; in Word, <strong>Insert → Pictures</strong>. Caption it with the field, the roll and the n.</p>
   </div>
   <div class="say">    
       <p>Route B lets you see and fix the document before it becomes a file. With Route A, open the <code>.docx</code> and check that the chart and its caption made it in.</p>
