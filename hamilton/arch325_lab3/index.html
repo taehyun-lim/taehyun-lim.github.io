@@ -69,6 +69,19 @@ code,.code{font-family:var(--mono);font-size:13.5px}
 .cbtn.inl{font-size:11px;padding:1px 6px;margin-left:5px;vertical-align:1px;color:var(--ink);background:var(--surface);border-color:var(--line)}
 .cbtn.inl:hover{background:var(--line)}
 .cbtn.inl.ok{background:var(--acad);border-color:var(--acad);color:#0E1416}
+details.fnhelp{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}
+details.fnhelp>summary{cursor:pointer;font-weight:700;font-size:15px;list-style:none;display:flex;align-items:center;gap:6px}
+details.fnhelp>summary::-webkit-details-marker{display:none}
+details.fnhelp>summary::before{content:"▸";color:var(--acad);transition:transform .15s}
+details.fnhelp[open]>summary::before{transform:rotate(90deg)}
+details.fnhelp>summary::after{content:"Click to open";font-weight:400;font-size:13px;color:var(--muted);margin-left:6px}
+details.fnhelp[open]>summary::after{content:""}
+.fnhelp .fn{padding:10px 0;border-bottom:1px solid var(--line)}
+.fnhelp .fn:last-child{border-bottom:0}
+.fnhelp .sig code{font-size:13px;white-space:normal;word-break:break-word}
+.fnhelp .fn p{margin:6px 0 0}
+.fnhelp .args{margin:6px 0 0;padding-left:20px}
+.fnhelp .args li{margin:3px 0}
 p code,li code{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
 .tbl{overflow-x:auto;margin-block:10px}
 table{border-collapse:collapse;font-variant-numeric:tabular-nums;min-width:100%}
@@ -168,7 +181,7 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
       <tr><td>Which pair differs?</td><td>measurements</td><td><button class="tablink" data-goto="kw">Mann-Whitney</button></td></tr></tbody></table></div>
     </div>
   </div>
-  <p class="muted">Cleaning tip: the raw Layer column (F on both sheets) mixes the four real strata, A (227 rows), B (542), C (125) and D (13), with waterscreen notes stapled onto the same field (656 rows in all, labeled A Waterscreen, A Waterscreen Lower, A Waterscreen Upper, B Waterscreen and C Waterscreen), small variants like "B " with a trailing space, "BII," "C South 1/2" and a misspelled "A Waterscren," and entries that are not one stratum at all, such as "Baulk" (4 rows), "Clean-up"/"Clean up" (3) and "B and C" (1), plus 272 blank cells, mostly finds from features. Put the letter in a new Level column (the first empty one, BN) with <code>=LEFT(TRIM(F2),1)</code>, but first set the Baulk, clean-up, "B and C" and blank rows aside, because the formula would quietly turn Baulk into B and Clean-up into C. It matters. One Baulk lot at Woodville holds 81 jar fragments, and leaving it in level B moves Woodville’s type × level Cramér’s V from 0.33 to 0.28.</p>
+  <p class="muted">Cleaning tip: the raw Layer column (F on both sheets) mixes the four real strata, A (227 rows), B (542), C (125) and D (13), with waterscreen notes stapled onto the same field (656 rows in all, labeled A Waterscreen, A Waterscreen Lower, A Waterscreen Upper, B Waterscreen and C Waterscreen), small variants like "B " with a trailing space, "BII," "C South 1/2" and a misspelled "A Waterscren," and entries that are not one stratum at all, such as "Baulk" (4 rows), "Clean-up"/"Clean up" (3) and "B and C" (1), plus 272 blank cells, mostly finds from features. Put the letter in a new Level column (the first empty one, BN) with <code>=LEFT(TRIM(F2),1)</code> (TRIM drops stray spaces, then LEFT keeps the first character), but first set the Baulk, clean-up, "B and C" and blank rows aside, because the formula would quietly turn Baulk into B and Clean-up into C. It matters. One Baulk lot at Woodville holds 81 jar fragments, and leaving it in level B moves Woodville’s type × level Cramér’s V from 0.33 to 0.28.</p>
 </section>
 
 <section id="counting" data-label="What we count" role="tabpanel" hidden>
@@ -251,7 +264,15 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
     <li>Total, in the row under the last form (row 23 for the 14 academic forms), copied across:<span class="code">=SUM(B9:B22)</span></li>
     <li>Check row (row 24): every row for that school, with no Form condition. It should equal the Total, which means no form was missed:<span class="code">=SUMIFS('Academic Education Artifacts'!$J:$J, 'Academic Education Artifacts'!$B:$B, B$7)</span></li>
     <li>Table 6.12: the same layout on another sheet (<code>Table 6.12</code>), with the Industrial sheet in the formulas and its six forms in A9:A14, so the Total is <code>=SUM(B9:B14)</code>:<span class="code">=SUMIFS('Industrial Education Artifacts'!$J:$J, 'Industrial Education Artifacts'!$B:$B, B$7, 'Industrial Education Artifacts'!$M:$M, $A9)</span></li></ol>
-    <p class="muted">The rows are the lab file’s own Form values (all pencils in one row), so the totals are close to Betti’s but not identical (see the box above).</p></div>
+    <p class="muted">The rows are the lab file’s own Form values (all pencils in one row), so the totals are close to Betti’s but not identical (see the box above).</p>
+    <details class="fnhelp"><summary>What the functions do</summary>
+      <div class="fn"><div class="sig"><code>'Sheet name'!$J:$J</code></div><p>A reference to another sheet. The part before ! is the sheet, the part after is the cells, here all of column J. The single quotes are needed whenever the sheet name has a space in it.</p></div>
+      <div class="fn"><div class="sig"><code>$J:$J   B$7   $A9   $E$4</code></div><p>A $ locks the part right after it when you copy the formula. <b>$J:$J</b> stays on column J wherever you copy it. <b>B$7</b> keeps row 7 (the header row) but lets the column move, so copied right it becomes D$7 and F$7. <b>$A9</b> keeps column A but lets the row move, so copied down it becomes $A10, $A11. <b>$E$4</b> never moves.</p></div>
+      <div class="fn"><div class="sig"><code>SUMIFS(sum_range, criteria_range1, criterion1, criteria_range2, criterion2, …)</code></div><p>Adds up one column, but only on the rows where every condition is true. Conditions come in pairs (where to look, what to match), and you can add as many pairs as you need.</p><ul class="args"><li><code>'Academic…'!$J:$J</code> sum_range, the column to add up (Count).</li><li><code>'Academic…'!$B:$B</code> criteria_range1, where to check the first condition (Site).</li><li><code>B$7</code> criterion1, the value Site must equal (the school named in the header).</li><li><code>'Academic…'!$M:$M</code> criteria_range2, where to check the second condition (Form).</li><li><code>$A9</code> criterion2, the value Form must equal (the form named in column A).</li></ul></div>
+      <div class="fn"><div class="sig"><b>SUMIFS with fewer conditions</b></div><p>Leave out a pair and that condition is dropped. The Check row keeps only the Site pair, so it adds every row for that school whatever its form.</p></div>
+      <div class="fn"><div class="sig"><code>SUM(B9:B22)</code></div><p>Adds every number in the range.</p></div>
+    </details>
+    </div>
 </section>
 
 <section id="hyptest" data-label="Hypothesis testing" role="tabpanel" hidden>
@@ -351,7 +372,13 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
         <li>Clicking a pivot cell writes an ordinary reference to the pivot’s sheet.</li>
         <li>Pivots update on their own when the data changes.</li>
         <li>Percent: Format → Number → Percent.</li></ul></div>
-    </div></div>
+    </div>
+    <details class="fnhelp"><summary>What the functions do</summary>
+      <div class="fn"><div class="sig"><code>='Table 6.7'!F23</code></div><p>A plain link. The cell shows whatever is in F23 on the Table 6.7 sheet and updates when that cell changes, so the count is worked out in one place only.</p></div>
+      <div class="fn"><div class="sig"><code>SUMIFS(sum_range, criteria_range1, criterion1)</code></div><p>The no-Table-sheets version needs only one condition, the school.</p><ul class="args"><li><code>'Academic…'!$J:$J</code> sum_range, the column to add up (Count).</li><li><code>'Academic…'!$B:$B</code> criteria_range1, where to check the condition (Site).</li><li><code>B$1</code> criterion1, the school named in row 1. Row 1 is locked, so copied right it becomes C$1 and D$1.</li></ul></div>
+      <div class="fn"><div class="sig"><code>GETPIVOTDATA(data_field, pivot_table, field1, item1, …)</code></div><p>What Excel writes when you click a pivot cell. It asks the pivot for a value by name (for example the sum of Count where Site is Bethel) instead of by cell address, so it still finds the right number if the pivot is rearranged. pivot_table is any cell inside the pivot.</p></div>
+    </details>
+    </div>
   <p class="muted">Both lab sheets use the same columns (B = Site, F = Layer, J = Count, L = Material, M = Form, AF = Pencil length). Chart the percentages as a 100% stacked bar, one bar per school.</p>
 </section>
 
@@ -407,7 +434,17 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
 =(ROWS(B2:D3)-1)*(COLUMNS(B2:D3)-1)</span></li>
       <li>p in B22, and in B23 the way to write it in a report<span class="code">=CHISQ.DIST.RT(B20,B21)
 =IF(B22&lt;0.001,"p &lt; .001",TEXT(B22,"0.000"))</span></li>
-      <li>Cross-check: the same p in one step<span class="code">=CHISQ.TEST(B2:D3,B7:D8)</span></li></ol></div>
+      <li>Cross-check: the same p in one step<span class="code">=CHISQ.TEST(B2:D3,B7:D8)</span></li></ol>
+    <details class="fnhelp"><summary>What the functions do</summary>
+      <div class="fn"><div class="sig"><code>=B$4*($E2/$E$4)</code></div><p>Expected count, column total × (row total ÷ N). <b>B$4</b> is the school’s column total (row locked, so copied right it becomes C$4, D$4). <b>$E2</b> is the row total (column locked, so copied down it becomes $E3). <b>$E$4</b> is N and never moves.</p></div>
+      <div class="fn"><div class="sig"><code>SQRT(number)</code></div><p>Square root.</p></div>
+      <div class="fn"><div class="sig"><code>ROWS(range)   COLUMNS(range)</code></div><p>Count the rows and the columns of a range. For B2:D3 they give 2 and 3, so df = (2 − 1) × (3 − 1) = 2 comes from the table’s shape instead of being typed in.</p></div>
+      <div class="fn"><div class="sig"><code>CHISQ.DIST.RT(x, deg_freedom)</code></div><p>The right-tail area of the χ² distribution, the chance of a χ² at least as large as x when H<sub>0</sub> is true. That area is the p-value.</p><ul class="args"><li><code>B20</code> x, the χ² you calculated.</li><li><code>B21</code> deg_freedom, the df.</li></ul></div>
+      <div class="fn"><div class="sig"><code>IF(test, value_if_true, value_if_false)   TEXT(value, format)</code></div><p>IF checks the test and returns one of two results. Here it writes “p &lt; .001” when p is tiny, and otherwise uses TEXT to turn the number into text with three decimals (the format "0.000").</p></div>
+      <div class="fn"><div class="sig"><code>CHISQ.TEST(actual_range, expected_range)</code></div><p>Takes the observed table and the expected table (same shape), works out χ² and df on its own, and returns the p-value directly. Useful as a check on the step-by-step result.</p></div>
+      <div class="fn"><div class="sig"><code>MIN(range)</code></div><p>The smallest number in the range. On the expected table it tells you at once whether any expected count is under 5.</p></div>
+    </details>
+    </div>
     <div class="box tool"><h3>Check the assumptions</h3><ul>
       <li><b>Expected ≥ 5 in every cell.</b> Check with <code>=MIN(B7:D8)</code>. If not, merge categories or use Fisher’s exact test in R.</li>
       <li><b>Independent observations.</b> Fragments of one object aren’t independent. Re-run with catalog lots or presence per unit as a check.</li>
@@ -471,7 +508,14 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
 =MIN(B6,B7)</span></li>
       <li>Cramér’s V in B10<span class="code">=SQRT(B4/(B5*(B8-1)))</span></li>
       <li>Rough reading in B11 (cut points at 0.2 and 0.5, a rough convention)<span class="code">=IF(B10&gt;=0.5,"strong",IF(B10&gt;=0.2,"moderate","weak"))</span></li></ol>
-      <p>For a 2 × 3 table, k − 1 = 1, so V = √(χ² ÷ N).</p></div>
+      <p>For a 2 × 3 table, k − 1 = 1, so V = √(χ² ÷ N).</p>
+    <details class="fnhelp"><summary>What the functions do</summary>
+      <div class="fn"><div class="sig"><code>ROWS(range)   COLUMNS(range)</code></div><p>Count the rows and the columns of a range. For the observed table (B2:D3 on the Chi-square sheet) they give r = 2 and c = 3.</p></div>
+      <div class="fn"><div class="sig"><code>MIN(B6,B7)</code></div><p>The smaller of the number of rows and columns, which is k in the V formula.</p></div>
+      <div class="fn"><div class="sig"><code>SQRT(number)</code></div><p>Square root.</p></div>
+      <div class="fn"><div class="sig"><code>IF(B10>=0.5,"strong",IF(B10>=0.2,"moderate","weak"))</code></div><p>An IF inside an IF. It checks ≥ 0.5 first, and only if that fails does it check ≥ 0.2. Anything below both is “weak”. The order matters, since 0.6 also passes the second test.</p></div>
+    </details>
+    </div>
   </div>
   <div class="box">
     <h3>Why V doesn't grow with N, even though &#967;² does</h3>
@@ -526,7 +570,16 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
 =STDEV(FILTER(AF:AF, B:B="Bethel", L:L="graphite", M:M="pencil", AF:AF&lt;&gt;""))</span>
         <p><b>Histogram:</b> Insert → Chart → Chart type: Histogram.</p></div>
     </div>
-    <p class="muted">If a length still sits left-aligned in its cell after converting, it is still text. A helper column with <code>=VALUE(AF2)</code> converts it in either program.</p></div>
+    <p class="muted">If a length still sits left-aligned in its cell after converting, it is still text. A helper column with <code>=VALUE(AF2)</code> converts it in either program.</p>
+    <details class="fnhelp"><summary>What the functions do</summary>
+      <div class="fn"><div class="sig"><code>COUNTIFS(criteria_range1, criterion1, …)</code></div><p>Counts the rows where every condition is true. Same condition pairs as SUMIFS, but with no column to add. It only counts rows. The condition "&lt;&gt;" means “not empty” (&lt;&gt; is “not equal to”, followed by nothing).</p></div>
+      <div class="fn"><div class="sig"><code>AVERAGEIFS(average_range, criteria_range1, criterion1, …)</code></div><p>The mean of one column over the rows where every condition is true. Same order as SUMIFS, with the column to average first. Cells holding text are skipped, so convert the lengths to numbers first.</p></div>
+      <div class="fn"><div class="sig"><code>FILTER(range, conditions)</code></div><p>Returns only the values from the range on rows that meet the conditions, as a list that MEDIAN or STDEV can use. Excel takes one combined condition, and each test gives 1 (true) or 0 (false), so multiplying them with * gives 1 only where all are true. Sheets takes each condition as its own argument instead.</p></div>
+      <div class="fn"><div class="sig"><code>MEDIAN(…)   STDEV.S(…)   STDEV(…)</code></div><p>The middle value, and the sample standard deviation (dividing by n − 1). STDEV in Sheets is the same calculation as STDEV.S in Excel.</p></div>
+      <div class="fn"><div class="sig"><code>MEDIAN(IF(...))</code></div><p>The pre-365 workaround. IF returns the length on rows that meet the conditions and FALSE elsewhere, MEDIAN ignores the FALSEs, and Ctrl+Shift+Enter tells older Excel to run IF on every row at once.</p></div>
+      <div class="fn"><div class="sig"><code>VALUE(text)</code></div><p>Turns text that looks like a number, such as "6.8", into the number 6.8.</p></div>
+    </details>
+    </div>
 </section>
 
 <section id="kw" data-label="Kruskal-Wallis" role="tabpanel" hidden>
@@ -583,7 +636,15 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
       <tr><td>Bethel vs Glenns/Dragon</td><td>.0119</td><td class="pos">.0357</td></tr>
       <tr><td>Bethel vs Woodville</td><td>.0195</td><td class="pos">.0390</td></tr>
       <tr><td>Glenns/Dragon vs Woodville</td><td>.1346</td><td>.1346</td></tr></tbody></table></div>
-      <p>Bethel’s fragments run a little longer than those at the other two schools.</p></div>
+      <p>Bethel’s fragments run a little longer than those at the other two schools.</p>
+    <details class="fnhelp"><summary>What the functions do</summary>
+      <div class="fn"><div class="sig"><code>RANK.AVG(number, ref, order)</code></div><p>The rank of one value within a list.</p><ul class="args"><li><code>B2</code> number, this fragment’s length.</li><li><code>$B$2:$B$941</code> ref, all 940 lengths, locked with $ so the list stays put when you copy the formula down.</li><li><code>1</code> order. 1 ranks from smallest (shortest = 1), and 0 ranks from largest. Tied values share the average of the ranks they span, so two fragments tied for 4th and 5th both get 4.5.</li></ul></div>
+      <div class="fn"><div class="sig"><code>COUNTIF(range, criterion)   SUMIF(range, criterion, sum_range)</code></div><p>The one-condition versions. COUNTIF(A:A, E2) counts the rows whose school is E2. SUMIF(A:A, E2, C:C) adds column C (the ranks) on those rows. Note that SUMIF puts the column to add <i>last</i>, while SUMIFS puts it first.</p></div>
+      <div class="fn"><div class="sig"><code>SUMPRODUCT(G2:G4^2/F2:F4)</code></div><p>Works cell by cell, then adds. For each school it squares the rank sum (G) and divides by n (F), and then adds the three results, which is the Σ R²/n part of the H formula.</p></div>
+      <div class="fn"><div class="sig"><code>CHISQ.DIST.RT(F6, 2)</code></div><p>Same function as on the χ² tab. H is compared with the χ² distribution with df = number of schools − 1 = 2.</p></div>
+      <div class="fn"><div class="sig"><code>NORM.S.DIST(z, cumulative)</code></div><p>The standard normal distribution. With TRUE it returns P(Z ≤ z), the area to the left of z. With FALSE it returns the height of the curve, which is not a probability.</p><ul class="args"><li><code>ABS(J2)</code> removes the sign, so a negative z is treated like the same distance on the positive side.</li><li><code>1 − NORM.S.DIST(…)</code> the area beyond |z| in one tail.</li><li><code>2 * (…)</code> both tails, the two-tailed p.</li></ul></div>
+    </details>
+    </div>
   <div class="grid2">
     <div class="box interactive">
       <span class="ico">▦</span>
@@ -736,7 +797,7 @@ new MutationObserver(()=>{drawCount();drawHist();}).observe(document.documentEle
   });
   document.querySelectorAll('code').forEach(function(el){
     var t=el.textContent.trim();
-    if(t.length<3||t.charAt(0)!=='='||t.indexOf('...')>-1||el.closest('.code'))return;
+    if(t.length<3||t.charAt(0)!=='='||t.indexOf('...')>-1||el.closest('.code')||el.closest('.fnhelp'))return;
     var b=document.createElement('button');b.type='button';b.className='cbtn inl';b.textContent='Copy';b.title='Copy this formula';b.setAttribute('aria-label','Copy formula '+t);
     b.addEventListener('click',function(){copy(t,b);});
     el.insertAdjacentElement('afterend',b);
