@@ -55,7 +55,7 @@ footer{margin-top:30px;font-size:13px;color:var(--muted)}
 <header>
   <p class="eyebrow">What U is actually counting</p>
   <h1>Mann-Whitney U, Cell by Cell</h1>
-  <p>Every Bethel value (rows) is compared against every Glenns/Dragon value (columns). A green cell means the row value is smaller; U is just how many green cells there are (ties count as half).</p>
+  <p>Every Bethel value (rows) is compared against every Glenns/Dragon value (columns). A green cell means the row value is smaller. U is just how many green cells there are (ties count as half).</p>
 </header>
 
 <div class="controls">
@@ -77,14 +77,14 @@ footer{margin-top:30px;font-size:13px;color:var(--muted)}
 
 <div class="panel">
   <h3>Cross-check: the rank-sum shortcut</h3>
-  <p class="sub">You never actually have to build this grid — Excel gets the same number from ranks</p>
+  <p class="sub">You never actually have to build this grid. Excel or Sheets gets the same number from ranks</p>
   <div style="overflow-x:auto;max-width:100%"><math display="block" id="uFormula"></math></div>
   <p class="sub" id="uNote"></p>
 </div>
 
 <div class="note" id="readout"></div>
 
-<footer>U counts "wins," so it only ever depends on which group's values tend to rank higher — not on how far apart the raw numbers are. That is the same rank-only logic Kruskal-Wallis uses for three or more groups.</footer>
+<footer>U counts "wins," so it only ever depends on which group's values tend to rank higher, not on how far apart the raw numbers are. That is the same rank-only logic Kruskal-Wallis uses for three or more groups.</footer>
 </div>
 
 <script>
@@ -143,14 +143,14 @@ function render(){
 
   const {R_B, U_B, nA, nB} = rankSumCheck(A,B);
   $('#statBox').innerHTML = [
-    ['U (from the grid)', U.toFixed(1)],
+    ['U for Glenns/Dragon (from the grid)', U.toFixed(1)],
     ['n Bethel', nA],
     ['n Glenns/Dragon', nB],
     ['Max possible U', nA*nB]
   ].map(x=>'<div class="stat"><span>'+x[0]+'</span><strong>'+x[1]+'</strong></div>').join('');
 
   $('#uFormula').innerHTML = '<msub><mi>U</mi><mtext>GD</mtext></msub><mo>=</mo><msub><mi>R</mi><mtext>GD</mtext></msub><mo>&#x2212;</mo><mfrac><mrow><msub><mi>n</mi><mtext>GD</mtext></msub><mo>(</mo><msub><mi>n</mi><mtext>GD</mtext></msub><mo>+</mo><mn>1</mn><mo>)</mo></mrow><mn>2</mn></mfrac><mo>=</mo><mn>'+R_B.toFixed(1)+'</mn><mo>&#x2212;</mo><mn>'+(nB*(nB+1)/2).toFixed(1)+'</mn><mo>=</mo><mn>'+U_B.toFixed(1)+'</mn>';
-  $('#uNote').textContent = 'R_GD = sum of Glenns/Dragon\'s ranks in the combined, sorted list of all '+(nA+nB)+' values (ties get the average rank they span). Same '+U_B.toFixed(1)+' either way — counting cells by hand, or subtracting from a rank sum.';
+  $('#uNote').textContent = 'R_GD = sum of Glenns/Dragon\'s ranks in the combined, sorted list of all '+(nA+nB)+' values (ties get the average rank they span). Same '+U_B.toFixed(1)+' either way, whether you count cells by hand or subtract from a rank sum.';
 
   $('#readout').innerHTML = '<b>U = '+U.toFixed(1)+' out of a possible '+(nA*nB)+'.</b> If school made no difference, U should land somewhere near half of that maximum by chance. How far U sits from that midpoint, relative to its expected spread, is what the z-approximation and p-value in the workbook are testing.';
 }

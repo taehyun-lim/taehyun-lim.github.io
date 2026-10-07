@@ -68,7 +68,7 @@ footer{margin-top:30px;font-size:13px;color:var(--muted)}
 
 <div class="note" id="readout"></div>
 
-<footer>Holm's trick: the smallest p-value gets the harshest penalty (×m, same as plain Bonferroni), but each larger one gets a slightly gentler penalty (×(m−1), ×(m−2), …) since fewer hypotheses are still "in play" once the more significant ones are set aside. The running-max step just keeps the sequence from un-sorting itself.</footer>
+<footer>Holm's trick is that the smallest p-value gets the harshest penalty (×m, same as plain Bonferroni), but each larger one gets a slightly gentler penalty (×(m−1), ×(m−2), …) since fewer hypotheses are still "in play" once the more significant ones are set aside. The running-max step just keeps the sequence from un-sorting itself.</footer>
 </div>
 
 <script>
@@ -83,18 +83,18 @@ let rows = LAB_DEFAULT.map(r=>({...r}));
 let step = 0; // 0..4
 const ALPHA=0.05;
 const STEP_TITLES=[
-  'Step 0 — the raw p-values',
-  'Step 1 — sort ascending and rank them',
-  'Step 2 — multiply each by (m − rank + 1)',
-  'Step 3 — take the running maximum',
-  'Step 4 — cap at 1, then compare to α',
+  'Step 0 · the raw p-values',
+  'Step 1 · sort ascending and rank them',
+  'Step 2 · multiply each by (m − rank + 1)',
+  'Step 3 · take the running maximum',
+  'Step 4 · cap at 1, then compare to α',
 ];
 const STEP_SUBS=[
   'In whatever order you happened to run the tests',
-  'Smallest p-value first — this fixes the order for every later step',
+  'Smallest p-value first. This fixes the order for every later step',
   'Rank 1 is multiplied by m, rank 2 by m − 1, and so on',
   'Each value becomes the largest of itself and everything before it',
-  'Anything over 1 is just capped at 1 — probabilities can\'t exceed it',
+  'Anything over 1 is just capped at 1, since probabilities can\'t exceed it',
 ];
 
 function computeHolm(data){
@@ -148,12 +148,12 @@ function render(){
   const losers = sorted.filter(r=>r.final>=ALPHA).map(r=>r.name);
   const list = a=> a.length<=1 ? (a[0]||'') : a.slice(0,-1).join(', ')+(a.length>2?',':'')+' and '+a[a.length-1];
   const finalCall = (survivors.length? list(survivors)+(survivors.length===1?' survives':' survive')+' Holm correction' : 'Nothing survives Holm correction')
-    + (losers.length? '; '+list(losers)+(losers.length===1?' does not.':' do not.') : '.');
+    + (losers.length? ', while '+list(losers)+(losers.length===1?' does not.':' do not.') : '.');
   const notes = [
-    cap(NUM[m])+' tests, '+NUM[m]+' raw p-values. '+(nRawSig===m ? 'All '+NUM[m]+' look' : cap(NUM[nRawSig])+' of the '+NUM[m]+' look'+(nRawSig===1?'s':''))+' "significant" at the usual α = .05 — but running '+NUM[m]+' tests inflates the chance that at least one clears .05 by luck alone.',
-    'Ranking fixes an order. The smallest raw p — the one we\'re least willing to be wrong about — goes first.',
+    cap(NUM[m])+' tests, '+NUM[m]+' raw p-values. '+(nRawSig===m ? 'All '+NUM[m]+' look' : cap(NUM[nRawSig])+' of the '+NUM[m]+' look'+(nRawSig===1?'s':''))+' "significant" at the usual α = .05, but running '+NUM[m]+' tests inflates the chance that at least one clears .05 by luck alone.',
+    'Ranking fixes an order. The smallest raw p, the most significant result, goes first.',
     'Rank 1 is penalized the most (×'+m+'), rank '+m+' the least (×1). This is already less harsh than plain Bonferroni, which would multiply every single one by '+m+'.',
-    'Taking the running maximum guarantees the adjusted values never decrease down the sorted list — without it, a later rank could end up smaller than an earlier one, which would not make sense.',
+    'Taking the running maximum guarantees the adjusted values never decrease down the sorted list. Without it, a later rank could end up smaller than an earlier one, which would not make sense.',
     'Final call: '+finalCall,
   ];
   $('#readout').innerHTML = '<b>'+notes[step]+'</b>';

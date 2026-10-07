@@ -89,7 +89,7 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
   </section>
   <section class="panel">
     <h3>2. Square it and stack</h3>
-    <p class="sub">Squaring a Z always gives a value &#8805; 0; stacking the squares gives the χ² statistic</p>
+    <p class="sub">Squaring a Z always gives a value &#8805; 0, and stacking the squares gives the χ² statistic</p>
     <svg id="svgStack" viewBox="0 0 900 240" role="img" aria-label="Bar showing the squared Z values stacked"></svg>
     <div class="formula" id="formula">&#967;&#178; = &#8212;</div>
   </section>
@@ -103,7 +103,7 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
 <div class="legend" id="legend"></div>
 
 <div class="note" id="calloutNote">
-  <b>From today's class (df = 2):</b> the school &#215; artifact-type comparison gave &#967;&#178; = 307.4. That's far outside the histogram's range (0&#8211;22) below &#8212; which is exactly why the p-value came out essentially zero.
+  <b>From the lab (df = 2):</b> the school &#215; artifact-type comparison gave &#967;&#178; = 307.4. That's far beyond the histogram's range (0&#8211;22) below, out in a tail so thin that p is essentially zero.
 </div>
 
 <section class="panel mathbox">
@@ -118,7 +118,7 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
       <span class="where">This is the piece that behaves like one of the Z's above, once N is reasonably large.</span></div>
     <div class="eq"><span class="lbl">χ² statistic</span>
       <math display="block"><msup><mi>&#x3C7;</mi><mn>2</mn></msup><mo>=</mo><munder><mo>&#x2211;</mo><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></munder><mfrac><msup><mrow><mo stretchy="false">(</mo><msub><mi>O</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#x2212;</mo><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="false">)</mo></mrow><mn>2</mn></msup><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mfrac><mspace width="1em"/><mtext>df</mtext><mo>=</mo><mo stretchy="false">(</mo><mi>r</mi><mo>&#x2212;</mo><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mi>c</mi><mo>&#x2212;</mo><mn>1</mn><mo stretchy="false">)</mo></math>
-      <span class="where">Square and sum the residuals above, cell by cell &#8212; the same squaring-and-summing this page does with Z's. One catch: the lab table has 6 residuals but df = 2, because once the row and column totals are fixed only (r&#8722;1)(c&#8722;1) = 2 cells are free to vary. So compare the lab's &#967;&#178; with the df = 2 curve, not df = 6.</span></div>
+      <span class="where">Square and sum the residuals above, cell by cell. It is the same squaring-and-summing this page does with Z's. One catch is that the lab table has 6 residuals but df = 2, because once the row and column totals are fixed only (r&#8722;1)(c&#8722;1) = 2 cells are free to vary. So compare the lab's &#967;&#178; with the df = 2 curve, not df = 6.</span></div>
   </div>
 </section>
 

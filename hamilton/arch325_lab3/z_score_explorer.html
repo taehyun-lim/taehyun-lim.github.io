@@ -71,9 +71,9 @@ footer{margin-top:30px;font-size:13px;color:var(--muted)}
 
 <div class="panel">
   <h3>Click, drag, or type to move the point</h3>
-  <p class="sub">The dark line marks your z-score; the shaded region is the area the p-value refers to</p>
+  <p class="sub">The dark line marks your z-score, and the shaded region is the area the p-value refers to</p>
   <svg id="svgNorm" viewBox="0 0 900 340" role="img" aria-label="Standard normal curve with a movable point and shaded p-value area"></svg>
-  <p class="hint">Drag the point left and right, click anywhere on the curve, or edit the z-score field above — all three stay in sync.</p>
+  <p class="hint">Drag the point left and right, click anywhere on the curve, or edit the z-score field above. All three stay in sync.</p>
 </div>
 
 <div class="stats" id="statBox"></div>
@@ -90,10 +90,10 @@ footer{margin-top:30px;font-size:13px;color:var(--muted)}
       <tr><td class="rowlabel">.01</td><td>2.326</td><td>2.576</td></tr>
     </tbody>
   </table></div>
-  <p class="sub">These are the z-scores that make p exactly equal to α for that kind of test — try typing one into the box above.</p>
+  <p class="sub">These are the z-scores that make p exactly equal to α for that kind of test. Try typing one into the box above.</p>
 </div>
 
-<footer>P-value = the area under the standard normal curve in the region the test asks about. Two-tailed asks "how far from 0 in either direction"; one-tailed asks "how far in one specific direction."</footer>
+<footer>P-value = the area under the standard normal curve in the region the test asks about. Two-tailed asks "how far from 0 in either direction," and one-tailed asks "how far in one specific direction."</footer>
 </div>
 
 <script>
@@ -207,7 +207,7 @@ function updateStats(){
   const sig05 = p<0.05;
   const atLine = Math.abs(p-0.05) < 0.0005; // e.g. z = 1.960 two-tailed, 1.645 one-tailed
   $('#readout').innerHTML = '<b>'+labelForMode(mode,z)+' = '+(p<0.0001?'&lt; .0001':p.toFixed(4))+'.</b> '
-    + (atLine ? 'That sits right on the conventional .05 line — this z is the critical value itself.'
+    + (atLine ? 'That sits right on the conventional .05 line. This z is the critical value itself.'
        : sig05 ? 'That clears the conventional p &lt; .05 threshold.' : 'That does not clear the conventional p &lt; .05 threshold.');
 }
 

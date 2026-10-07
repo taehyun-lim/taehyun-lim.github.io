@@ -51,7 +51,7 @@ footer{margin-top:30px;font-size:13px;color:var(--muted)}
 <header>
   <p class="eyebrow">Why "fail to reject" is not "H₀ is true"</p>
   <h1>Type I &amp; Type II Error Explorer</h1>
-  <p>Two simplified pictures, overlapping: what the test statistic looks like if H₀ is true (blue), and what it looks like if there's a real difference of size δ (copper). Drag the threshold to trade α against β. Then raise n or δ: the line stays at the same α, and β shrinks.</p>
+  <p>Two simplified pictures overlap, showing what the test statistic looks like if H₀ is true (blue), and what it looks like if there's a real difference of size δ (copper). Drag the threshold to trade α against β. Then raise n or δ. The line stays at the same α, and β shrinks.</p>
 </header>
 
 <div class="controls">
@@ -77,7 +77,7 @@ footer{margin-top:30px;font-size:13px;color:var(--muted)}
 <div class="stats" id="statBox"></div>
 <div class="note" id="readout"></div>
 
-<footer>Type I error (α): reject H₀ when it's actually true — the shaded blue tail. Type II error (β): fail to reject H₀ when H₁ is actually true — the shaded copper tail. Power (1 − β) is how often you'd correctly detect a real effect of size δ with this sample size. This is a simplified one-test picture, not the exact machinery behind χ² or Kruskal-Wallis, but the trade-off it shows — bigger n and bigger real effects both shrink β — is the same one driving every test on this site.</footer>
+<footer>Type I error (α): reject H₀ when it's actually true (the shaded blue tail). Type II error (β): fail to reject H₀ when H₁ is actually true (the shaded copper tail). Power (1 − β) is how often you'd correctly detect a real effect of size δ with this sample size. This is a simplified one-test picture, not the exact machinery behind χ² or Kruskal-Wallis, but the trade-off it shows (bigger n and bigger real effects both shrink β) is the same one driving every test on this site.</footer>
 </div>
 
 <script>
@@ -180,9 +180,9 @@ function updateStats(s){
   ].map(a=>'<div class="stat"><span>'+a[0]+'</span><strong>'+a[1]+'</strong></div>').join('');
 
   let msg;
-  if(power<0.4) msg = 'With this n and this δ, you would miss a real effect of this size more often than not — β = '+(beta*100).toFixed(0)+'%. A "fail to reject" here says almost nothing.';
-  else if(power<0.8) msg = 'Power is climbing but still leaves real gaps — about '+(beta*100).toFixed(0)+'% of the time, a genuinely real effect of this size would still slip past this test.';
-  else msg = 'Power = '+(power*100).toFixed(0)+'%: a real effect of this size would almost always clear this threshold. Note α barely moved — it is set by where you put the line, not by n or δ.';
+  if(power<0.4) msg = 'With this n and this δ, you would miss a real effect of this size more often than not (β = '+(beta*100).toFixed(0)+'%). A "fail to reject" here says almost nothing.';
+  else if(power<0.8) msg = 'Power is climbing but still leaves real gaps. About '+(beta*100).toFixed(0)+'% of the time, a genuinely real effect of this size would still slip past this test.';
+  else msg = 'Power = '+(power*100).toFixed(0)+'%, so a real effect of this size would almost always clear this threshold. Note that α did not change. It is set by where you put the line, not by n or δ.';
   $('#readout').innerHTML = '<b>'+msg+'</b>';
 }
 
