@@ -36,6 +36,7 @@ h3{font-family:var(--display);font-weight:600;font-size:20px;margin:0 0 8px}
 @media (max-width:1121px){ .g-tools{grid-template-columns:1fr} }
 .box{background:var(--panel);border-radius:10px;padding:18px 20px;min-width:0}
 .g-one{grid-template-columns:1fr}
+main section > .box + .box, main section > .q + .box{margin-top:20px}
 .nrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 #nInput{width:120px;font:inherit;font-variant-numeric:tabular-nums;text-align:right;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 6px}
 .note{background:var(--note);border-radius:10px;padding:14px 18px;margin-block:18px}
@@ -43,6 +44,11 @@ h3{font-family:var(--display);font-weight:600;font-size:20px;margin:0 0 8px}
 .q div{border-top:2px solid var(--line);padding-top:8px}
 .q b{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:2px}
 .tool h3{display:flex;align-items:center;gap:8px}
+.tool h4{font:700 16px var(--body);margin:20px 0 6px;color:var(--ink)}
+.tool .diff{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:12px 0 4px}
+.tool .diff>div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 14px;min-width:0}
+.tool .diff h4{margin:0 0 6px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--acad)}
+.tool .diff p,.tool .diff ul{margin:0 0 6px}
 .chip{font:600 11px var(--body);letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--surface);color:var(--acad);border:1px solid var(--line)}
 ol,ul{padding-left:20px;margin:0}
 li{margin-bottom:6px}
@@ -217,17 +223,15 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
     <p><b>Industrial at Woodville (+266):</b> mostly jar glass — 302 fragments in the lab file, 83 in Table 6.12 — and two lab-file lots hold 190 of those 302: 109 fragments noted as “mostly if not all from large jar in context” and 81 from the baulk. Most of the rest is beads: the lab file counts every bead, while Betti’s row is labeled seed beads (that is also Bethel’s +35). A couple of broken jars, in other words — the same breakage problem as the slates.</p>
     <p class="muted">Use the lab-file numbers for your own tests, cite Betti’s when you quote her, and say which one a number comes from.</p>
   </div>
-  <div class="grid2">
-    <div class="box tool"><h3>Excel <span class="chip">SUMIFS</span></h3><ol>
-      <li>One row of the table: add a Form (M) condition. School supplies are on the Academic sheet (B = Site, J = Count):</li></ol>
-      <span class="code">=SUMIFS('Academic Education Artifacts'!J:J, 'Academic Education Artifacts'!B:B, "Glenns/Dragon", 'Academic Education Artifacts'!M:M, "writing slate/blackboard")</span>
-      <ol start="2"><li>Standardized: divide by that school’s area.</li></ol>
-      <span class="code">=[count cell] / 331.25 * 100</span></div>
-    <div class="box tool"><h3>Google Sheets</h3>
-      <p>The same SUMIFS work as written — keep the single quotes around sheet names that contain spaces. Keep the three areas in a small table and pull the right one with a lookup instead of typing the number each time:</p>
-      <span class="code">=[count cell] / VLOOKUP("Glenns/Dragon", AreaTable, 2, FALSE) * 100</span>
-      <p class="muted">AreaTable is a named range (Data → Named ranges) with the school in its first column and the area in its second.</p></div>
-  </div>
+  <div class="box tool"><h3>Excel and Sheets</h3>
+    <p class="muted">The same formulas in both. Keep the single quotes around sheet names that contain spaces.</p>
+    <p>On a new sheet (call it <code>Table 6.7</code>): school names in B7, D7 and F7 (Glenns/Dragon, Woodville, Bethel — each above its Count column), each school’s excavated area in B5, D5 and F5 (331.25, 1,593.75, 312.5), and the lab file’s Form values in A9 downward (bottle, ink … writing slate/blackboard).</p><ol>
+    <li>Count: type in B9, then copy to D9 and F9 and down. <code>B$7</code> picks up the school, <code>$A9</code> the form:<span class="code">=SUMIFS('Academic Education Artifacts'!$J:$J, 'Academic Education Artifacts'!$B:$B, B$7, 'Academic Education Artifacts'!$M:$M, $A9)</span></li>
+    <li>Std. (per 100 sq ft): type in C9, then copy to E9 and G9 and down:<span class="code">=B9/B$5*100</span></li>
+    <li>Total, in the row under the last form (row 23 for the 14 academic forms), copied across:<span class="code">=SUM(B9:B22)</span></li>
+    <li>Check row: every row for that school. It should equal the Total, which means no form was missed:<span class="code">=SUMIFS('Academic Education Artifacts'!$J:$J, 'Academic Education Artifacts'!$B:$B, B$7)</span></li>
+    <li>Table 6.12: the same layout on another sheet (<code>Table 6.12</code>), with the Industrial sheet in the formulas and its six forms in A9:A14, so the Total is <code>=SUM(B9:B14)</code>:<span class="code">=SUMIFS('Industrial Education Artifacts'!$J:$J, 'Industrial Education Artifacts'!$B:$B, B$7, 'Industrial Education Artifacts'!$M:$M, $A9)</span></li></ol>
+    <p class="muted">The rows are the lab file’s own Form values (all pencils in one row), so the totals are close to Betti’s but not identical — see the box above.</p></div>
 </section>
 
 <section id="hyptest" data-label="Hypothesis testing" role="tabpanel" hidden>
@@ -269,18 +273,18 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
       <p><b>Not:</b> <i>“There's a 99.9% chance school affects the mix.”</i> &nbsp;·&nbsp; <i>“This proves school affects the mix.”</i> &nbsp;·&nbsp; <i>“We accept H<sub>1</sub> that school affects the mix.”</i></p>
     </div>
   </div>
-  <div class="grid2">
-    <div class="box tool"><h3>Z-score <span class="chip">Excel = Sheets</span></h3>
-      <p>By hand: <i>z</i> = (value − mean) ÷ SD. As a formula:</p>
-      <span class="code">=(x-mean)/sd
+  <div class="box tool"><h3>Excel and Sheets</h3>
+    <p class="muted">Every formula below works the same in both.</p>
+    <h4>Z-score</h4>
+    <p>By hand: <i>z</i> = (value − mean) ÷ SD. As a formula:</p>
+    <span class="code">=(x-mean)/sd
 =STANDARDIZE(x, mean, sd)</span>
-      <p class="muted">STANDARDIZE takes the raw value, the mean and the SD directly, so you don't have to compute the subtraction yourself.</p></div>
-    <div class="box tool"><h3>p-value from a z-score <span class="chip">Excel = Sheets</span></h3>
-      <span class="code">Two-tailed  =2*(1-NORM.S.DIST(ABS(z),TRUE))
+    <p class="muted">STANDARDIZE takes the raw value, the mean and the SD directly, so you don't have to compute the subtraction yourself.</p>
+    <h4>p-value from a z-score</h4>
+    <span class="code">Two-tailed  =2*(1-NORM.S.DIST(ABS(z),TRUE))
 Upper tail  =1-NORM.S.DIST(z,TRUE)
 Lower tail  =NORM.S.DIST(z,TRUE)</span>
-      <p class="muted">NORM.S.DIST(z, TRUE) returns the cumulative probability P(Z ≤ z) — that TRUE is what makes it the running-total curve, not the bell-curve height. Example: z = 1.96 → two-tailed p = .050; z = 2.576 → two-tailed p = .010.</p></div>
-  </div>
+    <p class="muted">NORM.S.DIST(z, TRUE) returns the cumulative probability P(Z ≤ z) — that TRUE is what makes it the running-total curve, not the bell-curve height. Example: z = 1.96 → two-tailed p = .050; z = 2.576 → two-tailed p = .010.</p></div>
   <div class="grid2">
     <div class="box interactive">
       <span class="ico">🔔</span>
@@ -308,26 +312,32 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
   <tr><td>Academic</td><td>781</td><td>1,265</td><td>2,191</td><td>4,237</td></tr>
   <tr><td>Industrial</td><td>232</td><td>19</td><td>656</td><td>907</td></tr>
   <tr><td><b>% industrial</b></td><td class="pos">22.9%</td><td class="pos">1.5%</td><td class="pos">23.0%</td><td>17.6%</td></tr></tbody></table></div>
-  <div class="grid2">
-    <div class="box tool"><h3>Excel <span class="chip">SUMIFS</span></h3>
-      <p>Academic and industrial finds are on separate sheets, so build the table on a new sheet (say, <code>Summary</code>) one row at a time:</p><ol>
-      <li>Type the school names in B1:D1, <code>Academic</code> in A2 and <code>Industrial</code> in A3.</li>
-      <li>Academic row: type in B2, copy across to D2<span class="code">=SUMIFS('Academic Education Artifacts'!$J:$J, 'Academic Education Artifacts'!$B:$B, B$1)</span></li>
-      <li>Industrial row: the same formula pointed at the other sheet. Type in B3, copy across to D3<span class="code">=SUMIFS('Industrial Education Artifacts'!$J:$J, 'Industrial Education Artifacts'!$B:$B, B$1)</span></li>
-      <li>Totals: <code>=SUM(B2:D2)</code> in E2 (copy to E3), <code>=SUM(B2:B3)</code> in B4 (copy to E4).</li>
-      <li>% industrial: <code>=B3/B4</code> in B5, copy to E5, format as percent.</li></ol></div>
-    <div class="box tool"><h3>Google Sheets <span class="chip">same formulas</span></h3>
-      <p>The SUMIFS above work as written — keep the single quotes around sheet names that contain spaces. Format → Number → Percent for row 5.</p>
-      <p>Or build the two rows with pivot tables — see below.</p></div>
-  </div>
-  <div class="box tool"><h3>Or with two pivot tables <span class="chip">Excel and Sheets</span></h3>
-    <p>One pivot per lab sheet, then combine their results on the Summary sheet.</p><ol>
-    <li>On the Academic sheet: Insert → PivotTable (Excel) or Insert → Pivot table (Sheets). Put <code>Site</code> in Columns and <code>Count</code> in Values, summarized by SUM. With Site in Columns the three schools come out side by side, ready to drop into a row of the table; in Rows they would come out stacked in a column.</li>
+  <div class="box tool"><h3>Excel and Sheets</h3>
+    <p>Academic and industrial finds are on separate sheets, so build the table on a new sheet (call it <code>Cross-tab</code>) one row at a time. The formulas are the same in both; keep the single quotes around sheet names that contain spaces.</p><ol>
+    <li>Type the school names in B1:D1, <code>Academic</code> in A2 and <code>Industrial</code> in A3.</li>
+    <li>Academic row: type in B2, copy across to D2<span class="code">=SUMIFS('Academic Education Artifacts'!$J:$J, 'Academic Education Artifacts'!$B:$B, B$1)</span></li>
+    <li>Industrial row: the same formula pointed at the other sheet. Type in B3, copy across to D3<span class="code">=SUMIFS('Industrial Education Artifacts'!$J:$J, 'Industrial Education Artifacts'!$B:$B, B$1)</span></li>
+    <li>Totals: <code>=SUM(B2:D2)</code> in E2 (copy to E3), <code>=SUM(B2:B3)</code> in B4 (copy to E4).</li>
+    <li>% industrial: <code>=B3/B4</code> in B5, copy to E5, and format row 5 as a percentage.</li></ol>
+    <h4>Or with two pivot tables</h4>
+    <p>One pivot per lab sheet, then combine their results on the Cross-tab sheet.</p><ol>
+    <li>On the Academic sheet, insert a pivot table. Put <code>Site</code> in Columns and <code>Count</code> in Values, summarized by SUM. With Site in Columns the three schools come out side by side, ready to drop into a row of the table; in Rows they would come out stacked in a column.</li>
     <li>Do the same on the Industrial sheet.</li>
     <li>Pivots sort the schools alphabetically — Bethel, Glenns/Dragon, Woodville — the same order as the table above.</li>
-    <li>On the Summary sheet, link B2:D2 to the Academic pivot’s three totals and B3:D3 to the Industrial pivot’s: type <code>=</code> and click the pivot cell. Excel writes a GETPIVOTDATA formula, which keeps finding the right value even if the pivot’s layout changes; Sheets writes an ordinary reference to the pivot’s sheet. Link rather than paste values, so the table updates with the data.</li>
-    <li>Leave the pivots’ Grand Total behind. Work out the totals and % industrial on the Summary sheet as in steps 4–5 above, and keep the counts in B2:D3 so the χ² formulas on the next tab work unchanged.</li>
-    <li>After you change the lab data, refresh: Data → Refresh All in Excel; Sheets updates on its own.</li></ol></div>
+    <li>On the Cross-tab sheet, link B2:D2 to the Academic pivot’s three totals and B3:D3 to the Industrial pivot’s: type <code>=</code> and click the pivot cell. Link rather than paste values, so the table updates with the data.</li>
+    <li>Leave the pivots’ Grand Total behind. Work out the totals and % industrial on the Cross-tab sheet as in steps 4–5 above, and keep the counts in B2:D3 so the χ² formulas on the next tab work unchanged.</li></ol>
+    <div class="diff">
+      <div><h4>Excel</h4><ul>
+        <li>Pivot: Insert → PivotTable.</li>
+        <li>Clicking a pivot cell writes a GETPIVOTDATA formula, which keeps finding the right value even if the pivot’s layout changes.</li>
+        <li>After you change the lab data: Data → Refresh All.</li>
+        <li>Percent: Home → Percent Style (%).</li></ul></div>
+      <div><h4>Sheets</h4><ul>
+        <li>Pivot: Insert → Pivot table.</li>
+        <li>Clicking a pivot cell writes an ordinary reference to the pivot’s sheet.</li>
+        <li>Pivots update on their own when the data changes.</li>
+        <li>Percent: Format → Number → Percent.</li></ul></div>
+    </div></div>
   <p class="muted">Both lab sheets use the same columns: B = Site, F = Layer, J = Count, L = Material, M = Form, AF = Pencil length. Chart the percentages as a 100% stacked bar, one bar per school.</p>
 </section>
 
@@ -371,13 +381,18 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
       <p>Draw standard-normal Z’s, square them and stack them, and watch the χ² distribution for df 1–6 take shape — the picture behind the p-value on this tab.</p>
     </div>
   </div>
-  <div class="grid2">
-    <div class="box tool"><h3>χ² formulas <span class="chip">Excel = Sheets</span></h3><ol>
-      <li>Observed table in <code>B2:D3</code> — the Summary sheet from the Cross-tab tab, with row totals in column E and column totals in row 4.</li>
+  <div class="grid2 g-one">
+    <div class="box tool"><h3>Excel and Sheets</h3>
+      <p class="muted">The same formulas in both. On a new sheet (call it <code>Chi-square</code>):</p><ol>
+      <li>Observed table in B2:E4, linked from the Cross-tab sheet: counts in B2:D3, row totals in column E, column totals in row 4. Type in B2, copy across B2:E4<span class="code">='Cross-tab'!B2</span></li>
       <li>Expected: type in B7, copy across B7:D8<span class="code">=B$4*($E2/$E$4)</span></li>
-      <li>p-value<span class="code">=CHISQ.TEST(B2:D3, B7:D8)</span></li>
-      <li>χ² statistic for your report<span class="code">=SUMPRODUCT((B2:D3-B7:D8)^2/B7:D8)</span></li>
-      <li>Residual for each cell<span class="code">=(B2-B7)/SQRT(B7)</span></li></ol></div>
+      <li>Residual: type in B11, copy across B11:D12<span class="code">=(B2-B7)/SQRT(B7)</span></li>
+      <li>Residual squared, (O − E)² ÷ E: type in B15, copy across B15:D16<span class="code">=(B2-B7)^2/B7</span></li>
+      <li>χ² in B20, df in B21<span class="code">=SUM(B15:D16)
+=(ROWS(B2:D3)-1)*(COLUMNS(B2:D3)-1)</span></li>
+      <li>p in B22, and in B23 the way to write it in a report<span class="code">=CHISQ.DIST.RT(B20,B21)
+=IF(B22&lt;0.001,"p &lt; .001",TEXT(B22,"0.000"))</span></li>
+      <li>Cross-check: the same p in one step<span class="code">=CHISQ.TEST(B2:D3,B7:D8)</span></li></ol></div>
     <div class="box tool"><h3>Check the assumptions</h3><ul>
       <li><b>Expected ≥ 5 in every cell.</b> Check with <code>=MIN(B7:D8)</code>. If not, merge categories or use Fisher’s exact test in R.</li>
       <li><b>Independent observations.</b> Fragments of one object aren’t independent. Re-run with catalog lots or presence per unit as a check.</li>
@@ -432,8 +447,15 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
     <div class="box"><h3>Rough reading</h3><div class="tbl"><table><thead><tr><th>V</th><th>Strength</th><th>Lab example</th></tr></thead><tbody>
       <tr><td>≈ 0.1</td><td>weak</td><td></td></tr><tr><td>≈ 0.3</td><td>moderate</td><td>0.24 type × school · 0.33 type × Woodville level (A–C)</td></tr><tr><td>≥ 0.5</td><td>strong</td><td></td></tr></tbody></table></div></div>
     <div class="box tool"><h3>Excel and Sheets</h3>
-      <span class="code">=SQRT(chi2 / (N * (MIN(rows, cols) - 1)))</span>
-      <p>For a 2 × 3 table, MIN(rows, cols) − 1 = 1, so V = √(χ² ÷ N).</p></div>
+      <p class="muted">The same formulas in both. On a new sheet next to the Chi-square sheet:</p><ol>
+      <li>χ² in B4 and N in B5, from the Chi-square sheet<span class="code">='Chi-square'!B20
+='Chi-square'!E4</span></li>
+      <li>Rows in B6, columns in B7, and k = min(r, c) in B8<span class="code">=ROWS('Chi-square'!B2:D3)
+=COLUMNS('Chi-square'!B2:D3)
+=MIN(B6,B7)</span></li>
+      <li>Cramér’s V in B10<span class="code">=SQRT(B4/(B5*(B8-1)))</span></li>
+      <li>Rough reading in B11 (cut points at 0.2 and 0.5, a rough convention)<span class="code">=IF(B10&gt;=0.5,"strong",IF(B10&gt;=0.2,"moderate","weak"))</span></li></ol>
+      <p>For a 2 × 3 table, k − 1 = 1, so V = √(χ² ÷ N).</p></div>
   </div>
   <div class="box">
     <h3>Why V doesn't grow with N, even though &#967;² does</h3>
@@ -468,20 +490,27 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
       <p>Drag one fragment length out to 30 mm and watch the mean chase it while the median barely moves.</p>
     </div>
   </div>
-  <div class="note"><b>Convert the lengths first.</b> In the lab file, 934 of the 940 graphite pencil lengths in column AF are stored as text ("10.29", not 10.29). AVERAGEIFS, MEDIAN, STDEV and RANK.AVG skip text without warning, so you get a wrong number or an error. Excel: select column AF, then Data → Text to Columns → Finish. Google Sheets: select column AF, then Data → Split text to columns. If a value still sits left-aligned in its cell, it is still text; a helper column with <code>=VALUE(AF2)</code> converts it.</div>
-  <div class="grid2">
-    <div class="box tool"><h3>Excel</h3>
-      <p>Graphite pencils are all on the Academic sheet. Type these in an empty column to the right of the data on that sheet (B = Site, L = Material, M = Form, AF = Pencil length):</p>
-      <span class="code">=COUNTIFS(B:B,"Bethel",L:L,"graphite",M:M,"pencil",AF:AF,"&lt;&gt;")
+  <div class="note"><b>Convert the lengths first.</b> In the lab file, 934 of the 940 graphite pencil lengths in column AF are stored as text ("10.29", not 10.29). AVERAGEIFS, MEDIAN, STDEV and RANK.AVG skip text without warning, so you get a wrong number or an error. How to convert them is in the Excel and Sheets box below.</div>
+  <div class="box tool"><h3>Excel and Sheets</h3>
+    <p>Graphite pencils are all on the Academic sheet. Type these in an empty column to the right of the data on that sheet (B = Site, L = Material, M = Form, AF = Pencil length). Count and mean are the same in both:</p>
+    <span class="code">=COUNTIFS(B:B,"Bethel",L:L,"graphite",M:M,"pencil",AF:AF,"&lt;&gt;")
 =AVERAGEIFS(AF:AF,B:B,"Bethel",L:L,"graphite",M:M,"pencil")</span>
-      <p>Median (Excel 365):</p><span class="code">=MEDIAN(FILTER(AF:AF,(B:B="Bethel")*(L:L="graphite")*(M:M="pencil")*(AF:AF&lt;&gt;"")))</span>
-      <p>Older Excel: <code>=MEDIAN(IF(...))</code>, entered with Ctrl+Shift+Enter. Histogram: Insert → Chart → Histogram.</p></div>
-    <div class="box tool"><h3>Google Sheets</h3>
-      <p>COUNTIFS and AVERAGEIFS work the same. FILTER takes separate conditions:</p>
-      <span class="code">=MEDIAN(FILTER(AF:AF, B:B="Bethel", L:L="graphite", M:M="pencil", AF:AF&lt;&gt;""))
+    <div class="diff">
+      <div><h4>Excel</h4>
+        <p><b>Lengths to numbers:</b> select column AF, then Data → Text to Columns → Finish.</p>
+        <p><b>Median and SD</b> (Excel 365; FILTER multiplies the conditions together):</p>
+        <span class="code">=MEDIAN(FILTER(AF:AF,(B:B="Bethel")*(L:L="graphite")*(M:M="pencil")*(AF:AF&lt;&gt;"")))
+=STDEV.S(FILTER(AF:AF,(B:B="Bethel")*(L:L="graphite")*(M:M="pencil")*(AF:AF&lt;&gt;"")))</span>
+        <p>Older Excel without FILTER: <code>=MEDIAN(IF(...))</code>, entered with Ctrl+Shift+Enter.</p>
+        <p><b>Histogram:</b> Insert → Chart → Histogram.</p></div>
+      <div><h4>Sheets</h4>
+        <p><b>Lengths to numbers:</b> select column AF, then Data → Split text to columns.</p>
+        <p><b>Median and SD</b> (FILTER takes the conditions as separate arguments):</p>
+        <span class="code">=MEDIAN(FILTER(AF:AF, B:B="Bethel", L:L="graphite", M:M="pencil", AF:AF&lt;&gt;""))
 =STDEV(FILTER(AF:AF, B:B="Bethel", L:L="graphite", M:M="pencil", AF:AF&lt;&gt;""))</span>
-      <p>Histogram: Insert → Chart → Chart type: Histogram.</p></div>
-  </div>
+        <p><b>Histogram:</b> Insert → Chart → Chart type: Histogram.</p></div>
+    </div>
+    <p class="muted">If a length still sits left-aligned in its cell after converting, it is still text; a helper column with <code>=VALUE(AF2)</code> converts it in either program.</p></div>
 </section>
 
 <section id="kw" data-label="Kruskal-Wallis" role="tabpanel" hidden>
@@ -517,16 +546,17 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
       <p>Toggle between raw fragment lengths and their ranks, and watch one huge outlier stop dominating the moment it becomes just "rank 15."</p>
     </div>
   </div>
-  <div class="grid2">
-    <div class="box tool"><h3>Kruskal-Wallis <span class="chip">Excel = Sheets</span></h3>
+  <div class="box tool"><h3>Excel and Sheets</h3>
+    <p class="muted">Every formula below works the same in both.</p>
+    <h4>Kruskal-Wallis</h4>
       <p>First convert the lengths to numbers (see the Measurements tab), then make a sheet of just the graphite pencils that have a length: on the Academic sheet, filter Material (L) = graphite, Form (M) = pencil and Pencil Length (AF) not blank, then copy Site (B) and Pencil Length (AF) into a new sheet as columns A and B, with headers in row 1 (940 rows).</p><ol>
       <li>Rank every fragment, shortest = 1 (column C)<span class="code">=RANK.AVG(B2, $B$2:$B$941, 1)</span></li>
       <li>For each school: n and the sum of ranks R<span class="code">=COUNTIF(A:A, "Bethel")
 =SUMIF(A:A, "Bethel", C:C)</span></li>
       <li>H statistic (N = 940)<span class="code">=12/(N*(N+1)) * SUM(R²/n for each school) - 3*(N+1)</span></li>
       <li>p-value, df = number of schools − 1<span class="code">=CHISQ.DIST.RT(H, 2)</span></li></ol>
-      <p class="muted">Skipping the tie correction barely changes H with this data.</p></div>
-    <div class="box tool"><h3>Which schools differ? <span class="chip">Mann-Whitney</span></h3><ol>
+      <p class="muted">Skipping the tie correction barely changes H with this data.</p>
+    <h4>Which schools differ? (Mann-Whitney)</h4><ol>
       <li>Keep two schools only and re-rank them together.</li>
       <li><code>U = R₁ − n₁(n₁+1)/2</code></li>
       <li><code>z = (U − n₁n₂/2) / √(n₁n₂(n₁+n₂+1)/12)</code></li>
@@ -537,7 +567,6 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
       <tr><td>Bethel vs Woodville</td><td>.020</td><td class="pos">.039</td></tr>
       <tr><td>Glenns/Dragon vs Woodville</td><td>.135</td><td>.135</td></tr></tbody></table></div>
       <p>Bethel’s fragments run a little longer than those at the other two schools.</p></div>
-  </div>
   <div class="grid2">
     <div class="box interactive">
       <span class="ico">▦</span>
@@ -672,4 +701,3 @@ new MutationObserver(()=>{drawCount();drawHist();}).observe(document.documentEle
 })();
 </script>
 </body></html>
-<!-- build 2026-10-06 -->
