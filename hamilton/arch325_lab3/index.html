@@ -279,18 +279,6 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
       <p><b>Not:</b> <i>“There's a 99.9% chance school affects the mix.”</i> &nbsp;·&nbsp; <i>“This proves school affects the mix.”</i> &nbsp;·&nbsp; <i>“We accept H<sub>1</sub> that school affects the mix.”</i></p>
     </div>
   </div>
-  <div class="box tool"><h3>Excel and Sheets</h3>
-    <p class="muted">Every formula below works the same in both.</p>
-    <h4>Z-score</h4>
-    <p>By hand: <i>z</i> = (value − mean) ÷ SD. As a formula:</p>
-    <span class="code">=(x-mean)/sd
-=STANDARDIZE(x, mean, sd)</span>
-    <p class="muted">STANDARDIZE takes the raw value, the mean and the SD directly, so you don't have to compute the subtraction yourself.</p>
-    <h4>p-value from a z-score</h4>
-    <span class="code">Two-tailed  =2*(1-NORM.S.DIST(ABS(z),TRUE))
-Upper tail  =1-NORM.S.DIST(z,TRUE)
-Lower tail  =NORM.S.DIST(z,TRUE)</span>
-    <p class="muted">NORM.S.DIST(z, TRUE) returns the cumulative probability P(Z ≤ z) — that TRUE is what makes it the running-total curve, not the bell-curve height. Example: z = 1.96 → two-tailed p = .050; z = 2.576 → two-tailed p = .010.</p></div>
   <div class="grid2">
     <div class="box interactive">
       <span class="ico">🔔</span>
@@ -570,7 +558,7 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
       <li>Keep two schools only and re-rank them together.</li>
       <li><code>U = R₁ − n₁(n₁+1)/2</code></li>
       <li><code>z = (U − n₁n₂/2) / √(n₁n₂(n₁+n₂+1)/12)</code></li>
-      <li><span class="code">=2*(1-NORM.S.DIST(ABS(z), TRUE))</span></li>
+      <li>p-value from z<span class="code">=2*(1-NORM.S.DIST(ABS(z), TRUE))</span><span class="muted" style="display:block">NORM.S.DIST(z, TRUE) is the cumulative probability P(Z ≤ z). 1 minus it is the upper tail; times 2 gives the two-tailed p. Example: z = 1.96 → p = .050.</span></li>
       <li>Three comparisons, so adjust: multiply p by 3 (Bonferroni) or use Holm.</li></ol>
       <div class="tbl"><table><thead><tr><th>Pair</th><th>p</th><th>Holm p</th></tr></thead><tbody>
       <tr><td>Bethel vs Glenns/Dragon</td><td>.012</td><td class="pos">.036</td></tr>
