@@ -44,6 +44,7 @@ main section > .box + .box, main section > .q + .box{margin-top:20px}
 .q div{border-top:2px solid var(--line);padding-top:8px}
 .q b{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:2px}
 .tool h3{display:flex;align-items:center;gap:8px}
+.xs-link{margin:0 0 12px;padding:8px 12px;background:var(--surface);border:1px solid var(--line);border-radius:8px;font-size:14px}
 .tool h4{font:700 16px var(--body);margin:20px 0 6px;color:var(--ink)}
 .tool .diff{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:12px 0 4px}
 .tool .diff>div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 14px;min-width:0}
@@ -158,14 +159,18 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
 
 <section id="counting" data-label="What we count" role="tabpanel" hidden>
   <h2>What are we counting?</h2>
-  <p class="lede">The same data gives a different story depending on the unit of count. Switch between them and watch Bethel.</p>
+  <p class="lede">The same data gives a different story depending on the unit of count. Switch between them and watch Glenns/Dragon and Bethel move in opposite directions.</p>
   <div class="q"><div><b>Compares</b>How the unit of quantification changes a comparison</div><div><b>Example</b>Industrial share by school, counted two ways</div></div>
   <div class="row"><div class="seg" role="group" aria-label="Unit of count"><button id="u-items" aria-pressed="true">Items (Count column)</button><button id="u-lots" aria-pressed="false">Catalog lots (rows)</button></div></div>
   <div class="grid2">
     <div class="box"><h3>Industrial share of each school</h3><svg id="countChart" viewBox="0 0 420 240" width="100%" role="img" aria-label="Bar chart of industrial share by school"></svg></div>
     <div class="box"><h3>Pearson residuals, industrial row</h3><div class="tbl"><table id="countRes"></table></div><p id="countMsg" class="muted"></p></div>
   </div>
-  <div class="note"><b>Why it flips:</b> 1,197 of Glenns/Dragon’s 1,265 academic items are writing-slate fragments. Slate shatters, so one slate can become dozens of "items". Neither count is wrong. Say which one you used and why, and check whether your answer changes.</div>
+  <div class="note"><b>Why it changes:</b> a catalog lot is one row of the lab file, and its Count says how many items that row holds. Things that shatter end up as many items in one lot.
+    <ul style="margin:8px 0 8px 18px;padding:0">
+    <li><b>Glenns/Dragon</b>: 1,197 of its 1,265 academic items are writing-slate fragments, packed into just 61 lots — one row (Row Id 7818) alone holds 126. Counted by lots, its academic total shrinks from 1,265 to 128, and its industrial share jumps from 1.5% to 12.9%.</li>
+    <li><b>Bethel</b> goes the other way. Its academic finds are mostly pencils, about one per lot, so they barely shrink (781 items, 708 lots). Its industrial finds are jar glass and beads that come many to a lot (232 items, 95 lots). Its industrial share falls from 22.9% to 11.8%, now below the overall share, which rises from 17.6% to 20.2% as the slate-heavy schools shrink. That is why its residual flips sign.</li></ul>
+    Neither count is wrong. Say which one you used and why, and check whether your answer changes.</div>
 </section>
 
 <section id="descriptive" data-label="Descriptive stats" role="tabpanel" hidden>
@@ -224,6 +229,7 @@ math{font-size:1.15em;margin-block:10px;color:var(--ink)}
     <p class="muted">Use the lab-file numbers for your own tests, cite Betti’s when you quote her, and say which one a number comes from.</p>
   </div>
   <div class="box tool"><h3>Excel and Sheets</h3>
+    <p class="xs-link">Worked example: the <a href="https://docs.google.com/spreadsheets/d/1Y4jxJydJlEfNXShKLyp_aepCGJ3rzw3Y/edit?usp=sharing&amp;ouid=114752631768661136565&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener">Lab 3 analysis workbook</a> does exactly this on its <b>Table 6.7</b> and <b>Table 6.12</b> sheets.</p>
     <p class="muted">The same formulas in both. Keep the single quotes around sheet names that contain spaces.</p>
     <p>On a new sheet (call it <code>Table 6.7</code>): school names in B7, D7 and F7 (Glenns/Dragon, Woodville, Bethel — each above its Count column), each school’s excavated area in B5, D5 and F5 (331.25, 1,593.75, 312.5), and the lab file’s Form values in A9 downward (bottle, ink … writing slate/blackboard).</p><ol>
     <li>Count: type in B9, then copy to D9 and F9 and down. <code>B$7</code> picks up the school, <code>$A9</code> the form:<span class="code">=SUMIFS('Academic Education Artifacts'!$J:$J, 'Academic Education Artifacts'!$B:$B, B$7, 'Academic Education Artifacts'!$M:$M, $A9)</span></li>
@@ -313,6 +319,7 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
   <tr><td>Industrial</td><td>232</td><td>19</td><td>656</td><td>907</td></tr>
   <tr><td><b>% industrial</b></td><td class="pos">22.9%</td><td class="pos">1.5%</td><td class="pos">23.0%</td><td>17.6%</td></tr></tbody></table></div>
   <div class="box tool"><h3>Excel and Sheets</h3>
+    <p class="xs-link">Worked example: the <a href="https://docs.google.com/spreadsheets/d/1Y4jxJydJlEfNXShKLyp_aepCGJ3rzw3Y/edit?usp=sharing&amp;ouid=114752631768661136565&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener">Lab 3 analysis workbook</a> does exactly this on its <b>Cross-tab</b> sheet.</p>
     <p>Academic and industrial finds are on separate sheets, so build the table on a new sheet (call it <code>Cross-tab</code>) one row at a time. The formulas are the same in both; keep the single quotes around sheet names that contain spaces.</p><ol>
     <li>Type the school names in B1:D1, <code>Academic</code> in A2 and <code>Industrial</code> in A3.</li>
     <li>Academic row: type in B2, copy across to D2<span class="code">=SUMIFS('Academic Education Artifacts'!$J:$J, 'Academic Education Artifacts'!$B:$B, B$1)</span></li>
@@ -320,6 +327,7 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
     <li>Totals: <code>=SUM(B2:D2)</code> in E2 (copy to E3), <code>=SUM(B2:B3)</code> in B4 (copy to E4).</li>
     <li>% industrial: <code>=B3/B4</code> in B5, copy to E5, and format row 5 as a percentage.</li></ol>
     <h4>Or with two pivot tables</h4>
+    <p class="xs-link">The workbook’s <b>Pivot table method</b> sheet has these steps too, with the numbers each pivot should show.</p>
     <p>One pivot per lab sheet, then combine their results on the Cross-tab sheet.</p><ol>
     <li>On the Academic sheet, insert a pivot table. Put <code>Site</code> in Columns and <code>Count</code> in Values, summarized by SUM. With Site in Columns the three schools come out side by side, ready to drop into a row of the table; in Rows they would come out stacked in a column.</li>
     <li>Do the same on the Industrial sheet.</li>
@@ -383,6 +391,7 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
   </div>
   <div class="grid2 g-one">
     <div class="box tool"><h3>Excel and Sheets</h3>
+    <p class="xs-link">Worked example: the <a href="https://docs.google.com/spreadsheets/d/1Y4jxJydJlEfNXShKLyp_aepCGJ3rzw3Y/edit?usp=sharing&amp;ouid=114752631768661136565&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener">Lab 3 analysis workbook</a> does exactly this on its <b>Chi-square</b> sheet.</p>
       <p class="muted">The same formulas in both. On a new sheet (call it <code>Chi-square</code>):</p><ol>
       <li>Observed table in B2:E4, linked from the Cross-tab sheet: counts in B2:D3, row totals in column E, column totals in row 4. Type in B2, copy across B2:E4<span class="code">='Cross-tab'!B2</span></li>
       <li>Expected: type in B7, copy across B7:D8<span class="code">=B$4*($E2/$E$4)</span></li>
@@ -447,6 +456,7 @@ Lower tail  =NORM.S.DIST(z,TRUE)</span>
     <div class="box"><h3>Rough reading</h3><div class="tbl"><table><thead><tr><th>V</th><th>Strength</th><th>Lab example</th></tr></thead><tbody>
       <tr><td>≈ 0.1</td><td>weak</td><td></td></tr><tr><td>≈ 0.3</td><td>moderate</td><td>0.24 type × school · 0.33 type × Woodville level (A–C)</td></tr><tr><td>≥ 0.5</td><td>strong</td><td></td></tr></tbody></table></div></div>
     <div class="box tool"><h3>Excel and Sheets</h3>
+    <p class="xs-link">Worked example: the <a href="https://docs.google.com/spreadsheets/d/1Y4jxJydJlEfNXShKLyp_aepCGJ3rzw3Y/edit?usp=sharing&amp;ouid=114752631768661136565&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener">Lab 3 analysis workbook</a> does exactly this on its <b>Cramérs V</b> sheet.</p>
       <p class="muted">The same formulas in both. On a new sheet next to the Chi-square sheet:</p><ol>
       <li>χ² in B4 and N in B5, from the Chi-square sheet<span class="code">='Chi-square'!B20
 ='Chi-square'!E4</span></li>
@@ -652,7 +662,7 @@ function drawCount(){const O=DATA[unit],r=chi(O),share=SITES.map((_,j)=>O[1][j]/
   share.forEach((v,j)=>{const x=l+30+j*120,h=(v/max)*(b-top);s+=`<rect x="${x}" y="${b-h}" width="${bw}" height="${h}" rx="3" fill="${css(unit==='items'?'--ind':'--pencil')}"/><text x="${x+bw/2}" y="${b-h-6}" text-anchor="middle" font-size="13" font-weight="600">${v.toFixed(1)}%</text><text class="ax" x="${x+bw/2}" y="${b+18}" text-anchor="middle">${SITES[j]}</text>`});
   svg.innerHTML=s;
   $('#countRes').innerHTML='<thead><tr><th></th>'+SITES.map(s=>`<th>${s}</th>`).join('')+'</tr></thead><tbody><tr><td>Industrial</td>'+r.res[1].map(v=>`<td class="${rc(v)}">${v>0?'+':''}${v.toFixed(1)}</td>`).join('')+`</tr></tbody>`;
-  $('#countMsg').textContent=`χ² = ${fmt(r.x,1)}, df = 2, p ${pf(r.p)}, V = ${r.V.toFixed(2)}. `+(unit==='items'?'Counting items, Bethel has MORE industrial material than expected.':'Counting lots, Bethel has FEWER industrial lots than expected.');}
+  $('#countMsg').textContent=`χ² = ${fmt(r.x,1)}, df = 2, p ${pf(r.p)}, V = ${r.V.toFixed(2)}. `+(unit==='items'?`Counting items, Glenns/Dragon is only ${share[1].toFixed(1)}% industrial, and Bethel has MORE industrial material than expected.`:`Counting lots, Glenns/Dragon rises to ${share[1].toFixed(1)}% industrial, and Bethel has FEWER industrial lots than expected.`);}
 ['items','lots'].forEach(u=>$('#u-'+u).onclick=()=>{unit=u;$('#u-items').setAttribute('aria-pressed',u==='items');$('#u-lots').setAttribute('aria-pressed',u==='lots');drawCount();});
 
 /* χ² calculator */
