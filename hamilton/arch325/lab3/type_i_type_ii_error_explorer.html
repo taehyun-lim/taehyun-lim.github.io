@@ -1,0 +1,217 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Type I &amp; Type II Error Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#FBFCFC; --surface:#FFFFFF; --panel:#EEF2F3; --ink:#1C2428; --muted:#5D6B72; --line:#D5DDE0;
+  --slate:#26333A; --chalk:#F4F6F5; --accent:#B5652B; --accent2:#3D6F8E; --note:#FBF3E0;
+  --display:"Newsreader",Cambria,Georgia,serif; --body:"IBM Plex Sans",Calibri,"Segoe UI",Arial,sans-serif; --mono:"IBM Plex Mono","Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  color-scheme:dark; --bg:#151C20; --surface:#1C252A; --panel:#243037; --ink:#E6ECEE; --muted:#9AAAB1; --line:#34434A;
+  --slate:#0E1416; --chalk:#E6ECEE; --accent:#E0935B; --accent2:#7FB0CF; --note:#2E2A1F; } }
+:root[data-theme="dark"]{ color-scheme:dark; --bg:#151C20; --surface:#1C252A; --panel:#243037; --ink:#E6ECEE; --muted:#9AAAB1; --line:#34434A;
+  --slate:#0E1416; --chalk:#E6ECEE; --accent:#E0935B; --accent2:#7FB0CF; --note:#2E2A1F; }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body);padding-inline:16px;padding-block:0 40px}
+.wrap{max-width:860px;margin:0 auto}
+header{padding-block:28px 6px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px;font-weight:600}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(26px,4.2vw,36px);line-height:1.15;margin:0 0 8px;text-wrap:balance}
+header p{margin:0 0 4px;color:var(--muted)}
+h3{font-family:var(--display);font-weight:600;font-size:18px;margin:0 0 4px;color:var(--ink)}
+.sub{font-size:13px;color:var(--muted);margin:0 0 10px}
+.controls{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;background:var(--panel);border-radius:12px;padding:14px 16px;margin-block:18px}
+.field{display:flex;align-items:center;gap:10px;font-size:14px;flex:1 1 220px;min-width:220px}
+.field label{color:var(--muted);font-weight:600;white-space:nowrap}
+.field input[type=range]{flex:1;accent-color:var(--accent2)}
+.field .val{font:600 14px var(--mono);min-width:44px;text-align:right}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px;background:var(--surface)}
+.seg button{font:600 13px var(--body);border:0;background:transparent;color:var(--muted);padding:6px 12px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--slate);color:var(--chalk)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px 14px;margin-block:18px}
+svg{width:100%;height:auto;display:block;touch-action:none}
+.axtext{fill:var(--muted);font-size:11.5px;font-family:var(--body)}
+.stats{display:flex;flex-wrap:wrap;gap:14px;margin-block:14px}
+.stat{background:var(--panel);border-radius:10px;padding:10px 16px;min-width:120px}
+.stat span{display:block;font-size:12px;color:var(--muted)}
+.stat strong{font-family:var(--display);font-size:24px;font-variant-numeric:tabular-nums}
+.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--muted);margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:2px;display:inline-block}
+.note{background:var(--note);border-radius:10px;padding:12px 16px;margin-block:16px;font-size:14px}
+footer{margin-top:30px;font-size:13px;color:var(--muted)}
+.wrap :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hint{font-size:12.5px;color:var(--muted);margin:6px 0 0}
+</style>
+
+</head><body>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">Why "fail to reject" is not "H₀ is true"</p>
+  <h1>Type I &amp; Type II Error Explorer</h1>
+  <p>Two simplified pictures overlap, showing what the test statistic looks like if H₀ is true (blue), and what it looks like if there's a real difference of size δ (copper). Drag the threshold to trade α against β. Then raise n or δ. The line stays at the same α, and β shrinks.</p>
+</header>
+
+<div class="controls">
+  <div class="field"><label for="deltaR">Effect size δ</label><input type="range" id="deltaR" min="0" max="3" step="0.1" value="0.5"><span class="val" id="deltaVal"></span></div>
+  <div class="field"><label for="nR">Sample size n</label><input type="range" id="nR" min="4" max="100" step="1" value="10"><span class="val" id="nVal"></span></div>
+  <div class="seg" role="group" aria-label="Snap threshold to α">
+    <button id="snap05">α = .05</button>
+    <button id="snap01">α = .01</button>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>Drag the threshold</h3>
+  <p class="sub">Everything to the right of the line counts as "reject H₀"</p>
+  <svg id="svgDist" viewBox="0 0 900 320" role="img" aria-label="Overlapping distributions under H0 and H1 with a draggable decision threshold"></svg>
+  <div class="legend">
+    <span><i style="background:var(--accent2)"></i>H₀: no real difference</span>
+    <span><i style="background:var(--accent)"></i>H₁: real difference of size δ</span>
+  </div>
+  <p class="hint">Drag the dark vertical line, or use the α presets above, to move the threshold.</p>
+</div>
+
+<div class="stats" id="statBox"></div>
+<div class="note" id="readout"></div>
+
+<footer>Type I error (α): reject H₀ when it's actually true (the shaded blue tail). Type II error (β): fail to reject H₀ when H₁ is actually true (the shaded copper tail). Power (1 − β) is how often you'd correctly detect a real effect of size δ with this sample size. This is a simplified one-test picture, not the exact machinery behind χ² or Kruskal-Wallis, but the trade-off it shows (bigger n and bigger real effects both shrink β) is the same one driving every test on this site.</footer>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+function erf(x){
+  const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;
+  const sign = x<0? -1:1; x=Math.abs(x);
+  const t=1/(1+p*x);
+  const y=1-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);
+  return sign*y;
+}
+function Phi(z){ return 0.5*(1+erf(z/Math.SQRT2)); }
+function normalPdf(x,mean,sd){ return Math.exp(-0.5*Math.pow((x-mean)/sd,2))/(sd*Math.sqrt(2*Math.PI)); }
+function zForAlpha(a){ // one-tailed upper critical z for small set of alphas via bisection on Phi
+  let lo=-6, hi=6;
+  for(let i=0;i<60;i++){ const mid=(lo+hi)/2; if(Phi(mid) < 1-a) lo=mid; else hi=mid; }
+  return (lo+hi)/2;
+}
+const Z05 = zForAlpha(0.05), Z01 = zForAlpha(0.01);
+
+let delta = 0.5, n = 10;
+let zc = null; // cutoff stored in z units, so α stays fixed when n or δ changes
+let dragging=false;
+
+const W=900,H=320,PAD={l:36,r:30,t:24,b:40};
+const XMIN=-4, XMAX=6;
+function xOf(v){ return PAD.l + (v-XMIN)/(XMAX-XMIN)*(W-PAD.l-PAD.r); }
+function vOf(px){ return XMIN + (px-PAD.l)/(W-PAD.l-PAD.r)*(XMAX-XMIN); }
+function svgEl(tag,attrs){ const e=document.createElementNS('http://www.w3.org/2000/svg',tag);
+  for(const k in attrs) e.setAttribute(k,attrs[k]); return e; }
+
+function se(){ return 1/Math.sqrt(n); }
+function thr(){ return zc*se(); } // where the line sits on the x axis
+
+function initThreshold(){ zc = Z05; }
+initThreshold();
+
+function render(){
+  const svg=$('#svgDist'); svg.innerHTML='';
+  const line=css('--line'), muted=css('--muted'), ink=css('--ink'), accent=css('--accent'), accent2=css('--accent2'), surface=css('--surface');
+  const s = se();
+  const threshold = thr();
+  const peak = 1/(s*Math.sqrt(2*Math.PI));
+  const ymax = peak*1.18;
+  function yOf(p){ return H-PAD.b - (p/ymax)*(H-PAD.t-PAD.b); }
+
+  for(let v=XMIN; v<=XMAX; v++){ const gx=xOf(v);
+    svg.appendChild(svgEl('line',{x1:gx,x2:gx,y1:PAD.t,y2:H-PAD.b,stroke:line,'stroke-width':0.6}));
+    const t=svgEl('text',{x:gx,y:H-PAD.b+18,class:'axtext','text-anchor':'middle'}); t.textContent=v; svg.appendChild(t);
+  }
+  svg.appendChild(svgEl('line',{x1:PAD.l,x2:W-PAD.r,y1:H-PAD.b,y2:H-PAD.b,stroke:muted,'stroke-width':1}));
+
+  function areaPath(mean, from, to){
+    let d='M'+xOf(from).toFixed(1)+','+(H-PAD.b)+' ';
+    const steps=100;
+    for(let i=0;i<=steps;i++){ const x=from+(to-from)*i/steps; d+='L'+xOf(x).toFixed(1)+','+yOf(normalPdf(x,mean,s)).toFixed(1)+' '; }
+    d+='L'+xOf(to).toFixed(1)+','+(H-PAD.b)+' Z';
+    return d;
+  }
+  // alpha: H0 right of threshold
+  svg.appendChild(svgEl('path',{d:areaPath(0, threshold, XMAX), fill:accent2, opacity:0.32}));
+  // beta: H1 left of threshold
+  svg.appendChild(svgEl('path',{d:areaPath(delta, XMIN, threshold), fill:accent, opacity:0.32}));
+
+  function curve(mean,color){
+    let d='';
+    for(let i=0;i<=200;i++){ const x=XMIN+(XMAX-XMIN)*i/200; const px=xOf(x), py=yOf(normalPdf(x,mean,s));
+      d+=(i===0?'M':'L')+px.toFixed(1)+','+py.toFixed(1)+' '; }
+    svg.appendChild(svgEl('path',{d, fill:'none', stroke:color, 'stroke-width':2.4}));
+  }
+  curve(0, accent2);
+  curve(delta, accent);
+
+  // threshold handle
+  const tx=xOf(threshold);
+  svg.appendChild(svgEl('line',{x1:tx,x2:tx,y1:PAD.t,y2:H-PAD.b,stroke:ink,'stroke-width':2}));
+  const handle=svgEl('circle',{cx:tx,cy:PAD.t+10,r:9,fill:ink,stroke:surface,'stroke-width':2,cursor:'grab',id:'handle'});
+  svg.appendChild(handle);
+
+  const hit=svgEl('rect',{x:PAD.l,y:0,width:W-PAD.l-PAD.r,height:H,fill:'transparent',cursor:'crosshair',id:'hitrect'});
+  svg.insertBefore(hit, svg.firstChild);
+  wireInteraction(svg);
+
+  updateStats(s);
+}
+
+function updateStats(s){
+  const threshold = thr();
+  const alpha = 1-Phi(threshold/s);
+  const beta = Phi((threshold-delta)/s);
+  const power = 1-beta;
+  $('#statBox').innerHTML = [
+    ['α (Type I)', alpha<0.0001? '< .0001': alpha.toFixed(4)],
+    ['β (Type II)', beta<0.0001? '< .0001': beta.toFixed(4)],
+    ['Power (1−β)', (power*100).toFixed(1)+'%'],
+    ['n', n]
+  ].map(a=>'<div class="stat"><span>'+a[0]+'</span><strong>'+a[1]+'</strong></div>').join('');
+
+  let msg;
+  if(power<0.4) msg = 'With this n and this δ, you would miss a real effect of this size more often than not (β = '+(beta*100).toFixed(0)+'%). A "fail to reject" here says almost nothing.';
+  else if(power<0.8) msg = 'Power is climbing but still leaves real gaps. About '+(beta*100).toFixed(0)+'% of the time, a genuinely real effect of this size would still slip past this test.';
+  else msg = 'Power = '+(power*100).toFixed(0)+'%, so a real effect of this size would almost always clear this threshold. Note that α did not change. It is set by where you put the line, not by n or δ.';
+  $('#readout').innerHTML = '<b>'+msg+'</b>';
+}
+
+function fromEvent(e){
+  const svg = $('#svgDist');
+  const rect = svg.getBoundingClientRect();
+  const scaleX = W/rect.width;
+  const px = (e.clientX - rect.left)*scaleX;
+  zc = Math.max(XMIN, Math.min(XMAX, vOf(px))) / se();
+  render();
+}
+function wireInteraction(svg){ /* listeners are attached once below, not per render */ }
+// The <svg> element itself persists (only its children are rebuilt each render),
+// so pointerdown goes on it once; move/up go on window so a drag survives rebuilds.
+$('#svgDist').addEventListener('pointerdown', e=>{ dragging=true; e.preventDefault(); fromEvent(e); });
+window.addEventListener('pointermove', e=>{ if(dragging) fromEvent(e); });
+window.addEventListener('pointerup', ()=>{ dragging=false; });
+window.addEventListener('pointercancel', ()=>{ dragging=false; });
+
+$('#deltaR').addEventListener('input', e=>{ delta=parseFloat(e.target.value); $('#deltaVal').textContent=delta.toFixed(1); render(); });
+$('#nR').addEventListener('input', e=>{ n=parseInt(e.target.value,10); $('#nVal').textContent=n; render(); });
+$('#snap05').onclick=()=>{ zc = Z05; render(); };
+$('#snap01').onclick=()=>{ zc = Z01; render(); };
+
+$('#deltaVal').textContent = delta.toFixed(1);
+$('#nVal').textContent = n;
+render();
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render);
+new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+})();
+</script>
+</body></html>

@@ -1,0 +1,223 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>From Raw Values to Ranks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#FBFCFC; --surface:#FFFFFF; --panel:#EEF2F3; --ink:#1C2428; --muted:#5D6B72; --line:#D5DDE0;
+  --slate:#26333A; --chalk:#F4F6F5; --accent:#B5652B; --accent2:#3D6F8E; --note:#FBF3E0;
+  --display:"Newsreader",Cambria,Georgia,serif; --body:"IBM Plex Sans",Calibri,"Segoe UI",Arial,sans-serif; --mono:"IBM Plex Mono","Courier New",monospace;
+  --g1:#2a78d6; --g2:#eb6834; --g3:#1baf7a;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  color-scheme:dark; --bg:#151C20; --surface:#1C252A; --panel:#243037; --ink:#E6ECEE; --muted:#9AAAB1; --line:#34434A;
+  --slate:#0E1416; --chalk:#E6ECEE; --accent:#E0935B; --accent2:#7FB0CF; --note:#2E2A1F;
+  --g1:#3987e5; --g2:#d95926; --g3:#199e70; } }
+:root[data-theme="dark"]{ color-scheme:dark; --bg:#151C20; --surface:#1C252A; --panel:#243037; --ink:#E6ECEE; --muted:#9AAAB1; --line:#34434A;
+  --slate:#0E1416; --chalk:#E6ECEE; --accent:#E0935B; --accent2:#7FB0CF; --note:#2E2A1F;
+  --g1:#3987e5; --g2:#d95926; --g3:#199e70; }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body);padding-inline:16px;padding-block:0 40px}
+.wrap{max-width:840px;margin:0 auto}
+header{padding-block:28px 6px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px;font-weight:600}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(26px,4.2vw,36px);line-height:1.15;margin:0 0 8px;text-wrap:balance}
+header p{margin:0 0 4px;color:var(--muted)}
+h3{font-family:var(--display);font-weight:600;font-size:18px;margin:0 0 4px;color:var(--ink)}
+.sub{font-size:13px;color:var(--muted);margin:0 0 10px}
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;background:var(--panel);border-radius:12px;padding:14px 16px;margin-block:18px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px;background:var(--surface)}
+.seg button{font:600 13.5px var(--body);border:0;background:transparent;color:var(--muted);padding:6px 13px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--slate);color:var(--chalk)}
+.btn{font:600 13px var(--body);border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--panel)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px 14px;margin-block:18px}
+svg{width:100%;height:auto;display:block}
+.axtext{fill:var(--muted);font-size:11.5px;font-family:var(--body)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted);margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:50%;display:inline-block}
+.tbl{overflow-x:auto;margin-block:10px}
+table{border-collapse:collapse;font-variant-numeric:tabular-nums;width:100%}
+th,td{padding:7px 12px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+thead th{font-size:12.5px;color:var(--muted);font-weight:600}
+.note{background:var(--note);border-radius:10px;padding:12px 16px;margin-block:16px;font-size:14px}
+math{font-size:1.1em;margin-block:6px;color:var(--ink)}
+footer{margin-top:30px;font-size:13px;color:var(--muted)}
+.wrap :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+</head><body>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">What Kruskal-Wallis and Mann-Whitney actually run on</p>
+  <h1>From Raw Values to Ranks</h1>
+  <p>Fifteen toy fragment lengths (mm) from three schools. Neither test ever looks at these raw numbers. Both convert them to ranks first. Watch what that conversion does.</p>
+</header>
+
+<div class="controls">
+  <div class="seg" role="group" aria-label="View" id="viewSeg"></div>
+  <button class="btn" id="shuffleBtn">New random set</button>
+  <button class="btn" id="tieBtn">Force a tie</button>
+</div>
+
+<div class="panel">
+  <h3 id="panelTitle">Raw values</h3>
+  <p class="sub" id="panelSub">Plotted at their true position on the number line</p>
+  <svg id="svgLine" viewBox="0 0 900 260" role="img" aria-label="Points shown at raw values or at ranks, colored by school"></svg>
+  <div class="legend">
+    <span><i style="background:var(--g1)"></i>Bethel</span>
+    <span><i style="background:var(--g2)"></i>Glenns/Dragon</span>
+    <span><i style="background:var(--g3)"></i>Woodville</span>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>Rank sums, and the H statistic</h3>
+  <p class="sub">Once every point has a rank, Kruskal-Wallis only needs each group's rank total</p>
+  <div class="tbl"><table>
+    <thead><tr><th>School</th><th>n</th><th>Rank sum R</th><th>R² / n</th></tr></thead>
+    <tbody id="rankTbody"></tbody>
+  </table></div>
+  <math display="block" id="hFormula"></math>
+  <p class="sub" id="hNote"></p>
+</div>
+
+<div class="note" id="readout"></div>
+
+<footer>Ties get the average of the ranks they span. Two values tied for 4th and 5th place both get rank 4.5. That is why "force a tie" changes a rank sum by a fraction instead of a whole number.</footer>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const GROUPS=['Bethel','Glenns/Dragon','Woodville'];
+const GCOL=['--g1','--g2','--g3'];
+
+function freshData(){
+  return [
+    {g:0, v:4.1},{g:0, v:5.3},{g:0, v:6.0},{g:0, v:6.8},{g:0, v:9.2},
+    {g:1, v:3.0},{g:1, v:3.6},{g:1, v:5.5},{g:1, v:5.9},{g:1, v:14.0},
+    {g:2, v:4.5},{g:2, v:5.0},{g:2, v:6.2},{g:2, v:7.1},{g:2, v:8.0},
+  ];
+}
+let data = freshData();
+let view = 'raw'; // 'raw' | 'rank'
+
+function computeRanks(pts){
+  const withIdx = pts.map((p,i)=>({...p, i}));
+  const sorted = [...withIdx].sort((a,b)=>a.v-b.v);
+  const ranks = new Array(pts.length);
+  let k=0;
+  while(k<sorted.length){
+    let j=k;
+    while(j+1<sorted.length && sorted[j+1].v===sorted[k].v) j++;
+    const avgRank = (k+1+j+1)/2;
+    for(let m=k;m<=j;m++) ranks[sorted[m].i]=avgRank;
+    k=j+1;
+  }
+  return ranks;
+}
+
+const W=900,H=260,PAD={l:30,r:30,t:26,b:34};
+const XMIN=2, XMAX=16;
+function xOfValue(v){ return PAD.l + (v-XMIN)/(XMAX-XMIN)*(W-PAD.l-PAD.r); }
+function xOfRank(r,n){ return PAD.l + (r-0.5)/n*(W-PAD.l-PAD.r); }
+function svgEl(tag,attrs){ const e=document.createElementNS('http://www.w3.org/2000/svg',tag);
+  for(const k in attrs) e.setAttribute(k,attrs[k]); return e; }
+
+let animId=null;
+function render(animate){
+  const svg=$('#svgLine');
+  const line=css('--line'), muted=css('--muted'), surface=css('--surface');
+  const n=data.length;
+  const ranks = computeRanks(data);
+  const laneY = [H/2-40, H/2, H/2+40];
+
+  const targets = data.map((p,i)=> view==='raw' ? xOfValue(p.v) : xOfRank(ranks[i], n));
+
+  if(animId) cancelAnimationFrame(animId);
+  const start = (svg.dataset.xs? JSON.parse(svg.dataset.xs) : targets);
+  const t0 = performance.now();
+  function frame(now){
+    const t = Math.min(1, (now-t0)/(animate? 500:1));
+    const eased = 1-Math.pow(1-t,3);
+    const xs = start.map((sx,i)=> sx + (targets[i]-sx)*eased);
+    draw(xs, ranks, laneY, line, muted, surface);
+    if(t<1) animId = requestAnimationFrame(frame);
+    else svg.dataset.xs = JSON.stringify(targets);
+  }
+  animId = requestAnimationFrame(frame);
+
+  // panel text + table (no need to animate)
+  $('#panelTitle').textContent = view==='raw' ? 'Raw values' : 'Ranked (1 to '+n+')';
+  $('#panelSub').textContent = view==='raw' ? 'Plotted at their true position on the number line' : 'Same points, repositioned by rank order (smallest value = rank 1)';
+
+  const sums=[0,0,0], counts=[0,0,0];
+  data.forEach((p,i)=>{ sums[p.g]+=ranks[i]; counts[p.g]++; });
+  $('#rankTbody').innerHTML = GROUPS.map((name,gi)=>
+    '<tr><td>'+name+'</td><td>'+counts[gi]+'</td><td>'+sums[gi].toFixed(1)+'</td><td>'+((sums[gi]*sums[gi])/counts[gi]).toFixed(1)+'</td></tr>'
+  ).join('');
+
+  const N=n;
+  const sumRsqOverN = sums.reduce((a,s,gi)=>a+(s*s)/counts[gi],0);
+  const H_stat = (12/(N*(N+1)))*sumRsqOverN - 3*(N+1);
+  $('#hFormula').innerHTML = '<mi>H</mi><mo>=</mo><mfrac><mn>12</mn><mrow><mi>N</mi><mo>(</mo><mi>N</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow></mfrac><munder><mo>&#x2211;</mo><mi>j</mi></munder><mfrac><msubsup><mi>R</mi><mi>j</mi><mn>2</mn></msubsup><msub><mi>n</mi><mi>j</mi></msub></mfrac><mo>&#x2212;</mo><mn>3</mn><mo>(</mo><mi>N</mi><mo>+</mo><mn>1</mn><mo>)</mo><mo>=</mo><mn>'+H_stat.toFixed(2)+'</mn>';
+  $('#hNote').textContent = 'df = (number of groups) − 1 = 2. Compare H = '+H_stat.toFixed(2)+' against a χ² distribution with df = 2, the same reference distribution the χ² Builder tool draws.';
+  const big = data.reduce((m,p,i)=> p.v>data[m].v ? i : m, 0);
+  const bigV = data[big].v.toFixed(1), bigR = ranks[big], bigG = GROUPS[data[big].g];
+  $('#readout').innerHTML = view==='raw'
+    ? '<b>These are the raw values.</b> '+bigG+' has one huge fragment ('+bigV+' mm) that would dominate any test that used raw values directly.'
+    : '<b>Ranked, that '+bigV+' mm fragment is just "rank '+bigR+'."</b> It still counts as the largest, but it can no longer drag a mean or a sum around by sheer size, only by rank position.';
+}
+
+function draw(xs, ranks, laneY, line, muted, surface){
+  const svg=$('#svgLine'); svg.innerHTML='';
+  const axisY = H/2;
+  if(view==='raw'){
+    for(let v=XMIN; v<=XMAX; v+=2){ const gx=xOfValue(v);
+      svg.appendChild(svgEl('line',{x1:gx,x2:gx,y1:PAD.t,y2:H-PAD.b,stroke:line,'stroke-width':0.6}));
+      const t=svgEl('text',{x:gx,y:H-PAD.b+16,class:'axtext','text-anchor':'middle'}); t.textContent=v; svg.appendChild(t);
+    }
+  } else {
+    const n=data.length;
+    for(let r=1; r<=n; r++){ const gx=xOfRank(r,n);
+      const t=svgEl('text',{x:gx,y:H-PAD.b+16,class:'axtext','text-anchor':'middle'}); t.textContent=r; svg.appendChild(t);
+    }
+  }
+  svg.appendChild(svgEl('line',{x1:PAD.l,x2:W-PAD.r,y1:axisY,y2:axisY,stroke:muted,'stroke-width':1}));
+  data.forEach((p,i)=>{
+    const y = laneY[p.g];
+    const col = css(GCOL[p.g]);
+    svg.appendChild(svgEl('line',{x1:xs[i],x2:xs[i],y1:axisY,y2:y,stroke:col,'stroke-width':1,opacity:0.35}));
+    svg.appendChild(svgEl('circle',{cx:xs[i],cy:y,r:9,fill:col,stroke:surface,'stroke-width':1.6,opacity:0.92}));
+  });
+}
+
+const seg=$('#viewSeg');
+[['raw','Raw values'],['rank','Ranked']].forEach(([key,label])=>{
+  const b=document.createElement('button'); b.textContent=label; b.dataset.key=key;
+  b.setAttribute('aria-pressed', String(key===view));
+  b.onclick=()=>{ view=key; [...seg.children].forEach(x=>x.setAttribute('aria-pressed', String(x.dataset.key===view))); render(true); };
+  seg.appendChild(b);
+});
+
+$('#shuffleBtn').onclick=()=>{
+  data = freshData().map(p=>({...p, v: Math.min(XMAX, Math.max(XMIN, Math.round((p.v + (Math.random()*4-2))*10)/10)) }));
+  $('#svgLine').removeAttribute('data-xs');
+  render(false);
+};
+$('#tieBtn').onclick=()=>{
+  data[7].v = data[1].v; // force a tie ACROSS two different groups (Bethel & Glenns/Dragon), so the fractional rank actually shows up in the group sums
+  $('#svgLine').removeAttribute('data-xs');
+  render(true);
+};
+
+render(false);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ()=>render(false));
+new MutationObserver(()=>render(false)).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+})();
+</script>
+</body></html>
