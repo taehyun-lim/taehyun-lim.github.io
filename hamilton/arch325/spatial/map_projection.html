@@ -1,0 +1,2297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Map Projection Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #F1F4F5; --panel: #FFFFFF; --ink: #1B2836; --ink-2: #546676; --rule: #D2DADF; --rule-2: #E4E9EC;
+  --accent: #A3195B; --accent-ink: #FFFFFF; --accent-soft: #F5E3EC; --grid: rgba(27,40,54,0.06);
+  --map-edge: #1B2836;
+  --t-area: #1F6F6B; --t-conf: #2B5C9E; --t-comp: #5D6873; --t-dist: #7A6420; --t-pers: #6B4C8A;
+  --font: "IBM Plex Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --display: "Fraunces", Georgia, "Times New Roman", serif;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #121D27; --panel: #182633; --ink: #E3EAF0; --ink-2: #9CAEBD; --rule: #2B3B4A; --rule-2: #223241;
+    --accent: #E06A9F; --accent-ink: #1A0D14; --accent-soft: #3A2132; --grid: rgba(227,234,240,0.05);
+    --map-edge: #DCE5EC;
+    --t-area: #6FC4BE; --t-conf: #8DB4EA; --t-comp: #A9B4BE; --t-dist: #D7BE6E; --t-pers: #BFA2DD;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #121D27; --panel: #182633; --ink: #E3EAF0; --ink-2: #9CAEBD; --rule: #2B3B4A; --rule-2: #223241;
+  --accent: #E06A9F; --accent-ink: #1A0D14; --accent-soft: #3A2132; --grid: rgba(227,234,240,0.05);
+  --map-edge: #DCE5EC;
+  --t-area: #6FC4BE; --t-conf: #8DB4EA; --t-comp: #A9B4BE; --t-dist: #D7BE6E; --t-pers: #BFA2DD;
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+html, body { margin: 0; }
+body { background: var(--paper); color: var(--ink); font: 400 14px/1.55 var(--font); -webkit-font-smoothing: antialiased; }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+[hidden] { display: none !important; }
+h1, h2, h3 { text-wrap: balance; }
+
+.app { display: grid; grid-template-columns: 296px minmax(0, 1fr); min-height: 100vh; }
+aside { border-right: 1px solid var(--rule); background: var(--panel); padding: 22px 14px 28px 18px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.brand { margin: 0 4px 16px; }
+.brand h1 { font: 650 23px/1.2 var(--display); letter-spacing: -0.01em; margin: 0 0 4px; }
+.brand p { margin: 0; color: var(--ink-2); font-size: 12.5px; line-height: 1.5; }
+.fam { margin-top: 14px; }
+.fam h3 { font-size: 12.5px; font-weight: 600; color: var(--ink-2); margin: 0 6px 4px; }
+.proj { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 2px 8px; width: 100%; border: 0; background: none; text-align: left; padding: 5px 8px 5px 10px; border-radius: 4px; cursor: pointer; border-left: 3px solid transparent; }
+.proj:hover { background: var(--rule-2); }
+.proj[aria-pressed="true"] { background: var(--accent-soft); border-left-color: var(--accent); }
+.proj[aria-pressed="true"] .pname { font-weight: 600; }
+.pname { font-size: 14px; }
+.tags { display: inline-flex; gap: 3px; flex-wrap: wrap; }
+.tag { font-size: 11px; line-height: 1; padding: 3px 5px; border-radius: 3px; border: 1px solid currentColor; color: var(--t-comp); white-space: nowrap; }
+.t-area { color: var(--t-area); } .t-conf { color: var(--t-conf); } .t-comp { color: var(--t-comp); } .t-dist { color: var(--t-dist); } .t-pers { color: var(--t-pers); }
+.t-int { color: var(--ink-2); border-style: dashed; }
+
+main { padding: 16px 26px 32px; min-width: 0; }
+.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--rule); margin-bottom: 16px; overflow-x: auto; }
+.tabs button { border: 0; background: none; padding: 9px 14px 8px; font-size: 14px; color: var(--ink-2); border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; white-space: nowrap; }
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--accent); }
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 12px; min-height: 34px; }
+.toolbar .grow { flex: 1; }
+.field-inline { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); }
+select { background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: 6px 28px 6px 10px; color: var(--ink); -webkit-appearance: none; appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink-2) 50%), linear-gradient(135deg, var(--ink-2) 50%, transparent 50%);
+  background-position: calc(100% - 15px) 52%, calc(100% - 10px) 52%; background-size: 5px 5px; background-repeat: no-repeat; }
+.btn { border: 1px solid var(--rule); background: var(--panel); border-radius: 4px; padding: 6px 12px; cursor: pointer; font-size: 13px; }
+.btn:hover { border-color: var(--ink-2); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.stage { position: relative; display: flex; justify-content: center; align-items: center; padding: 18px; border: 1px solid var(--rule); border-radius: 6px;
+  background-color: var(--panel);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px; background-position: -1px -1px; min-height: 280px; }
+#map, #vec { display: block; cursor: grab; touch-action: none; max-width: 100%; }
+#map.grabbing, #vec.grabbing { cursor: grabbing; }
+#vec { background: #FFFFFF; border-radius: 2px; box-shadow: 0 0 0 1px rgba(27,40,54,0.08); }
+#vec svg { display: block; width: 100%; height: 100%; }
+.loading { position: absolute; top: 12px; left: 14px; font-size: 12.5px; color: var(--ink-2); background: var(--panel); padding: 2px 8px; border-radius: 3px; border: 1px solid var(--rule); }
+.probe { position: absolute; right: 12px; bottom: 12px; background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: 6px 10px; font-size: 12.5px;
+  display: grid; grid-template-columns: auto auto; column-gap: 10px; row-gap: 1px; pointer-events: none; font-variant-numeric: tabular-nums; box-shadow: 0 2px 8px rgba(20,30,40,0.08); }
+.probe dt { color: var(--ink-2); } .probe dd { margin: 0; text-align: right; font-weight: 500; }
+.probe .place { grid-column: 1 / -1; font-weight: 600; text-align: left; }
+.probe .place:empty { display: none; }
+.hint { color: var(--ink-2); font-size: 12.5px; margin: 8px 2px 0; }
+.note { margin: 10px 0 0; padding: 8px 12px; border-left: 3px solid var(--accent); background: var(--accent-soft); font-size: 13px; border-radius: 0 4px 4px 0; }
+.legend { margin: 10px 2px 0; max-width: 520px; }
+.legend-bar { height: 10px; border-radius: 2px; border: 1px solid var(--rule); }
+.legend-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-2); margin-top: 3px; }
+
+.info { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px 32px; margin: 22px 2px 6px; align-items: start; }
+.info h2 { font: 650 28px/1.15 var(--display); margin: 0 0 6px; letter-spacing: -0.015em; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.info h2 .tags { font-family: var(--font); }
+.info h2 .tag { font-size: 12px; padding: 3px 6px; }
+.info p { margin: 0; max-width: 64ch; }
+.info .who { color: var(--ink-2); font-size: 13px; margin-top: 4px; }
+.analysis { display: grid; gap: 10px; min-width: 300px; }
+.stats { display: grid; grid-template-columns: auto auto; column-gap: 16px; row-gap: 3px; font-size: 13px; margin: 0; font-variant-numeric: tabular-nums; }
+.stats dt { color: var(--ink-2); } .stats dd { margin: 0; font-weight: 600; text-align: right; }
+.hist { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.hist figure { margin: 0; }
+.hist figcaption { font-size: 12px; color: var(--ink-2); margin-bottom: 2px; }
+.hist svg { display: block; width: 100%; height: 64px; }
+.cap { font-size: 12px; color: var(--ink-2); max-width: 40ch; margin: 0; line-height: 1.5; }
+
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; margin-top: 18px; }
+fieldset { border: 1px solid var(--rule); border-radius: 6px; padding: 12px 16px 14px; margin: 0; background: var(--panel); min-width: 0; }
+legend { font-weight: 600; font-size: 14px; padding: 0 6px; margin-left: -6px; }
+.slider { display: grid; grid-template-columns: 7em minmax(0, 1fr) 58px; align-items: center; gap: 10px; margin: 6px 0; font-size: 13px; }
+.slider label { color: var(--ink-2); }
+.slider output { text-align: right; font-variant-numeric: tabular-nums; }
+input[type="range"] { width: 100%; accent-color: var(--accent); }
+input[type="color"] { width: 34px; height: 26px; padding: 0 2px; border: 1px solid var(--rule); border-radius: 4px; background: var(--panel); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.chip { border: 1px solid var(--rule); background: transparent; border-radius: 999px; padding: 3px 11px; font-size: 12.5px; cursor: pointer; }
+.chip:hover { border-color: var(--accent); color: var(--accent); }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 5px; overflow: hidden; margin: 4px 0 10px; }
+.seg label { position: relative; }
+.seg input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.seg span { display: block; padding: 5px 12px; font-size: 13px; border-right: 1px solid var(--rule); white-space: nowrap; }
+.seg label:last-child span { border-right: 0; }
+.seg input:checked + span { background: var(--ink); color: var(--panel); }
+.seg input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: -2px; }
+.check { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 13.5px; }
+.check input[type="checkbox"] { accent-color: var(--accent); width: 16px; height: 16px; margin: 0; }
+.check select { padding: 3px 26px 3px 8px; font-size: 13px; }
+.row { display: flex; align-items: center; gap: 10px; margin: 6px 0; font-size: 13.5px; flex-wrap: wrap; }
+.row > label { color: var(--ink-2); min-width: 7em; }
+.sub { color: var(--ink-2); font-size: 12.5px; margin: 6px 0 0; }
+.opt { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--rule); }
+.opt h4 { margin: 0 0 4px; font-size: 13px; }
+.progress { height: 4px; background: var(--rule-2); border-radius: 2px; overflow: hidden; margin-top: 8px; }
+.progress > div { height: 100%; width: 0; background: var(--accent); }
+
+.panel h2 { font: 650 26px/1.2 var(--display); margin: 4px 0 6px; }
+.panel > p { max-width: 70ch; margin: 0 0 12px; }
+.plot { border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); padding: 10px; margin-top: 12px; position: relative; }
+.plot svg { display: block; width: 100%; height: auto; }
+.plot .dot { cursor: pointer; }
+.plot .tip { position: absolute; pointer-events: none; background: var(--panel); border: 1px solid var(--rule); padding: 4px 8px; border-radius: 4px; font-size: 12.5px; box-shadow: 0 2px 8px rgba(20,30,40,0.1); }
+table { border-collapse: collapse; width: 100%; font-size: 13px; margin-top: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--rule-2); }
+th { color: var(--ink-2); font-weight: 600; }
+td.num, th.num { text-align: right; }
+tbody tr { cursor: pointer; }
+tbody tr:hover { background: var(--rule-2); }
+.filelist { list-style: none; padding: 0; margin: 10px 0; font-size: 13px; }
+.filelist li { padding: 4px 0; border-bottom: 1px solid var(--rule-2); display: flex; justify-content: space-between; gap: 12px; }
+.filelist .muted { color: var(--ink-2); }
+
+footer { margin: 28px 2px 0; padding-top: 14px; border-top: 1px solid var(--rule); color: var(--ink-2); font-size: 12.5px; max-width: 86ch; }
+footer p { margin: 0 0 4px; }
+footer a { color: inherit; }
+footer details.license { margin-top: 8px; }
+footer details.license summary { cursor: pointer; }
+footer details.license p { margin: 6px 0 0; font-size: 12px; line-height: 1.5; }
+
+@media (max-width: 860px) {
+  .app { grid-template-columns: 1fr; }
+  aside { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--rule); padding: 16px 14px 10px; }
+  #proj-list { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; }
+  .fam { margin-top: 0; flex: 0 0 auto; display: flex; gap: 4px; }
+  .fam h3 { display: none; }
+  .proj { width: auto; flex-direction: column; align-items: flex-start; border: 1px solid var(--rule); }
+  .proj[aria-pressed="true"] { border-color: var(--accent); }
+  .pname { white-space: nowrap; }
+  main { padding: 10px 12px 28px; }
+  .stage { padding: 10px; min-height: 0; }
+  .info { grid-template-columns: 1fr; }
+  .analysis { min-width: 0; }
+  .info h2 { font-size: 23px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside aria-label="Projections">
+    <div class="brand">
+      <h1>Map Projection Designer</h1>
+      <p>Pick a projection and an aspect, and unroll the globe onto a plane.</p>
+    </div>
+    <nav id="proj-list"></nav>
+  </aside>
+
+  <main>
+    <div class="tabs" role="tablist" aria-label="Tools">
+      <button type="button" role="tab" id="tab-raster" aria-selected="true" aria-controls="panel-work">Raster map</button>
+      <button type="button" role="tab" id="tab-vector" aria-selected="false" aria-controls="panel-work">Vector map</button>
+      <button type="button" role="tab" id="tab-compare" aria-selected="false" aria-controls="panel-compare">Compare all</button>
+      <button type="button" role="tab" id="tab-batch" aria-selected="false" aria-controls="panel-batch">Batch convert</button>
+    </div>
+
+    <section id="panel-work" role="tabpanel">
+      <div class="toolbar">
+        <label class="field-inline raster-only" for="style">Base map
+          <select id="style">
+            <option value="political">Countries</option>
+            <option value="land">Land and sea</option>
+            <option value="test">Checkerboard (for distortion)</option>
+            <option value="upload">My image…</option>
+          </select>
+        </label>
+        <button type="button" class="btn raster-only" id="open-image">Open map image</button>
+        <input type="file" id="file" accept="image/*" hidden>
+        <span class="grow"></span>
+        <button type="button" class="btn primary" id="save" hidden>Save PNG</button>
+      </div>
+
+      <div class="stage" id="stage">
+        <canvas id="map" tabindex="0" aria-label="Projected world map. Drag it, or use the arrow keys, to move the map centre."></canvas>
+        <div id="vec" tabindex="0" role="img" aria-label="Vector world map preview. Drag it, or use the arrow keys, to move the map centre." hidden></div>
+        <div class="loading" id="loading">Loading world map data</div>
+        <dl class="probe" id="probe" hidden>
+          <dd class="place" id="probe-place"></dd>
+          <dt>Position</dt><dd id="probe-pos"></dd>
+          <dt>Area scale</dt><dd id="probe-area"></dd>
+          <dt>Angular distortion</dt><dd id="probe-angle"></dd>
+        </dl>
+      </div>
+      <p class="hint">Drag the map to move its centre. Click the map first to use the arrow keys.</p>
+      <p class="note" id="note" hidden></p>
+      <div class="legend raster-only" id="legend" hidden>
+        <div class="legend-bar" id="legend-bar"></div>
+        <div class="legend-labels"><span id="legend-lo"></span><span id="legend-mid"></span><span id="legend-hi"></span></div>
+      </div>
+
+      <section class="info" aria-live="polite">
+        <div>
+          <h2><span id="info-name"></span><span class="tags" id="info-tags"></span></h2>
+          <p id="info-note"></p>
+          <p class="who" id="info-who"></p>
+        </div>
+        <div class="analysis raster-only">
+          <dl class="stats">
+            <dt>Area spread</dt><dd id="stat-area">–</dd>
+            <dt>Area distortion (RMS)</dt><dd id="stat-rms">–</dd>
+            <dt>Mean angular distortion</dt><dd id="stat-angle">–</dd>
+            <dt>Share of globe shown</dt><dd id="stat-cover">–</dd>
+          </dl>
+          <div class="hist">
+            <figure><figcaption>Area scale, ×1/8 to ×8</figcaption><svg id="hist-area" viewBox="0 0 200 64" preserveAspectRatio="none" aria-hidden="true"></svg></figure>
+            <figure><figcaption>Angular distortion, 0° to 90°</figcaption><svg id="hist-angle" viewBox="0 0 200 64" preserveAspectRatio="none" aria-hidden="true"></svg></figure>
+          </div>
+          <p class="cap">Area spread is the ratio between the most inflated and most shrunken areas, ignoring the top and bottom 5%. The histograms weight every point by its area on the globe.</p>
+        </div>
+      </section>
+
+      <div class="controls">
+        <fieldset>
+          <legend>Aspect</legend>
+          <div class="slider"><label for="a-lat">Centre lat</label><input type="range" id="a-lat" min="-90" max="90" step="0.5"><output for="a-lat"></output></div>
+          <div class="slider"><label for="a-lon">Centre lon</label><input type="range" id="a-lon" min="-180" max="180" step="0.5"><output for="a-lon"></output></div>
+          <div class="slider"><label for="a-rot">Rotation</label><input type="range" id="a-rot" min="-180" max="180" step="0.5"><output for="a-rot"></output></div>
+          <div class="chips">
+            <button type="button" class="chip" data-preset="normal">Normal</button>
+            <button type="button" class="chip" data-preset="transverse">Transverse</button>
+            <button type="button" class="chip" data-preset="pacific">Pacific-centred</button>
+            <button type="button" class="chip" data-preset="seoul">Seoul-centred</button>
+            <button type="button" class="chip" data-preset="nemo">Point Nemo</button>
+            <button type="button" class="chip" data-preset="upside">Upside down</button>
+          </div>
+        </fieldset>
+
+        <fieldset class="raster-only">
+          <legend>View</legend>
+          <div class="seg" role="radiogroup" aria-label="View mode">
+            <label><input type="radio" name="mode" value="map" checked><span>Map</span></label>
+            <label><input type="radio" name="mode" value="area"><span>Area</span></label>
+            <label><input type="radio" name="mode" value="angle"><span>Angles</span></label>
+          </div>
+          <label class="check"><input type="checkbox" id="o-grat" checked> Graticule
+            <select id="o-step" aria-label="Graticule spacing"><option value="10">every 10°</option><option value="15" selected>every 15°</option><option value="30">every 30°</option></select>
+          </label>
+          <label class="check"><input type="checkbox" id="o-tissot"> Tissot’s indicatrices (11° circles)</label>
+          <p class="sub">Tissot’s indicatrices are identical circles on the globe. Watch how they grow or squash on the map to see the distortion.</p>
+        </fieldset>
+
+        <fieldset class="vector-only" hidden>
+          <legend>Layers</legend>
+          <label class="check"><input type="checkbox" id="v-coast" checked> Coastlines and borders</label>
+          <label class="check"><input type="checkbox" id="v-grat" checked> Graticule
+            <select id="v-step" aria-label="Graticule spacing"><option value="10">every 10°</option><option value="15" selected>every 15°</option><option value="30">every 30°</option></select>
+          </label>
+          <label class="check"><input type="checkbox" id="v-edge" checked> Map edge</label>
+          <label class="check"><input type="checkbox" id="v-tissot"> Tissot’s indicatrices</label>
+          <label class="check"><input type="checkbox" id="v-ocean" checked> Fill the ocean</label>
+          <label class="check"><input type="checkbox" id="v-land"> Fill countries</label>
+          <div class="slider"><label for="v-stroke">Line width</label><input type="range" id="v-stroke" min="0.2" max="3" step="0.1" value="0.8"><output for="v-stroke">0.8 px</output></div>
+          <p class="sub">Countries cut by the map’s edge are drawn as outlines only, so they stay accurate for cutting plotters.</p>
+        </fieldset>
+
+        <fieldset id="params-wrap" hidden>
+          <legend>Projection settings</legend>
+          <div id="params"></div>
+          <div class="opt" id="opt-box" hidden>
+            <h4>Optimise parameters</h4>
+            <div class="slider"><label for="opt-w">Priority</label><input type="range" id="opt-w" min="0" max="1" step="0.05" value="0.5" aria-describedby="opt-w-desc"><output for="opt-w" id="opt-w-out">Balanced</output></div>
+            <p class="sub" id="opt-w-desc">Left favours true shapes, right favours true areas.</p>
+            <div class="row"><button type="button" class="btn" id="opt-run">Find best parameters</button><span id="opt-status" class="sub" aria-live="polite"></span></div>
+            <div class="progress" id="opt-prog" hidden><div></div></div>
+          </div>
+        </fieldset>
+
+        <fieldset class="raster-only">
+          <legend>Output</legend>
+          <div class="row"><label for="x-width">Image width</label>
+            <select id="x-width"><option value="1200">1,200 px</option><option value="2400" selected>2,400 px</option><option value="3600">3,600 px</option></select></div>
+          <label class="check"><input type="checkbox" id="x-aa" checked> Smooth edges (supersampling)</label>
+          <div class="row"><label for="x-gcolor">Graticule colour</label><input type="color" id="x-gcolor" value="#22303c"></div>
+          <div class="slider"><label for="x-gwidth">Graticule width</label><input type="range" id="x-gwidth" min="1" max="4" step="1" value="1"><output for="x-gwidth">1 px</output></div>
+          <p class="sub">Graticule width is measured at 1,200 px and scales with the image.</p>
+        </fieldset>
+      </div>
+    </section>
+
+    <section id="panel-compare" class="panel" role="tabpanel" hidden>
+      <h2>Compare all projections</h2>
+      <p>Every projection is measured with its default settings, the same way the analysis panel measures the current one. Maps toward the bottom left keep both areas and shapes more truthful. Projections that show only part of the globe are drawn as hollow circles and measured over the part they show.</p>
+      <div class="row"><button type="button" class="btn primary" id="cmp-run">Measure all projections</button><span class="sub" id="cmp-status" aria-live="polite"></span></div>
+      <div class="progress" id="cmp-prog" hidden><div></div></div>
+      <div class="plot" id="cmp-plot" hidden><svg id="cmp-svg" viewBox="0 0 760 460" role="img" aria-label="Scatter plot of area distortion against angular distortion"></svg><div class="tip" id="cmp-tip" hidden></div></div>
+      <table id="cmp-table" hidden>
+        <thead><tr><th>Projection</th><th>Family</th><th class="num">Area distortion (RMS log₂)</th><th class="num">Mean angular distortion</th><th class="num">Globe shown</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="panel-batch" class="panel" role="tabpanel" hidden>
+      <h2>Batch convert</h2>
+      <p>Reproject many equirectangular (2:1) images at once with the current projection, aspect and output settings, then save them together as a ZIP file.</p>
+      <p class="sub" id="batch-summary"></p>
+      <div class="row"><button type="button" class="btn" id="batch-pick">Choose images</button><input type="file" id="batch-files" accept="image/*" multiple hidden>
+        <button type="button" class="btn primary" id="batch-run" disabled>Convert and save ZIP</button><span class="sub" id="batch-status" aria-live="polite"></span></div>
+      <div class="progress" id="batch-prog" hidden><div></div></div>
+      <ul class="filelist" id="batch-list"></ul>
+    </section>
+
+    <footer>
+      <p>A from-scratch browser reimplementation of <a href="https://github.com/jkunimune/Map-Projections" target="_blank" rel="noopener">Map-Projections</a> by Justin Kunimune (MIT license): Map Designer (raster and vector), Map Analyzer, Map Plotter, Map Optimizer and Map Converter.</p>
+      <p>Borders come from Natural Earth 1:110m data (public domain), via Datamaps 0.5.9 (MIT license). The TetraPower projection follows Kunimune’s published AuthaGraph formulas (CC BY 4.0). AuthaGraph is the work of Hajime Narukawa and AuthaGraph Co., Ltd.; this page is not affiliated with them.</p>
+      <details class="license" open>
+        <summary>License notice for Map-Projections</summary>
+        <p>MIT License</p>
+        <p>Copyright (c) 2023 Justin Kunimune</p>
+        <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+        <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+        <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+      </details>
+    </footer>
+  </main>
+</div>
+<script>
+/* ---------------------------------------------------------------
+ * Map projection maths.
+ * Every projection provides an inverse inv(x, y, o, params):
+ *   (x, y)  plane coordinates (globe radius 1)
+ *   o[0..2] unit vector in the "centre frame" (x axis = map centre, y = map right, z = map up)
+ *   returns true when (x, y) lies on the map.
+ * An aspect rotation then carries the centre frame to geographic coordinates.
+ * Forward projection is done numerically from the inverse (see app.js), so every
+ * projection automatically supports vector output.
+ * --------------------------------------------------------------- */
+const PI = Math.PI, HALF_PI = PI / 2, SQRT2 = Math.SQRT2;
+const { sin, cos, tan, asin, acos, atan, atan2, sqrt, abs, exp, log } = Math;
+
+function fromLatLon(phi, lam, o) {
+  const c = cos(phi);
+  o[0] = c * cos(lam); o[1] = c * sin(lam); o[2] = sin(phi);
+  return true;
+}
+function clampUnit(v) { return v > 1 ? 1 : v < -1 ? -1 : v; }
+
+/* ---------- Azimuthal family ---------- */
+function azimuthal(cFromRho, rhoMax) {
+  return function (x, y, o) {
+    const rho = sqrt(x * x + y * y);
+    if (rho > rhoMax) return false;
+    if (rho < 1e-12) { o[0] = 1; o[1] = 0; o[2] = 0; return true; }
+    const c = cFromRho(rho);
+    if (c !== c) return false;
+    const s = sin(c) / rho;
+    o[0] = cos(c); o[1] = x * s; o[2] = y * s;
+    return true;
+  };
+}
+
+/* ---------- Jacobi elliptic functions, parameter m = 1/2 (lemniscatic case) ---------- */
+const M_HALF = 0.5;
+const K_HALF = 1.8540746773013719; // K(1/√2)
+const AGM = (function () {
+  const a = [1], c = [sqrt(M_HALF)];
+  let b = sqrt(1 - M_HALF), n = 0;
+  while (abs(c[n]) > 1e-13 && n < 16) {
+    a[n + 1] = (a[n] + b) / 2; c[n + 1] = (a[n] - b) / 2; b = sqrt(a[n] * b); n++;
+  }
+  return { a, c, n, scale: Math.pow(2, n) * a[n] };
+})();
+const ellOut = new Float64Array(3);
+function ellipjHalf(u) { // sn, cn, dn (m = 1/2)
+  const a = AGM.a, c = AGM.c, n = AGM.n;
+  let ph = AGM.scale * u;
+  for (let i = n; i > 0; i--) ph = (ph + asin(c[i] * sin(ph) / a[i])) / 2;
+  const s = sin(ph);
+  ellOut[0] = s; ellOut[1] = cos(ph); ellOut[2] = sqrt(1 - M_HALF * s * s);
+  return ellOut;
+}
+/* Fast version for rendering: one period (4K) tabulated and linearly interpolated (error ~1e-8). */
+const ELL_N = 16384, ELL_P = 4 * K_HALF, ELL_H = ELL_P / ELL_N;
+const ELL_T = (function () {
+  const t = new Float64Array(3 * (ELL_N + 1));
+  for (let i = 0; i <= ELL_N; i++) { const r = ellipjHalf(i * ELL_H); t[3 * i] = r[0]; t[3 * i + 1] = r[1]; t[3 * i + 2] = r[2]; }
+  return t;
+})();
+function ellipjFast(u) {
+  let v = u / ELL_H; v -= Math.floor(v / ELL_N) * ELL_N;
+  if (!(v < ELL_N)) v = 0; // a tiny negative value can round up to exactly one period
+  const i = v | 0, f = v - i, a = 3 * i, b = a + 3, g = 1 - f;
+  ellOut[0] = ELL_T[a] * g + ELL_T[b] * f; ellOut[1] = ELL_T[a + 1] * g + ELL_T[b + 1] * f; ellOut[2] = ELL_T[a + 2] * g + ELL_T[b + 2] * f;
+  return ellOut;
+}
+/* ζ = sn(u)/(1+cn(u)), u = ur + i·ui, m = m' = 1/2.
+ * ζ is the stereographic coordinate with the map centre as its pole; the unit vector goes to o. */
+function zetaToVector(ur, ui, o, rot) {
+  let r = ellipjFast(ur); const s = r[0], c = r[1], d = r[2];
+  r = ellipjFast(ui); const s1 = r[0], c1 = r[1], d1 = r[2];
+  const delta = c1 * c1 + M_HALF * s * s * s1 * s1;
+  // sn = (s d1 + i c d s1 c1)/δ,  cn = (c c1 − i s d s1 d1)/δ
+  const snR = s * d1, snI = c * d * s1 * c1;
+  const dnR = delta + c * c1, dnI = -s * d * s1 * d1;
+  const den = dnR * dnR + dnI * dnI;
+  if (!(den > 1e-300)) return false;
+  let p = (snR * dnR + snI * dnI) / den, q = (snI * dnR - snR * dnI) / den;
+  if (rot) { const pr = (p - q) * Math.SQRT1_2, qr = (p + q) * Math.SQRT1_2; p = pr; q = qr; }
+  const r2 = p * p + q * q, k = 1 / (1 + r2);
+  if (!isFinite(r2)) return false;
+  o[0] = (1 - r2) * k; o[1] = 2 * p * k; o[2] = 2 * q * k;
+  return true;
+}
+
+/* ---------- Robinson table ---------- */
+const ROB_X = [1, 0.9986, 0.9954, 0.99, 0.9822, 0.973, 0.96, 0.9427, 0.9216, 0.8962, 0.8679, 0.835, 0.7986, 0.7597, 0.7186, 0.6732, 0.6213, 0.5722, 0.5322];
+const ROB_Y = [0, 0.062, 0.124, 0.186, 0.248, 0.31, 0.372, 0.434, 0.4958, 0.5571, 0.6176, 0.6769, 0.7346, 0.7903, 0.8435, 0.8936, 0.9394, 0.9761, 1];
+
+/* ---------- Winkel tripel forward (used in tests) ---------- */
+const WINKEL_C = 2 / PI; // cos φ1, φ1 = acos(2/π)
+function winkelFwd(phi, lam, out) {
+  const cp = cos(phi), ch = cos(lam / 2);
+  const alpha = acos(clampUnit(cp * ch));
+  const sincInv = alpha > 1e-12 ? alpha / sin(alpha) : 1;
+  out[0] = 0.5 * (lam * WINKEL_C + 2 * cp * sin(lam / 2) * sincInv);
+  out[1] = 0.5 * (phi + sin(phi) * sincInv);
+}
+/* ---------- Goode homolosine ---------- */
+const GOODE_PHI_T = 0.7109889316;     // 40°44'11.8"
+const GOODE_Y_T = 0.7109889316;
+const GOODE_DY = 0.0528035274542;
+const GOODE_N = [[-PI, -40 * PI / 180, -100 * PI / 180], [-40 * PI / 180, PI, 30 * PI / 180]];
+const GOODE_S = [[-PI, -100 * PI / 180, -160 * PI / 180], [-100 * PI / 180, -20 * PI / 180, -60 * PI / 180],
+                 [-20 * PI / 180, 80 * PI / 180, 20 * PI / 180], [80 * PI / 180, PI, 140 * PI / 180]];
+function goodeInv(x, y, o) {
+  const ay = abs(y);
+  let phi, cosFactor, mollT = 0, moll = false;
+  if (ay <= GOODE_Y_T) { phi = y; cosFactor = cos(phi); }
+  else {
+    const ym = ay + GOODE_DY;
+    if (ym > SQRT2) return false;
+    const th = asin(ym / SQRT2);
+    phi = asin(clampUnit((2 * th + sin(2 * th)) / PI)) * (y < 0 ? -1 : 1);
+    moll = true; mollT = th;
+  }
+  const lobes = y >= 0 ? GOODE_N : GOODE_S;
+  for (let i = 0; i < lobes.length; i++) {
+    const [l0, l1, lc] = lobes[i];
+    const xc = lc; // x of the lobe’s central meridian (x = λ on the equator)
+    let dl;
+    if (!moll) { if (cosFactor < 1e-12) continue; dl = (x - xc) / cosFactor; }
+    else { dl = PI * (x - xc) / (2 * SQRT2 * cos(mollT)); }
+    const lam = lc + dl;
+    if (lam >= l0 - 1e-12 && lam <= l1 + 1e-12) return fromLatLon(phi, lam, o);
+  }
+  return false;
+}
+
+/* ---------- Albers equal-area conic ---------- */
+function albersSetup(p) {
+  const s1 = sin(p.p1 * PI / 180), s2 = sin(p.p2 * PI / 180);
+  let n = (s1 + s2) / 2;
+  if (abs(n) < 1e-3) n = n < 0 ? -1e-3 : 1e-3;
+  const C = 1 + s1 * (2 * n - s1);
+  const r0 = sqrt(C) / n;
+  return { n, C, r0 };
+}
+function albersFwd(k, phi, lam) {
+  const r = sqrt(Math.max(0, k.C - 2 * k.n * sin(phi))) / k.n, t = k.n * lam;
+  return [r * sin(t), k.r0 - r * cos(t)];
+}
+
+
+/* ---------- Lenticular family: x = a·λ·c1 + b·Aitoff_x, y = a·φ + b·Aitoff_y (Newton, analytic Jacobian) ---------- */
+function makeLenticularInv(a, b, c1) {
+  let lp = 0, ll = 0, ok = false;
+  return function (x, y, o) {
+    let phi, lam;
+    if (ok) { phi = lp; lam = ll; } else { phi = y * 0.9; lam = x / (a * c1 + b * 0.9 + 1e-9) * 0.9; }
+    if (lam > PI) lam = PI; else if (lam < -PI) lam = -PI;
+    if (phi > HALF_PI) phi = HALF_PI; else if (phi < -HALF_PI) phi = -HALF_PI;
+    ok = false;
+    for (let it = 0; it < 40; it++) {
+      const cp = cos(phi), sp = sin(phi), s2p = sin(2 * phi), sp2 = sp * sp, cp2 = cp * cp;
+      const sl = sin(lam), cl2 = cos(lam / 2), sl2 = sin(lam / 2), sl22 = sl2 * sl2;
+      const C = 1 - cp2 * cl2 * cl2;
+      let F = 0, E = 1;
+      if (C > 1e-15) { F = 1 / C; E = acos(clampUnit(cp * cl2)) * sqrt(F); }
+      const xa = 2 * E * cp * sl2, ya = E * sp;
+      const fx = a * lam * c1 + b * xa - x, fy = a * phi + b * ya - y;
+      if (abs(fx) < 1e-10 && abs(fy) < 1e-10) { ok = true; break; }
+      const dxadl = F * (cp2 * sl22 + E * cp * cl2 * sp2), dxadp = 2 * F * (sl * s2p / 4 - E * sp * sl2);
+      const dyadl = 0.25 * F * (s2p * sl2 - E * sp * cp2 * sl), dyadp = F * (sp2 * cl2 + E * sl22 * cp);
+      const dxdl = a * c1 + b * dxadl, dxdp = b * dxadp, dydl = b * dyadl, dydp = a + b * dyadp;
+      const den = dxdp * dydl - dydp * dxdl;
+      if (abs(den) < 1e-14) break;
+      let dl = (fy * dxdp - fx * dydp) / den, dp = (fx * dydl - fy * dxdl) / den;
+      const m = Math.max(abs(dp), abs(dl));
+      if (m > 0.5) { dp *= 0.5 / m; dl *= 0.5 / m; }
+      lam -= dl; phi -= dp;
+      if (phi > HALF_PI) phi = HALF_PI; else if (phi < -HALF_PI) phi = -HALF_PI;
+    }
+    if (!ok || abs(lam) > PI + 1e-9) { ok = false; return false; }
+    lp = phi; ll = lam;
+    return fromLatLon(phi, lam, o);
+  };
+}
+function lenticularFwd(a, b, c1, phi, lam) {
+  const cp = cos(phi), al = acos(clampUnit(cp * cos(lam / 2))), E = al > 1e-12 ? al / sin(al) : 1;
+  return [a * lam * c1 + b * 2 * E * cp * sin(lam / 2), a * phi + b * E * sin(phi)];
+}
+
+/* ---------- Conic helpers ---------- */
+function conicBounds(fwd, phiMin, phiMax) {
+  let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+  for (let i = 0; i <= 120; i++) for (let j = 0; j <= 120; j++) {
+    const xy = fwd(phiMin + (phiMax - phiMin) * i / 120, -PI + 2 * PI * j / 120);
+    if (!isFinite(xy[0]) || !isFinite(xy[1])) continue;
+    if (xy[0] < x0) x0 = xy[0]; if (xy[0] > x1) x1 = xy[0]; if (xy[1] < y0) y0 = xy[1]; if (xy[1] > y1) y1 = xy[1];
+  }
+  const pad = 0.015 * Math.max(x1 - x0, y1 - y0);
+  return [x0 - pad, x1 + pad, y0 - pad, y1 + pad];
+}
+function polarFromConic(x, y, n, r0) {
+  const sg = n < 0 ? -1 : 1, dy = r0 - y;
+  return [sg * sqrt(x * x + dy * dy), atan2(x * sg, dy * sg) / n];
+}
+function lccSetup(p) {
+  const f1 = p.p1 * PI / 180, f2 = p.p2 * PI / 180;
+  let n = abs(f1 - f2) < 1e-6 ? sin(f1) : log(cos(f1) / cos(f2)) / log(tan(PI / 4 + f2 / 2) / tan(PI / 4 + f1 / 2));
+  if (abs(n) < 0.02) n = n < 0 ? -0.02 : 0.02;
+  const F = cos(f1) * Math.pow(tan(PI / 4 + f1 / 2), n) / n;
+  return { n, F, r0: F, cut: (n > 0 ? -1 : 1) * 70 * PI / 180 };
+}
+function lccFwd(k, phi, lam) {
+  if (k.n > 0 ? phi < k.cut : phi > k.cut) return [NaN, NaN];
+  const r = k.F / Math.pow(tan(PI / 4 + phi / 2), k.n), t = k.n * lam;
+  return [r * sin(t), k.r0 - r * cos(t)];
+}
+function eqdcSetup(p) {
+  const f1 = p.p1 * PI / 180, f2 = p.p2 * PI / 180;
+  let n = abs(f1 - f2) < 1e-6 ? sin(f1) : (cos(f1) - cos(f2)) / (f2 - f1);
+  if (abs(n) < 0.02) n = n < 0 ? -0.02 : 0.02;
+  const G = cos(f1) / n + f1;
+  return { n, G, r0: G };
+}
+function eqdcFwd(k, phi, lam) { const r = k.G - phi, t = k.n * lam; return [r * sin(t), k.r0 - r * cos(t)]; }
+
+/* ---------- Tobler hyperelliptical (equal-area) ---------- */
+function toblerSetup(p) {
+  const N = 2048, a = p.alpha, k = p.k, g = p.gamma;
+  const gy = (y) => a + (1 - a) * Math.pow(Math.max(0, 1 - Math.pow(abs(y) / g, k)), 1 / k);
+  const G = new Float64Array(N + 1);
+  const h = g / N;
+  for (let i = 1; i <= N; i++) {
+    const y0 = (i - 1) * h, y1 = i * h;
+    G[i] = G[i - 1] + h / 6 * (gy(y0) + 4 * gy((y0 + y1) / 2) + gy(y1));
+  }
+  return { N, h, G, gy, gamma: g, total: G[N] };
+}
+
+/* ---------- Van der Grinten ---------- */
+function vdgFwd(phi, lam) {
+  if (abs(phi) < 1e-12) return [lam, 0];
+  const th = asin(Math.min(1, abs(2 * phi / PI)));
+  if (abs(lam) < 1e-12 || abs(abs(phi) - HALF_PI) < 1e-12) return [0, (phi < 0 ? -1 : 1) * PI * tan(th / 2)];
+  const A = 0.5 * abs(PI / lam - lam / PI), G = cos(th) / (sin(th) + cos(th) - 1), P = G * (2 / sin(th) - 1), Q = A * A + G;
+  const P2 = P * P, A2 = A * A;
+  const x = PI * (A * (G - P2) + sqrt(Math.max(0, A2 * (G - P2) * (G - P2) - (P2 + A2) * (G * G - P2)))) / (P2 + A2);
+  const y = PI * (P * Q - A * sqrt(Math.max(0, (A2 + 1) * (P2 + A2) - Q * Q))) / (P2 + A2);
+  return [x * (lam < 0 ? -1 : 1), y * (phi < 0 ? -1 : 1)];
+}
+function vdgInv(x, y, o) {
+  const X = x / PI, Y = y / PI, r2 = X * X + Y * Y;
+  if (r2 > 1) return false;
+  let phi;
+  if (abs(Y) < 1e-12) phi = 0;
+  else {
+    const c1 = -abs(Y) * (1 + r2), c2 = c1 - 2 * Y * Y + X * X, c3 = -2 * c1 + 1 + 2 * Y * Y + r2 * r2;
+    const d = Y * Y / c3 + (2 * c2 * c2 * c2 / (c3 * c3 * c3) - 9 * c1 * c2 / (c3 * c3)) / 27;
+    const a1 = (c1 - c2 * c2 / (3 * c3)) / c3, m1 = 2 * sqrt(Math.max(0, -a1 / 3));
+    const t1 = acos(clampUnit(3 * d / (a1 * m1))) / 3;
+    phi = (y < 0 ? -1 : 1) * PI * (-m1 * cos(t1 + PI / 3) - c2 / (3 * c3));
+  }
+  const lam = abs(X) < 1e-12 ? 0 : PI * (r2 - 1 + sqrt(1 + 2 * (X * X - Y * Y) + r2 * r2)) / (2 * X);
+  if (abs(lam) > PI + 1e-9) return false;
+  return fromLatLon(Math.max(-HALF_PI, Math.min(HALF_PI, phi)), lam, o);
+}
+
+/* ---------- Polyhedral nets ---------- */
+function vnorm(v) { const n = sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]); return [v[0] / n, v[1] / n, v[2] / n]; }
+function vll(latDeg, lonDeg) { const p = latDeg * PI / 180, l = lonDeg * PI / 180; return [cos(p) * cos(l), cos(p) * sin(l), sin(p)]; }
+// Unfold faces along a tree: entries [faceIndex, parentFaceIndex] (root has parent −1). Each face = [i, j, k] vertex indices.
+function unfoldNet(faces, tree, verts) {
+  const pos = {}; // faceIndex -> {vertexIndex: [x, y]}
+  tree.forEach(([f, par]) => {
+    const F = faces[f];
+    if (par < 0) {
+      // keep the net's handedness consistent with the outside of the solid (no mirroring)
+      const A = verts[F[0]], B = verts[F[1]], C = verts[F[2]];
+      const u = [B[0] - A[0], B[1] - A[1], B[2] - A[2]], w = [C[0] - A[0], C[1] - A[1], C[2] - A[2]];
+      const nrm = [u[1] * w[2] - u[2] * w[1], u[2] * w[0] - u[0] * w[2], u[0] * w[1] - u[1] * w[0]];
+      const sgn = nrm[0] * (A[0] + B[0] + C[0]) + nrm[1] * (A[1] + B[1] + C[1]) + nrm[2] * (A[2] + B[2] + C[2]) > 0 ? 1 : -1;
+      pos[f] = { [F[0]]: [0, 0], [F[1]]: [1, 0], [F[2]]: [0.5, sgn * sqrt(3) / 2] }; return;
+    }
+    const P = faces[par], shared = F.filter((v) => P.includes(v));
+    const third = F.find((v) => !P.includes(v)), pThird = P.find((v) => !F.includes(v));
+    const a = pos[par][shared[0]], b = pos[par][shared[1]], c = pos[par][pThird];
+    const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, ex = b[0] - a[0], ey = b[1] - a[1], L = sqrt(ex * ex + ey * ey);
+    let nx = -ey / L, ny = ex / L;
+    if ((c[0] - mx) * nx + (c[1] - my) * ny > 0) { nx = -nx; ny = -ny; }
+    const hgt = L * sqrt(3) / 2;
+    pos[f] = { [shared[0]]: a, [shared[1]]: b, [third]: [mx + nx * hgt, my + ny * hgt] };
+  });
+  return faces.map((F, f) => ({ face: F, pts: F.map((v) => pos[f][v]) }));
+}
+function transformNet(net, rot, scale) {
+  const c = cos(rot), s = sin(rot);
+  let cx = 0, cy = 0, n = 0;
+  net.forEach((t) => t.pts.forEach((p) => { cx += p[0]; cy += p[1]; n++; }));
+  cx /= n; cy /= n;
+  net.forEach((t) => { t.pts = t.pts.map((p) => { const x = p[0] - cx, y = p[1] - cy; return [(c * x - s * y) * scale, (s * x + c * y) * scale]; }); });
+  return net;
+}
+function netBounds(net, pad) {
+  let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+  net.forEach((t) => t.pts.forEach((p) => { x0 = Math.min(x0, p[0]); x1 = Math.max(x1, p[0]); y0 = Math.min(y0, p[1]); y1 = Math.max(y1, p[1]); }));
+  const d = pad * Math.max(x1 - x0, y1 - y0);
+  return [x0 - d, x1 + d, y0 - d, y1 + d];
+}
+// Prepare barycentric data for fast point-in-triangle tests.
+function prepNet(net, verts) {
+  return net.map((t) => {
+    const [a, b, c] = t.pts;
+    const det = (b[1] - c[1]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[1] - c[1]);
+    return { a, b, c, det, V: t.face.map((i) => verts[i]),
+      bx0: Math.min(a[0], b[0], c[0]) - 1e-9, bx1: Math.max(a[0], b[0], c[0]) + 1e-9,
+      by0: Math.min(a[1], b[1], c[1]) - 1e-9, by1: Math.max(a[1], b[1], c[1]) + 1e-9 };
+  });
+}
+function findTri(tris, x, y, out) {
+  for (let i = 0; i < tris.length; i++) {
+    const t = tris[i];
+    if (x < t.bx0 || x > t.bx1 || y < t.by0 || y > t.by1) continue;
+    const l1 = ((t.b[1] - t.c[1]) * (x - t.c[0]) + (t.c[0] - t.b[0]) * (y - t.c[1])) / t.det;
+    const l2 = ((t.c[1] - t.a[1]) * (x - t.c[0]) + (t.a[0] - t.c[0]) * (y - t.c[1])) / t.det;
+    const l3 = 1 - l1 - l2;
+    if (l1 >= -1e-9 && l2 >= -1e-9 && l3 >= -1e-9) { out[0] = l1; out[1] = l2; out[2] = l3; return t; }
+  }
+  return null;
+}
+function gnomonicPoly(tris) {
+  const bc = new Float64Array(3);
+  return function (x, y, o) {
+    const t = findTri(tris, x, y, bc); if (!t) return false;
+    const [A, B, C] = t.V;
+    const v = vnorm([bc[0] * A[0] + bc[1] * B[0] + bc[2] * C[0], bc[0] * A[1] + bc[1] * B[1] + bc[2] * C[1], bc[0] * A[2] + bc[1] * B[2] + bc[2] * C[2]]);
+    o[0] = v[0]; o[1] = v[1]; o[2] = v[2];
+    return true;
+  };
+}
+
+// Octahedron (Cahill-style butterfly)
+const OCTA = (function () {
+  const V = [[0, 0, 1], [0, 0, -1], [1, 0, 0], [0, 1, 0], [-1, 0, 0], [0, -1, 0]]; // N, S, E0, E90, E180, E270
+  const E = (k) => 2 + (k % 4);
+  const faces = [];
+  for (let k = 0; k < 4; k++) faces.push([0, E(k), E(k + 1)]);   // 0..3 north
+  for (let k = 0; k < 4; k++) faces.push([1, E(k + 1), E(k)]);   // 4..7 south
+  const tree = [[0, -1], [1, 0], [2, 1], [3, 0], [4, 0], [5, 1], [6, 2], [7, 3]];
+  let net = unfoldNet(faces, tree, V);
+  // rotate so the 120° gap at the north pole points up
+  const np = net[0].pts[0];
+  let mx = 0, my = 0;
+  for (let k = 0; k < 4; k++) { const t = net[k]; mx += (t.pts[1][0] + t.pts[2][0]) / 2 - np[0]; my += (t.pts[1][1] + t.pts[2][1]) / 2 - np[1]; }
+  const ang = -HALF_PI - atan2(my, mx);
+  net = transformNet(net, ang, 2);
+  return { V, net, tris: prepNet(net, V), bounds: netBounds(net, 0.01) };
+})();
+
+// Icosahedron (strip net)
+const ICOSA = (function () {
+  const lat = atan(0.5) * 180 / PI;
+  const V = [[0, 0, 1], [0, 0, -1]];
+  for (let k = 0; k < 5; k++) V.push(vll(lat, 72 * k));        // U_k: 2..6
+  for (let k = 0; k < 5; k++) V.push(vll(-lat, 36 + 72 * k));  // L_k: 7..11
+  const U = (k) => 2 + (k % 5), L = (k) => 7 + (k % 5);
+  const faces = [], tree = [];
+  // D_k = (U_k, U_k+1, L_k) index 4k, P_k = (L_k, L_k+1, U_k+1) index 4k+1, T_k = (N, U_k, U_k+1) 4k+2, B_k = (S, L_k+1, L_k) 4k+3
+  for (let k = 0; k < 5; k++) { faces.push([U(k), U(k + 1), L(k)], [L(k), L(k + 1), U(k + 1)], [0, U(k), U(k + 1)], [1, L(k + 1), L(k)]); }
+  for (let k = 0; k < 5; k++) {
+    tree.push([4 * k, k === 0 ? -1 : 4 * (k - 1) + 1]);
+    tree.push([4 * k + 1, 4 * k]); tree.push([4 * k + 2, 4 * k]); tree.push([4 * k + 3, 4 * k + 1]);
+  }
+  let net = unfoldNet(faces, tree, V);
+  const a = net[0].pts[0], b = net[0].pts[1]; // U0 -> U1 along the band: make it horizontal
+  net = transformNet(net, -atan2(b[1] - a[1], b[0] - a[0]), 1);
+  return { V, net, tris: prepNet(net, V), bounds: netBounds(net, 0.01) };
+})();
+
+/* ---------- Tetrahedral, vertex-centred (Kunimune's AuthaGraph approximation, 2017) ----------
+ * θ = atan(√12/π · (λ − asin(sin λ / √3))), r = ρ(c, λ) · √3 sec θ, where c is the distance from the nearest vertex.
+ * ρ = (c / atan(√2 sec λ))^p (power law, p = 0.68 for AuthaGraph) or the authalic √((1 − cos c)/(1 − cos c_max)). */
+const TETRA = (function () {
+  const t = -asin(1 / 3) * 180 / PI;
+  const V = [[0, 0, 1], vll(t, 0), vll(t, 120), vll(t, -120)];
+  const e = 2 * sqrt(3), h = 3; // edge length and height in formula units
+  // Rectangle net 2e × h. Vertex labels: A=1, B=0, C=3, D=2
+  const A = 1, B = 0, C = 3, D = 2;
+  const P = { A0: [0, 0], A1: [2 * e, 0], B: [e, 0], C: [e / 2, h], D: [3 * e / 2, h], Cr: [5 * e / 2, h], Dl: [-e / 2, h] };
+  const net = [
+    { face: [A, B, C], pts: [P.A0, P.B, P.C] },
+    { face: [C, D, B], pts: [P.C, P.D, P.B] },
+    { face: [B, A, D], pts: [P.B, P.A1, P.D] },
+    { face: [D, C, A], pts: [P.D, P.Cr, P.A1] },
+    { face: [D, C, A], pts: [P.Dl, P.C, P.A0] },
+  ].map((f) => { f.pts = f.pts.map((p) => [p[0] - e, p[1] - h / 2]); return f; });
+  return { V, net, tris: prepNet(net, V), bounds: [-e, e, -h / 2, h / 2], e };
+})();
+function tetraThetaInv(th) { // solve tanθ·π/√12 = λ − asin(sin λ/√3) for λ ∈ [0, π/3]
+  const target = tan(th) * PI / sqrt(12);
+  let l = 2 * th;
+  for (let i = 0; i < 20; i++) {
+    const sl = sin(l), f = l - asin(sl / sqrt(3)) - target;
+    const fp = 1 - cos(l) / (sqrt(3) * sqrt(1 - sl * sl / 3));
+    const d = f / fp; l -= d;
+    if (abs(d) < 1e-12) break;
+  }
+  return Math.max(0, Math.min(PI / 3, l));
+}
+function makeTetraInv(authalic) {
+  const bc = new Float64Array(3);
+  return function (x, y, o, p) {
+    const T = TETRA, b = T.bounds;
+    if (x < b[0] || x > b[1] || y < b[2] || y > b[3]) return false;
+    const t = findTri(T.tris, x, y, bc); if (!t) return false;
+    // nearest of the triangle's three corners in the plane
+    const pts = [t.a, t.b, t.c];
+    let vi = 0, best = Infinity;
+    for (let i = 0; i < 3; i++) { const dx = x - pts[i][0], dy = y - pts[i][1], d = dx * dx + dy * dy; if (d < best) { best = d; vi = i; } }
+    const pv = pts[vi], p1 = pts[(vi + 1) % 3], p2 = pts[(vi + 2) % 3];
+    const V0 = t.V[vi], V1 = t.V[(vi + 1) % 3], V2 = t.V[(vi + 2) % 3];
+    const dx = x - pv[0], dy = y - pv[1], r = sqrt(best);
+    const a1 = atan2(p1[1] - pv[1], p1[0] - pv[0]), ap = atan2(dy, dx);
+    let alpha = ap - a1; while (alpha > PI) alpha -= 2 * PI; while (alpha < -PI) alpha += 2 * PI;
+    alpha = abs(alpha); // 0 at edge V→V1, 60° at edge V→V2
+    let th, Ve;
+    if (alpha <= PI / 6) { th = alpha; Ve = V1; } else { th = Math.min(PI / 6, PI / 3 - alpha); Ve = V2; }
+    const lam = tetraThetaInv(th);
+    const rho = Math.min(1, r / (sqrt(3) / cos(th)));
+    const cmaxT = sqrt(2) / cos(lam);
+    let c;
+    if (authalic) c = acos(clampUnit(1 - rho * rho * (1 - 1 / sqrt(1 + cmaxT * cmaxT))));
+    else c = Math.pow(rho, 1 / p.power) * atan(cmaxT);
+    // tangent frame at V0: e1 toward the edge vertex, n toward the face centre
+    const dot = (u, v) => u[0] * v[0] + u[1] * v[1] + u[2] * v[2];
+    const tang = (w) => { const k = dot(w, V0); return vnorm([w[0] - k * V0[0], w[1] - k * V0[1], w[2] - k * V0[2]]); };
+    const e1 = tang(Ve);
+    const fc = tang(vnorm([V0[0] + V1[0] + V2[0], V0[1] + V1[1] + V2[1], V0[2] + V1[2] + V2[2]]));
+    const k = dot(fc, e1), n = vnorm([fc[0] - k * e1[0], fc[1] - k * e1[1], fc[2] - k * e1[2]]);
+    const cl = cos(lam), sl = sin(lam), cc = cos(c), sc = sin(c);
+    for (let i = 0; i < 3; i++) o[i] = cc * V0[i] + sc * (cl * e1[i] + sl * n[i]);
+    return true;
+  };
+}
+
+/* ---------- Two-point equidistant (two foci on the centre-frame equator, separated by d) ---------- */
+function twoPointInv(x, y, o, p) {
+  const d = p.d * PI / 180, h = d / 2;
+  const r1 = sqrt((x + h) * (x + h) + y * y), r2 = sqrt((x - h) * (x - h) + y * y);
+  if (r1 + r2 > 2 * PI - d + 1e-12) return false;
+  const cd = cos(d), s2 = 1 - cd * cd;
+  const a = (cos(r1) - cd * cos(r2)) / s2, b = (cos(r2) - cd * cos(r1)) / s2;
+  const g2 = 1 - (a * a + b * b + 2 * a * b * cd);
+  const g = (y < 0 ? -1 : 1) * sqrt(Math.max(0, g2));
+  // A = (cos h, −sin h, 0), B = (cos h, sin h, 0), N = (0, 0, 1)
+  o[0] = (a + b) * cos(h); o[1] = (b - a) * sin(h); o[2] = g;
+  return true;
+}
+
+/* ---------- Vertical perspective ---------- */
+function perspectiveC(rho, P) {
+  const q = 1 - rho * rho * (P + 1) / (P - 1);
+  if (q < 0) return NaN;
+  if (rho < 1e-12) return 0;
+  const s = (P - sqrt(q)) / ((P - 1) / rho + rho / (P - 1));
+  return asin(clampUnit(s));
+}
+
+/* ---------- Projection table ---------- */
+const GUYOU_TMP = new Float64Array(3);
+const NORMAL = [0, 0, 0], POLAR = [90, 0, 0];
+const deg = (v) => v * PI / 180;
+const cache = (p, key, make) => p[key] || (p[key] = make(p));
+
+// Puts the tetrahedron vertex at the bottom middle of the rectangle at 77°N 143°E, where Kunimune located
+// the AuthaGraph's polar singularity, with the North Pole inside that vertex's region rather than on a cut.
+const TETRA_ASPECT = [-13, 143, 0];
+
+const PROJECTIONS = [
+  /* Cylindrical */
+  { key: 'equirect', name: 'Equirectangular', family: 'Cylindrical', tags: ['Equidistant'], aspect: NORMAL,
+    note: 'Latitude and longitude used directly as y and x. Distances along every meridian are true. With a 0° standard parallel it is the plate carrée.', who: 'Antiquity, attributed to Marinus of Tyre',
+    params: [{ key: 'std', label: 'Std. parallel', min: 0, max: 70, step: 0.5, value: 0, unit: '°', opt: true }],
+    bounds: (p) => { const c = cos(deg(p.std)); return [-PI * c, PI * c, -HALF_PI, HALF_PI]; },
+    inv: (x, y, o, p) => { const c = cos(deg(p.std)), lam = x / c; return (abs(y) > HALF_PI || abs(lam) > PI) ? false : fromLatLon(y, lam, o); } },
+  { key: 'mercator', name: 'Mercator', family: 'Cylindrical', tags: ['Conformal'], aspect: NORMAL, partial: true,
+    note: 'Preserves angles, so rhumb lines (constant-bearing courses) are straight. Areas balloon toward the poles; the map is cut at about 85°.', who: '1569, Gerardus Mercator',
+    bounds: () => [-PI, PI, -PI, PI],
+    inv: (x, y, o) => fromLatLon(2 * atan(exp(y)) - HALF_PI, x, o) },
+  { key: 'gallster', name: 'Gall Stereographic', family: 'Cylindrical', tags: ['Compromise'], aspect: NORMAL,
+    note: 'A cylinder cutting the globe at 45°, projected from the antipode of each meridian. A long-lived compromise between Mercator and equal-area maps.', who: '1855, James Gall',
+    bounds: () => { const k = 1 + SQRT2 / 2; return [-PI / SQRT2, PI / SQRT2, -k, k]; },
+    inv: (x, y, o) => { const k = 1 + SQRT2 / 2, lam = x * SQRT2; if (abs(y) > k || abs(lam) > PI) return false; return fromLatLon(2 * atan(y / k), lam, o); } },
+  { key: 'central', name: 'Central Cylindrical', family: 'Cylindrical', tags: ['Perspective'], aspect: NORMAL, partial: true,
+    note: 'Perspective from the centre of the globe onto a cylinder. Great circles through the cylinder’s axis are straight. Cut at 70°.', who: 'Uncertain',
+    bounds: () => [-PI, PI, -tan(deg(70)), tan(deg(70))],
+    inv: (x, y, o) => fromLatLon(atan(y), x, o) },
+  { key: 'cea', name: 'Gall–Peters', family: 'Cylindrical', tags: ['Equal-area'], aspect: NORMAL,
+    note: 'A cylindrical equal-area projection. A standard parallel of 0° gives Lambert, 30° Behrmann, 37.5° Hobo–Dyer and 45° Gall–Peters.', who: '1855, James Gall; 1973, Arno Peters',
+    params: [{ key: 'std', label: 'Std. parallel', min: 0, max: 70, step: 0.5, value: 45, unit: '°', opt: true }],
+    presets: [['Lambert', { std: 0 }], ['Behrmann', { std: 30 }], ['Hobo–Dyer', { std: 37.5 }], ['Gall–Peters', { std: 45 }]],
+    bounds: (p) => { const c = cos(deg(p.std)); return [-PI * c, PI * c, -1 / c, 1 / c]; },
+    inv: (x, y, o, p) => { const c = cos(deg(p.std)); const s = y * c; if (abs(s) > 1) return false; const lam = x / c; if (abs(lam) > PI) return false; return fromLatLon(asin(s), lam, o); } },
+  { key: 'miller', name: 'Miller', family: 'Cylindrical', tags: ['Compromise'], aspect: NORMAL,
+    note: 'A Mercator squashed north–south so that the poles fit on the map.', who: '1942, Osborn Miller',
+    bounds: () => { const y = 1.25 * log(tan(PI / 4 + 0.4 * HALF_PI)); return [-PI, PI, -y, y]; },
+    inv: (x, y, o) => fromLatLon(2.5 * atan(exp(0.8 * y)) - 0.625 * PI, x, o) },
+
+  /* Pseudocylindrical */
+  { key: 'sinusoidal', name: 'Sinusoidal', family: 'Pseudocylindrical', tags: ['Equal-area'], aspect: NORMAL,
+    note: 'Every parallel has its true length, and shapes are good near the central meridian.', who: 'In use since the 16th century; also called Sanson–Flamsteed',
+    bounds: () => [-PI, PI, -HALF_PI, HALF_PI],
+    inv: (x, y, o) => { if (abs(y) > HALF_PI) return false; const c = cos(y); if (c < 1e-12) return false; const lam = x / c; return abs(lam) > PI ? false : fromLatLon(y, lam, o); } },
+  { key: 'mollweide', name: 'Mollweide', family: 'Pseudocylindrical', tags: ['Equal-area'], aspect: NORMAL,
+    note: 'Fits the whole world into a 2:1 ellipse with true areas. Common for thematic maps.', who: '1805, Karl Mollweide',
+    bounds: () => [-2 * SQRT2, 2 * SQRT2, -SQRT2, SQRT2],
+    inv: (x, y, o) => { if (abs(y) > SQRT2) return false; const t = asin(y / SQRT2), ct = cos(t); const lam = ct > 1e-12 ? PI * x / (2 * SQRT2 * ct) : 0; if (abs(lam) > PI) return false; return fromLatLon(asin(clampUnit((2 * t + sin(2 * t)) / PI)), lam, o); } },
+  { key: 'tobler', name: 'Tobler Hyperelliptical', family: 'Pseudocylindrical', tags: ['Equal-area'], aspect: NORMAL,
+    note: 'A family of equal-area maps whose outline is a superellipse |x|ᵏ + |y|ᵏ = γᵏ blended with a rectangle. It includes Mollweide (α = 0, k = 2, γ = √2) and the cylindrical equal-area maps (α = 1). A good playground for the optimiser.', who: '1973, Waldo Tobler',
+    params: [{ key: 'alpha', label: 'α (blend)', min: 0, max: 1, step: 0.01, value: 0, unit: '', opt: true },
+             { key: 'k', label: 'k (shape)', min: 1, max: 6, step: 0.05, value: 2.5, unit: '', opt: true },
+             { key: 'gamma', label: 'γ (height)', min: 0.6, max: 2.4, step: 0.01, value: 1.18, unit: '', opt: true }],
+    bounds: (p) => { const T = cache(p, '_tob', toblerSetup); return [-PI / T.total, PI / T.total, -T.gamma, T.gamma]; },
+    inv: (x, y, o, p) => {
+      const T = cache(p, '_tob', toblerSetup), ay = abs(y);
+      if (ay > T.gamma) return false;
+      const u = ay / T.h, i = Math.min(T.N - 1, u | 0), f = u - i;
+      const Gv = T.G[i] + (T.G[i + 1] - T.G[i]) * f, g = T.gy(ay);
+      if (g < 1e-9) return false;
+      const lam = x * T.total / g; if (abs(lam) > PI) return false;
+      return fromLatLon(asin(clampUnit(Gv / T.total)) * (y < 0 ? -1 : 1), lam, o);
+    } },
+  { key: 'eckert4', name: 'Eckert IV', family: 'Pseudocylindrical', tags: ['Equal-area'], aspect: NORMAL,
+    note: 'Equal-area, with poles drawn as lines half the length of the equator and semicircular sides.', who: '1906, Max Eckert',
+    bounds: () => { const cx = 2 / sqrt(PI * (4 + PI)), cy = 2 * sqrt(PI / (4 + PI)); return [-2 * cx * PI, 2 * cx * PI, -cy, cy]; },
+    inv: (x, y, o) => { const cx = 2 / sqrt(PI * (4 + PI)), cy = 2 * sqrt(PI / (4 + PI)); if (abs(y) > cy) return false; const t = asin(y / cy); const lam = x / (cx * (1 + cos(t))); if (abs(lam) > PI) return false; return fromLatLon(asin(clampUnit((t + sin(t) * cos(t) + 2 * sin(t)) / (2 + HALF_PI))), lam, o); } },
+  { key: 'equalearth', name: 'Equal Earth', family: 'Pseudocylindrical', tags: ['Equal-area'], aspect: NORMAL,
+    note: 'A recent design that looks like Robinson but keeps areas exact.', who: '2018, Šavrič, Patterson and Jenny',
+    bounds: () => { const A1 = 1.340264, A2 = -0.081106, A3 = 0.000893, A4 = 0.003796, M = sqrt(3) / 2; const l = PI / 3, l2 = l * l, l6 = l2 * l2 * l2; return [-PI / (M * A1), PI / (M * A1), -l * (A1 + A2 * l2 + l6 * (A3 + A4 * l2)), l * (A1 + A2 * l2 + l6 * (A3 + A4 * l2))]; },
+    inv: (x, y, o) => {
+      const A1 = 1.340264, A2 = -0.081106, A3 = 0.000893, A4 = 0.003796, M = sqrt(3) / 2;
+      if (abs(y) > 1.3173627591574133) return false;
+      let l = y, l2 = l * l, l6 = l2 * l2 * l2;
+      for (let i = 0; i < 12; i++) { const fy = l * (A1 + A2 * l2 + l6 * (A3 + A4 * l2)) - y, fpy = A1 + 3 * A2 * l2 + l6 * (7 * A3 + 9 * A4 * l2); const d = fy / fpy; l -= d; l2 = l * l; l6 = l2 * l2 * l2; if (abs(d) < 1e-12) break; }
+      const lam = M * x * (A1 + 3 * A2 * l2 + l6 * (7 * A3 + 9 * A4 * l2)) / cos(l);
+      if (abs(lam) > PI) return false;
+      return fromLatLon(asin(clampUnit(sin(l) / M)), lam, o);
+    } },
+  { key: 'robinson', name: 'Robinson', family: 'Pseudocylindrical', tags: ['Compromise'], aspect: NORMAL,
+    note: 'Defined not by a formula but by a table of values chosen to look right.', who: '1963, Arthur Robinson',
+    bounds: () => [-0.8487 * PI, 0.8487 * PI, -1.3523, 1.3523],
+    inv: (x, y, o) => {
+      const Y = abs(y) / 1.3523; if (Y > 1) return false;
+      let i = 0; while (i < 17 && ROB_Y[i + 1] < Y) i++;
+      const t = (Y - ROB_Y[i]) / (ROB_Y[i + 1] - ROB_Y[i]);
+      const phi = (i + t) * 5 * PI / 180 * (y < 0 ? -1 : 1);
+      const X = ROB_X[i] + t * (ROB_X[i + 1] - ROB_X[i]);
+      const lam = x / (0.8487 * X); if (abs(lam) > PI) return false;
+      return fromLatLon(phi, lam, o);
+    } },
+  { key: 'naturalearth', name: 'Natural Earth', family: 'Pseudocylindrical', tags: ['Compromise'], aspect: NORMAL,
+    note: 'A compromise projection with flat poles and rounded corners, defined by polynomials.', who: 'c. 2008, Tom Patterson',
+    bounds: () => { const p = HALF_PI, p2 = p * p, p4 = p2 * p2; const xm = PI * 0.8707; const ym = p * (1.007226 + p2 * (0.015085 + p4 * (-0.044475 + 0.028874 * p2 - 0.005916 * p4))); return [-xm, xm, -ym, ym]; },
+    inv: (x, y, o) => {
+      const p = HALF_PI, p2m = p * p, p4m = p2m * p2m; const ym = p * (1.007226 + p2m * (0.015085 + p4m * (-0.044475 + 0.028874 * p2m - 0.005916 * p4m)));
+      if (abs(y) > ym) return false;
+      let phi = y;
+      for (let i = 0; i < 25; i++) { const phi2 = phi * phi, phi4 = phi2 * phi2; const d = (phi * (1.007226 + phi2 * (0.015085 + phi4 * (-0.044475 + 0.028874 * phi2 - 0.005916 * phi4))) - y) / (1.007226 + phi2 * (0.015085 * 3 + phi4 * (-0.044475 * 7 + 0.028874 * 9 * phi2 - 0.005916 * 11 * phi4))); phi -= d; if (abs(d) < 1e-12) break; }
+      if (phi > HALF_PI) phi = HALF_PI; else if (phi < -HALF_PI) phi = -HALF_PI;
+      const phi2 = phi * phi;
+      const lam = x / (0.8707 + phi2 * (-0.131979 + phi2 * (-0.013791 + phi2 * phi2 * phi2 * (0.003971 - 0.001529 * phi2))));
+      if (abs(lam) > PI) return false;
+      return fromLatLon(phi, lam, o);
+    } },
+  { key: 'kavrayskiy', name: 'Kavrayskiy VII', family: 'Pseudocylindrical', tags: ['Compromise'], aspect: NORMAL,
+    note: 'Parallels are equally spaced and meridians are elliptical arcs. Popular in the former Soviet Union.', who: '1939, Vladimir Kavrayskiy',
+    bounds: () => { const xm = 1.5 * PI / sqrt(3); return [-xm, xm, -HALF_PI, HALF_PI]; },
+    inv: (x, y, o) => { if (abs(y) > HALF_PI) return false; const q = sqrt(PI * PI / 3 - y * y); const lam = x * 2 * PI / (3 * q); return abs(lam) > PI ? false : fromLatLon(y, lam, o); } },
+  { key: 'goode', name: 'Goode Homolosine', family: 'Pseudocylindrical', tags: ['Equal-area', 'Interrupted'], aspect: NORMAL, fixedLon: true,
+    note: 'Joins the sinusoidal (low latitudes) to the Mollweide (high latitudes) and cuts the oceans so the continents keep their shape.', who: '1923, John Paul Goode',
+    bounds: () => [-PI, PI, -(SQRT2 - GOODE_DY), SQRT2 - GOODE_DY],
+    inv: goodeInv },
+  { key: 'gores', name: 'Globe Gores', family: 'Pseudocylindrical', tags: ['Equal-area', 'Interrupted'], aspect: NORMAL, fixedLon: true,
+    note: 'The sinusoidal projection interrupted into lens-shaped strips. Print it, cut out the gores and you can glue them onto a ball.', who: 'Globe makers since the 16th century',
+    params: [{ key: 'n', label: 'Gores', min: 4, max: 24, step: 1, value: 12, unit: '' }],
+    bounds: () => [-PI, PI, -HALF_PI, HALF_PI],
+    inv: (x, y, o, p) => {
+      if (abs(y) > HALF_PI || abs(x) > PI) return false;
+      const w = 2 * PI / p.n, k = Math.min(p.n - 1, Math.floor((x + PI) / w)), lc = -PI + (k + 0.5) * w, c = cos(y);
+      if (c < 1e-12) return false;
+      const dl = (x - lc) / c; if (abs(dl) > w / 2 + 1e-12) return false;
+      return fromLatLon(y, lc + dl, o);
+    } },
+
+  /* Azimuthal */
+  { key: 'orthographic', name: 'Orthographic', family: 'Azimuthal', tags: ['Perspective'], aspect: POLAR, hemisphere: true, partial: true,
+    note: 'The Earth as seen from very far away. Only one hemisphere is visible at a time.', who: '2nd century BC, Hipparchus',
+    bounds: () => [-1, 1, -1, 1], inv: azimuthal((r) => asin(r), 1) },
+  { key: 'perspective', name: 'Vertical Perspective', family: 'Azimuthal', tags: ['Perspective'], aspect: [30, 130, 0], hemisphere: true, partial: true,
+    note: 'The view from a satellite at a chosen altitude. At very large distances it becomes the orthographic projection.', who: 'Studied since the 18th century',
+    params: [{ key: 'alt', label: 'Altitude (R)', min: 0.1, max: 10, step: 0.05, value: 1.5, unit: '' }],
+    bounds: (p) => { const P = 1 + p.alt, r = sqrt((P - 1) / (P + 1)); return [-r, r, -r, r]; },
+    inv: (x, y, o, p) => { const P = 1 + p.alt, rho = sqrt(x * x + y * y); if (rho > sqrt((P - 1) / (P + 1))) return false; const c = perspectiveC(rho, P); if (c !== c) return false; if (rho < 1e-12) { o[0] = 1; o[1] = 0; o[2] = 0; return true; } const s = sin(c) / rho; o[0] = cos(c); o[1] = x * s; o[2] = y * s; return true; } },
+  { key: 'stereographic', name: 'Stereographic', family: 'Azimuthal', tags: ['Conformal'], aspect: POLAR, partial: true,
+    note: 'A perspective view from the opposite side of the globe: angles are preserved and circles stay circles. Shown out to about 110° from the centre.', who: '2nd century BC, Hipparchus',
+    bounds: () => [-2.8, 2.8, -2.8, 2.8], inv: azimuthal((r) => 2 * atan(r / 2), 2.8 * SQRT2) },
+  { key: 'azeqd', name: 'Azimuthal Equidistant', family: 'Azimuthal', tags: ['Equidistant'], aspect: POLAR,
+    note: 'Distances and directions from the centre are true. This is the map on the United Nations flag.', who: '11th century, al-Bīrūnī',
+    bounds: () => [-PI, PI, -PI, PI], inv: azimuthal((r) => r, PI) },
+  { key: 'laea', name: 'Lambert Azimuthal Equal-Area', family: 'Azimuthal', tags: ['Equal-area'], aspect: POLAR,
+    note: 'Fits the whole globe into a disk with true areas.', who: '1772, Johann Lambert',
+    bounds: () => [-2, 2, -2, 2], inv: azimuthal((r) => 2 * asin(r / 2), 2) },
+  { key: 'gnomonic', name: 'Gnomonic', family: 'Azimuthal', tags: ['Perspective'], aspect: POLAR, partial: true,
+    note: 'Perspective from the Earth’s centre: every great circle (shortest route) is a straight line. It can’t show even a full hemisphere.', who: '6th century BC, Thales',
+    bounds: () => [-2.2, 2.2, -2.2, 2.2], inv: azimuthal((r) => atan(r), 10) },
+  { key: 'twopoint', name: 'Two-Point Equidistant', family: 'Azimuthal', tags: ['Equidistant'], aspect: [30, -40, 0],
+    note: 'Distances from two chosen points are both true. Here the two points sit on either side of the map centre; move them with the aspect controls and set their separation below.', who: '1919, Hans Maurer',
+    params: [{ key: 'd', label: 'Separation', min: 10, max: 170, step: 1, value: 90, unit: '°' }],
+    bounds: (p) => { const d = deg(p.d), a = PI - d / 2, b = sqrt(Math.max(1e-6, PI * PI - PI * d)); return [-a, a, -b, b]; },
+    inv: twoPointInv },
+
+  /* Conic */
+  { key: 'albers', name: 'Albers Equal-Area Conic', family: 'Conic', tags: ['Equal-area'], aspect: NORMAL,
+    note: 'A cone meeting the globe at two standard parallels, with true areas. Widely used for mid-latitude countries.', who: '1805, Heinrich Albers',
+    params: [{ key: 'p1', label: 'Parallel 1', min: -80, max: 80, step: 1, value: 20, unit: '°', opt: true },
+             { key: 'p2', label: 'Parallel 2', min: -80, max: 80, step: 1, value: 50, unit: '°', opt: true }],
+    bounds: (p) => { const k = albersSetup(p); return conicBounds((f, l) => albersFwd(k, f, l), -HALF_PI, HALF_PI); },
+    inv: (x, y, o, p) => {
+      const k = cache(p, '_albers', albersSetup);
+      const [rho, lam] = polarFromConic(x, y, k.n, k.r0);
+      if (abs(lam) > PI) return false;
+      const s = (k.C - rho * rho * k.n * k.n) / (2 * k.n);
+      if (s > 1 || s < -1) return false;
+      return fromLatLon(asin(s), lam, o);
+    } },
+  { key: 'lcc', name: 'Lambert Conformal Conic', family: 'Conic', tags: ['Conformal'], aspect: NORMAL, partial: true,
+    note: 'A conformal cone through two standard parallels. Standard for aeronautical charts. The far pole is at infinity, so the map stops at 70° on that side.', who: '1772, Johann Lambert',
+    params: [{ key: 'p1', label: 'Parallel 1', min: -80, max: 80, step: 1, value: 30, unit: '°', opt: true },
+             { key: 'p2', label: 'Parallel 2', min: -80, max: 80, step: 1, value: 60, unit: '°', opt: true }],
+    bounds: (p) => { const k = lccSetup(p); return conicBounds((f, l) => lccFwd(k, f, l), -HALF_PI, HALF_PI); },
+    inv: (x, y, o, p) => {
+      const k = cache(p, '_lcc', lccSetup);
+      const [rho, lam] = polarFromConic(x, y, k.n, k.r0);
+      if (abs(lam) > PI) return false;
+      const phi = 2 * atan(Math.pow(k.F / rho, 1 / k.n)) - HALF_PI;
+      if (!(phi === phi) || (k.n > 0 ? phi < k.cut : phi > k.cut)) return false;
+      return fromLatLon(phi, lam, o);
+    } },
+  { key: 'eqdc', name: 'Equidistant Conic', family: 'Conic', tags: ['Equidistant'], aspect: NORMAL,
+    note: 'Meridians are true to scale and parallels are evenly spaced arcs. A simple, honest map for mid-latitude regions.', who: '2nd century, Ptolemy (simple conic)',
+    params: [{ key: 'p1', label: 'Parallel 1', min: -80, max: 80, step: 1, value: 20, unit: '°', opt: true },
+             { key: 'p2', label: 'Parallel 2', min: -80, max: 80, step: 1, value: 60, unit: '°', opt: true }],
+    bounds: (p) => { const k = eqdcSetup(p); return conicBounds((f, l) => eqdcFwd(k, f, l), -HALF_PI, HALF_PI); },
+    inv: (x, y, o, p) => {
+      const k = cache(p, '_eqdc', eqdcSetup);
+      const [rho, lam] = polarFromConic(x, y, k.n, k.r0);
+      if (abs(lam) > PI) return false;
+      const phi = k.G - rho;
+      if (abs(phi) > HALF_PI) return false;
+      return fromLatLon(phi, lam, o);
+    } },
+
+  /* Lenticular */
+  { key: 'hammer', name: 'Hammer', family: 'Lenticular', tags: ['Equal-area'], aspect: NORMAL,
+    note: 'One hemisphere of the Lambert azimuthal equal-area, stretched to twice its width to hold the whole world in an ellipse.', who: '1892, Ernst Hammer',
+    bounds: () => [-2 * SQRT2, 2 * SQRT2, -SQRT2, SQRT2],
+    inv: (x, y, o) => {
+      if ((x * x) / 8 + (y * y) / 2 > 1) return false;
+      const z = sqrt(1 - (x / 4) * (x / 4) - (y / 2) * (y / 2));
+      return fromLatLon(asin(clampUnit(z * y)), 2 * atan2(z * x, 2 * (2 * z * z - 1)), o);
+    } },
+  { key: 'aitoff', name: 'Aitoff', family: 'Lenticular', tags: ['Compromise'], aspect: NORMAL,
+    note: 'One hemisphere of the azimuthal equidistant, stretched to twice its width.', who: '1889, David Aitoff',
+    bounds: () => [-PI, PI, -HALF_PI, HALF_PI],
+    makeInv: () => makeLenticularInv(0, 1, 0) },
+  { key: 'winkel', name: 'Winkel Tripel', family: 'Lenticular', tags: ['Compromise'], aspect: NORMAL,
+    note: 'The average of Aitoff and an equirectangular map, chosen to keep area, angle and distance distortion all low. National Geographic’s world map since 1998.', who: '1921, Oswald Winkel',
+    bounds: () => [-(1 + HALF_PI), 1 + HALF_PI, -HALF_PI, HALF_PI],
+    makeInv: () => makeLenticularInv(0.5, 0.5, 2 / PI) },
+  { key: 'vandergrinten', name: 'Van der Grinten', family: 'Lenticular', tags: ['Compromise'], aspect: NORMAL, partial: true,
+    note: 'The whole world in a circle, with straight parallels at the equator only. National Geographic’s reference map from 1922 to 1988.', who: '1898, Alphons van der Grinten',
+    bounds: () => [-PI, PI, -PI, PI], inv: vdgInv },
+
+  /* Elliptic */
+  { key: 'peirce', name: 'Peirce Quincuncial', family: 'Elliptic', tags: ['Conformal'], aspect: POLAR,
+    note: 'The northern hemisphere fills the central diamond and the southern hemisphere splits into the four corner triangles. Copies of the map tile the plane seamlessly.', who: '1879, Charles Sanders Peirce',
+    bounds: () => [-1, 1, -1, 1],
+    inv: (x, y, o) => {
+      if (abs(x) > 1 || abs(y) > 1) return false;
+      return zetaToVector((x + y) * K_HALF, (y - x) * K_HALF, o, true);
+    } },
+  { key: 'guyou', name: 'Guyou', family: 'Elliptic', tags: ['Conformal'], aspect: NORMAL,
+    note: 'Puts two hemispheres in two side-by-side squares. A sibling of the Peirce quincuncial.', who: '1887, Émile Guyou',
+    bounds: () => [-K_HALF, K_HALF, -K_HALF / 2, K_HALF / 2],
+    inv: (x, y, o) => {
+      if (abs(x) > K_HALF || abs(y) > K_HALF / 2) return false;
+      const t = GUYOU_TMP;
+      if (!zetaToVector(2 * (x + K_HALF / 2), 2 * y, t, false)) return false;
+      o[0] = t[1]; o[1] = -t[0]; o[2] = t[2];
+      return true;
+    } },
+
+  /* Polyhedral */
+  { key: 'tetrapower', name: 'TetraPower (AuthaGraph-style)', family: 'Polyhedral', tags: ['Compromise'], aspect: TETRA_ASPECT,
+    note: 'Kunimune’s reconstruction of the AuthaGraph: a tetrahedron unfolded into a rectangle, with each vertex region mapped by a power law (exponent 0.68 matches the AuthaGraph). Lower exponents push land away from the four pointy singularities.', who: '1999, Hajime Narukawa; 2017 formulas by Justin Kunimune',
+    params: [{ key: 'power', label: 'Exponent', min: 0.3, max: 1.2, step: 0.01, value: 0.68, unit: '', opt: true }],
+    bounds: () => TETRA.bounds.slice(), makeInv: () => makeTetraInv(false) },
+  { key: 'tetraarea', name: 'Tetrahedral Equal-Area', family: 'Polyhedral', tags: ['Equal-area'], aspect: TETRA_ASPECT,
+    note: 'The same tetrahedral rectangle with an area-preserving distance mapping (the vertex-oriented great-circle projection of van Leeuwen and Strebe). Equal-area, but it squeezes land into the corners.', who: '2006, van Leeuwen and Strebe; 2017, Kunimune',
+    bounds: () => TETRA.bounds.slice(), makeInv: () => makeTetraInv(true) },
+  { key: 'butterfly', name: 'Octahedral Butterfly', family: 'Polyhedral', tags: ['Perspective', 'Interrupted'], aspect: [0, -20, 0],
+    note: 'The globe’s eight octants as gnomonic triangles arranged in the butterfly layout made famous by Bernard Cahill. (Cahill-Keyes uses a more refined octant projection.)', who: '1909, Bernard Cahill (layout)',
+    bounds: () => OCTA.bounds.slice(), makeInv: () => gnomonicPoly(OCTA.tris) },
+  { key: 'icosa', name: 'Icosahedral', family: 'Polyhedral', tags: ['Perspective', 'Interrupted'], aspect: NORMAL,
+    note: 'Twenty gnomonic triangles unfolded into a strip. The same idea as Buckminster Fuller’s Dymaxion map, which uses a different orientation and net.', who: '1943, R. Buckminster Fuller (idea)',
+    bounds: () => ICOSA.bounds.slice(), makeInv: () => gnomonicPoly(ICOSA.tris) },
+];
+
+/* ---------- Aspect rotation: M = Rz(λ0)·Ry(−φ0)·Rx(γ) ---------- */
+function aspectMatrix(latDeg, lonDeg, rotDeg) {
+  const p = latDeg * PI / 180, l = lonDeg * PI / 180, g = rotDeg * PI / 180;
+  const cp = cos(p), sp = sin(p), cl = cos(l), sl = sin(l), cg = cos(g), sg = sin(g);
+  // Ry(−φ0)
+  const Ry = [[cp, 0, -sp], [0, 1, 0], [sp, 0, cp]];
+  const Rx = [[1, 0, 0], [0, cg, -sg], [0, sg, cg]];
+  const Rz = [[cl, -sl, 0], [sl, cl, 0], [0, 0, 1]];
+  const mul = (A, B) => A.map((r, i) => [0, 1, 2].map(j => r[0] * B[0][j] + r[1] * B[1][j] + r[2] * B[2][j]));
+  return mul(Rz, mul(Ry, Rx));
+}
+
+if (typeof module !== 'undefined') module.exports = { TETRA, OCTA, ICOSA, lenticularFwd, vdgFwd, toblerSetup, lccSetup, lccFwd, eqdcSetup, eqdcFwd, perspectiveC, ellipjFast, PROJECTIONS, aspectMatrix, winkelFwd, ellipjHalf, zetaToVector, albersSetup, albersFwd, K_HALF, ROB_X, ROB_Y, GOODE_DY };
+
+</script>
+<script>
+(function () {
+'use strict';
+  const R2D = 180 / Math.PI, D2R = Math.PI / 180;
+  const $ = (s) => document.querySelector(s);
+  const byKey = Object.fromEntries(PROJECTIONS.map((p) => [p.key, p]));
+  const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+  const hexRgb = (h) => { const n = parseInt(h.replace('#', ''), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; };
+
+  /* ================= State ================= */
+  const state = {
+    tab: 'raster', proj: 'equalearth', lat: 0, lon: 150, rot: 0, preset: 'pacific',
+    style: 'political', mode: 'map', graticule: true, step: 15, tissot: false,
+    gratColor: '#22303c', gratWidth: 1, exportWidth: 2400, aa: true,
+    vec: { coast: true, grat: true, edge: true, tissot: false, fillLand: false, fillOcean: true, stroke: 0.8 },
+  };
+  const paramState = {};
+  PROJECTIONS.forEach((p) => { paramState[p.key] = {}; (p.params || []).forEach((q) => { paramState[p.key][q.key] = q.value; }); });
+  const curParams = (key) => Object.assign({}, paramState[key || state.proj]);
+  const aspectM = () => aspectMatrix(state.lat, state.lon, state.rot);
+
+  /* ================= World data ================= */
+  const TEX_W = 3600, TEX_H = 1800;
+  const PALETTE = ['#E5D3A0', '#C8DBAE', '#EEC4A0', '#D4C4DF', '#B8D7D0', '#E8CACA'];
+  const OCEAN = '#A6C8DD', ICE = '#F3F6F7', INK = '#1B2836';
+  const textures = { political: null, land: null, upload: null };
+  let world = null, idTex = null, worldStatus = 'loading';
+
+  function decodeWorld(topo) {
+    const sx = topo.transform.scale[0], sy = topo.transform.scale[1];
+    const tx = topo.transform.translate[0], ty = topo.transform.translate[1];
+    const arcs = topo.arcs.map((a) => { let x = 0, y = 0; return a.map((p) => { x += p[0]; y += p[1]; return [x * sx + tx, y * sy + ty]; }); });
+    const rawRing = (idx) => {
+      const out = [];
+      idx.forEach((i, n) => { const pts = i >= 0 ? arcs[i] : arcs[~i].slice().reverse(); for (let t = n ? 1 : 0; t < pts.length; t++) out.push(pts[t]); });
+      return out;
+    };
+    const geoms = topo.objects[Object.keys(topo.objects)[0]].geometries;
+    const owners = new Map();
+    const countries = geoms.map((g, ci) => {
+      const polys = g.type === 'Polygon' ? [g.arcs] : g.type === 'MultiPolygon' ? g.arcs : [];
+      polys.forEach((p) => p.forEach((r) => r.forEach((i) => { const a = i < 0 ? ~i : i; if (!owners.has(a)) owners.set(a, new Set()); owners.get(a).add(ci); })));
+      const raw = polys.map((p) => p.map(rawRing));
+      return { id: g.id, name: (g.properties && g.properties.name) || '', raw, polys: raw.map((p) => p.map(unwrapRing)) };
+    });
+    const nb = countries.map(() => new Set());
+    owners.forEach((s) => { const a = [...s]; a.forEach((i) => a.forEach((j) => { if (i !== j) nb[i].add(j); })); });
+    const order = countries.map((_, i) => i).sort((a, b) => nb[b].size - nb[a].size);
+    const col = new Array(countries.length).fill(-1);
+    order.forEach((i) => {
+      const used = new Set([...nb[i]].map((j) => col[j]));
+      for (let t = 0; t < PALETTE.length; t++) { const c = (i * 5 + t) % PALETTE.length; if (!used.has(c)) { col[i] = c; break; } }
+      if (col[i] < 0) col[i] = i % PALETTE.length;
+    });
+    countries.forEach((c, i) => { c.color = col[i]; });
+    countries.arcs = arcs;
+    return countries;
+  }
+  // Rings crossing the antimeridian get continuous longitudes; rings around a pole (Antarctica) are closed through the pole.
+  function unwrapRing(r) {
+    const pts = [[r[0][0], r[0][1]]]; let off = 0, latSum = r[0][1];
+    for (let i = 1; i < r.length; i++) {
+      const d = r[i][0] - r[i - 1][0];
+      if (d > 180) off -= 360; else if (d < -180) off += 360;
+      pts.push([r[i][0] + off, r[i][1]]); latSum += r[i][1];
+    }
+    let closure = null;
+    if (Math.abs(off) > 180) {
+      const pole = latSum / r.length < 0 ? -90 : 90;
+      closure = [[pts[pts.length - 1][0], pole], [pts[0][0], pole]];
+    }
+    return { pts, closure };
+  }
+  function traceWorld(ctx, W, H, polys, dx, forStroke) {
+    const X = (lon) => (lon + 180 + dx) * W / 360, Y = (lat) => (90 - lat) * H / 180;
+    polys.forEach((poly) => poly.forEach((R) => {
+      const p = R.pts;
+      ctx.moveTo(X(p[0][0]), Y(p[0][1]));
+      for (let i = 1; i < p.length; i++) ctx.lineTo(X(p[i][0]), Y(p[i][1]));
+      if (R.closure && !forStroke) R.closure.forEach((q) => ctx.lineTo(X(q[0]), Y(q[1])));
+      if (!R.closure || !forStroke) ctx.closePath();
+    }));
+  }
+  function buildWorldTexture(kind) {
+    const cv = document.createElement('canvas'); cv.width = TEX_W; cv.height = TEX_H;
+    const ctx = cv.getContext('2d');
+    ctx.fillStyle = kind === 'land' ? '#86AFCB' : OCEAN; ctx.fillRect(0, 0, TEX_W, TEX_H);
+    world.forEach((c) => {
+      ctx.beginPath();
+      [-360, 0, 360].forEach((dx) => traceWorld(ctx, TEX_W, TEX_H, c.polys, dx, false));
+      ctx.fillStyle = c.id === 'ATA' ? ICE : kind === 'land' ? '#D9D4B8' : PALETTE[c.color];
+      ctx.fill('evenodd');
+    });
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = kind === 'land' ? 1.6 : 1.3;
+    ctx.strokeStyle = kind === 'land' ? 'rgba(62,92,112,0.9)' : 'rgba(66,80,92,0.8)';
+    world.forEach((c) => {
+      ctx.beginPath();
+      [-360, 0, 360].forEach((dx) => traceWorld(ctx, TEX_W, TEX_H, c.polys, dx, true));
+      ctx.stroke();
+    });
+    return { w: TEX_W, h: TEX_H, d: ctx.getImageData(0, 0, TEX_W, TEX_H).data };
+  }
+  function buildIdTexture() {
+    const w = 1440, h = 720, cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+    const ctx = cv.getContext('2d');
+    world.forEach((c, i) => {
+      ctx.beginPath();
+      [-360, 0, 360].forEach((dx) => traceWorld(ctx, w, h, c.polys, dx, false));
+      ctx.fillStyle = 'rgb(' + ((i + 1) & 255) + ',' + ((i + 1) >> 8) + ',255)';
+      ctx.fill('evenodd');
+    });
+    return { w, h, d: ctx.getImageData(0, 0, w, h).data };
+  }
+  function countryAt(latDeg, lonDeg) {
+    if (!idTex) return null;
+    const u = clamp(Math.floor((lonDeg + 180) / 360 * idTex.w), 0, idTex.w - 1);
+    const v = clamp(Math.floor((90 - latDeg) / 180 * idTex.h), 0, idTex.h - 1);
+    const k = 4 * (v * idTex.w + u), d = idTex.d;
+    if (d[k + 3] !== 255 || d[k + 2] !== 255) return null;
+    const id = d[k] + (d[k + 1] << 8) - 1;
+    return world[id] ? world[id].name : null;
+  }
+  function imageToTexture(im) {
+    const w = Math.min(4096, im.naturalWidth || im.width), h = Math.round(w / 2);
+    const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+    const c2 = cv.getContext('2d'); c2.drawImage(im, 0, 0, w, h);
+    return { w, h, d: c2.getImageData(0, 0, w, h).data };
+  }
+
+  // Checkerboard test pattern: each 15° latitude band has its own colour; cells alternate in brightness.
+  const TEST = (function () {
+    const stops = [[70, 112, 160], [104, 166, 178], [233, 204, 120], [214, 136, 106], [150, 84, 128]];
+    const cells = new Uint8Array(12 * 24 * 3);
+    for (let b = 0; b < 12; b++) {
+      const t = b / 11 * (stops.length - 1), i = Math.min(stops.length - 2, Math.floor(t)), f = t - i;
+      for (let c = 0; c < 24; c++) {
+        const dark = (b + c) % 2 ? 0.8 : 1;
+        for (let ch = 0; ch < 3; ch++) cells[3 * (b * 24 + c) + ch] = Math.round((stops[i][ch] * (1 - f) + stops[i + 1][ch] * f) * dark);
+      }
+    }
+    return cells;
+  })();
+
+  /* ================= Sampling and distortion ================= */
+  function allocBuffers(n) {
+    return { n, ok: new Uint8Array(n), vx: new Float32Array(n), vy: new Float32Array(n), vz: new Float32Array(n),
+      lat: new Float32Array(n), lon: new Float32Array(n), ls: new Float32Array(n), om: new Float32Array(n), mark: new Uint8Array(n), mark2: new Uint8Array(n) };
+  }
+  let shared = allocBuffers(1);
+  function sharedBuffers(n) { if (shared.n < n) shared = allocBuffers(n); return shared; }
+
+  function sampleGrid(P, params, M, W, H, B) {
+    const inv = P.makeInv ? P.makeInv() : P.inv;
+    const [x0, x1, y0, y1] = P.bounds(params);
+    const du = (x1 - x0) / W, dv = (y1 - y0) / H;
+    const { ok, vx, vy, vz, lat, lon } = B;
+    const m00 = M[0][0], m01 = M[0][1], m02 = M[0][2], m10 = M[1][0], m11 = M[1][1], m12 = M[1][2], m20 = M[2][0], m21 = M[2][1], m22 = M[2][2];
+    const o = new Float64Array(3);
+    for (let j = 0; j < H; j++) {
+      const y = y1 - (j + 0.5) * dv;
+      for (let i = 0; i < W; i++) {
+        const k = j * W + i, x = x0 + (i + 0.5) * du;
+        if (!inv(x, y, o, params)) { ok[k] = 0; continue; }
+        const gx = m00 * o[0] + m01 * o[1] + m02 * o[2], gy = m10 * o[0] + m11 * o[1] + m12 * o[2], gz = m20 * o[0] + m21 * o[1] + m22 * o[2];
+        ok[k] = 1; vx[k] = gx; vy[k] = gy; vz[k] = gz;
+        lat[k] = Math.asin(gz > 1 ? 1 : gz < -1 ? -1 : gz) * R2D;
+        lon[k] = Math.atan2(gy, gx) * R2D;
+      }
+    }
+    return { du, dv, x0, x1, y0, y1 };
+  }
+
+  const CUT2 = 0.04; // neighbouring samples farther apart than ~11° are treated as a cut in the map
+  const HIST_LO = -8, HIST_HI = 8, HIST_N = 801;
+  // Metric tensor from 3-D differences of neighbouring samples → area scale (log2) and maximum angular distortion.
+  function computeDistortion(W, H, g, B) {
+    const { ok, vx, vy, vz, ls, om } = B, du = g.du, dv = g.dv;
+    const d2 = (a, b) => { const p = vx[a] - vx[b], q = vy[a] - vy[b], r = vz[a] - vz[b]; return p * p + q * q + r * r; };
+    const hist = new Float64Array(HIST_N), histW = new Float64Array(91);
+    let wsum = 0, omsum = 0, lsum = 0, l2sum = 0;
+    for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) {
+      const k = j * W + i;
+      ls[k] = NaN; om[k] = NaN;
+      if (!ok[k]) continue;
+      const kr = i < W - 1 && ok[k + 1] ? k + 1 : -1, kl = i > 0 && ok[k - 1] ? k - 1 : -1;
+      const ku = j > 0 && ok[k - W] ? k - W : -1, kd = j < H - 1 && ok[k + W] ? k + W : -1;
+      const dr = kr >= 0 ? d2(kr, k) : 9, dl = kl >= 0 ? d2(k, kl) : 9, dU = ku >= 0 ? d2(ku, k) : 9, dD = kd >= 0 ? d2(k, kd) : 9;
+      let ax, ay, az, bx, by, bz, sa, sb;
+      if (dr < CUT2 && dl < CUT2) { ax = vx[kr] - vx[kl]; ay = vy[kr] - vy[kl]; az = vz[kr] - vz[kl]; sa = 2; }
+      else if (dr <= dl && dr < CUT2) { ax = vx[kr] - vx[k]; ay = vy[kr] - vy[k]; az = vz[kr] - vz[k]; sa = 1; }
+      else if (dl < CUT2) { ax = vx[k] - vx[kl]; ay = vy[k] - vy[kl]; az = vz[k] - vz[kl]; sa = 1; }
+      else continue;
+      if (dU < CUT2 && dD < CUT2) { bx = vx[ku] - vx[kd]; by = vy[ku] - vy[kd]; bz = vz[ku] - vz[kd]; sb = 2; }
+      else if (dU <= dD && dU < CUT2) { bx = vx[ku] - vx[k]; by = vy[ku] - vy[k]; bz = vz[ku] - vz[k]; sb = 1; }
+      else if (dD < CUT2) { bx = vx[k] - vx[kd]; by = vy[k] - vy[kd]; bz = vz[k] - vz[kd]; sb = 1; }
+      else continue;
+      const ha = sa * du, hb = sb * dv;
+      const E = (ax * ax + ay * ay + az * az) / (ha * ha), G = (bx * bx + by * by + bz * bz) / (hb * hb), F = (ax * bx + ay * by + az * bz) / (ha * hb);
+      const det = E * G - F * F;
+      if (!(det > 0)) continue;
+      const tr = (E + G) / 2, disc = Math.sqrt(Math.max(0, tr * tr - det));
+      const s1 = Math.sqrt(tr + disc), s2 = Math.sqrt(Math.max(1e-30, tr - disc));
+      const l2 = -0.5 * Math.log2(det), w = Math.sqrt(det), wdeg = 2 * Math.asin(Math.min(1, (s1 - s2) / (s1 + s2))) * R2D;
+      ls[k] = l2; om[k] = wdeg;
+      wsum += w; omsum += w * wdeg; lsum += w * l2; l2sum += w * l2 * l2;
+      hist[clamp(Math.round((l2 - HIST_LO) / (HIST_HI - HIST_LO) * (HIST_N - 1)), 0, HIST_N - 1)] += w;
+      histW[Math.min(90, Math.floor(wdeg))] += w;
+    }
+    if (!(wsum > 0)) return null;
+    const pct = (q) => { let acc = 0; for (let b = 0; b < HIST_N; b++) { acc += hist[b]; if (acc >= q * wsum) return HIST_LO + b * (HIST_HI - HIST_LO) / (HIST_N - 1); } return HIST_HI; };
+    const mean = lsum / wsum;
+    return { median: pct(0.5), p05: pct(0.05), p95: pct(0.95), omega: omsum / wsum, areaRMS: Math.sqrt(Math.max(0, l2sum / wsum - mean * mean)),
+      cover: wsum * du * dv / (4 * Math.PI), hist, histW, wsum };
+  }
+
+  // Bit 1 = graticule, bit 2 = map edge or cut.
+  function markLines(W, H, B, opt) {
+    const { ok, vx, vy, vz, lat, lon, mark, mark2 } = B, N = W * H, step = opt.step;
+    mark.fill(0, 0, N);
+    for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) {
+      const k = j * W + i; if (!ok[k]) continue;
+      for (let side = 0; side < 2; side++) {
+        const inside = side === 0 ? i < W - 1 : j < H - 1;
+        const n = side === 0 ? k + 1 : k + W;
+        if (!inside || !ok[n]) { mark[k] |= 2; continue; }
+        const p = vx[k] - vx[n], q = vy[k] - vy[n], r = vz[k] - vz[n];
+        if (p * p + q * q + r * r > CUT2) { mark[k] |= 2; mark[n] |= 2; continue; }
+        if (!opt.graticule) continue;
+        let line = false;
+        const la = lat[k], lb = lat[n];
+        if (Math.floor(la / step) !== Math.floor(lb / step)) line = true;
+        else {
+          const a = lon[k], b = lon[n];
+          if (Math.abs(a - b) > 180) line = Math.max(Math.abs(la), Math.abs(lb)) < 89.5;
+          else {
+            const fa = Math.floor(a / step), fb = Math.floor(b / step);
+            if (fa !== fb) { const mer = Math.max(fa, fb) * step; line = Math.abs(la) < 80 || mer % 90 === 0; }
+          }
+        }
+        if (line) mark[k] |= 1;
+      }
+      if (i === 0 || j === 0 || !ok[k - 1] || !ok[k - W]) mark[k] |= 2;
+    }
+    // thicken graticule lines to the requested width (separable dilation)
+    const t = Math.max(1, Math.round(opt.thickness || 1));
+    if (t > 1 && opt.graticule) {
+      const a = Math.floor((t - 1) / 2), b = t - 1 - a;
+      for (let k = 0; k < N; k++) mark2[k] = mark[k] & 1;
+      for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) {
+        let v = 0; for (let d = -b; d <= a && !v; d++) { const ii = i + d; if (ii >= 0 && ii < W) v = mark2[j * W + ii]; }
+        if (v) mark[j * W + i] |= 4;
+      }
+      for (let k = 0; k < N; k++) mark2[k] = (mark[k] & 4) ? 1 : 0;
+      for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) {
+        let v = 0; for (let d = -b; d <= a && !v; d++) { const jj = j + d; if (jj >= 0 && jj < H) v = mark2[jj * W + i]; }
+        const k = j * W + i; if (v && ok[k]) mark[k] |= 1;
+        mark[k] &= 3;
+      }
+    }
+  }
+
+  const CBUF = [0, 0, 0];
+  function lerp3(a, b, t, out) { out = out || [0, 0, 0]; out[0] = a[0] + (b[0] - a[0]) * t; out[1] = a[1] + (b[1] - a[1]) * t; out[2] = a[2] + (b[2] - a[2]) * t; return out; }
+  const DIV_NEG = [[44, 104, 160], [140, 182, 214], [243, 241, 236]];
+  const DIV_POS = [[243, 241, 236], [222, 150, 178], [150, 22, 84]];
+  function diverging(t, out) {
+    if (t < 0) { const s = -t; return s < 0.5 ? lerp3(DIV_NEG[2], DIV_NEG[1], s * 2, out) : lerp3(DIV_NEG[1], DIV_NEG[0], s * 2 - 1, out); }
+    return t < 0.5 ? lerp3(DIV_POS[0], DIV_POS[1], t * 2, out) : lerp3(DIV_POS[1], DIV_POS[2], t * 2 - 1, out);
+  }
+  const SEQ = [[245, 243, 238], [240, 200, 160], [212, 110, 120], [120, 30, 90], [50, 16, 52]];
+  function sequential(t, out) { const s = t * (SEQ.length - 1), i = Math.min(SEQ.length - 2, Math.floor(s)); return lerp3(SEQ[i], SEQ[i + 1], s - i, out); }
+
+  function colorize(W, H, B, opt, px) {
+    const { ok, vx, vy, vz, lat, lon, ls, om, mark } = B, N = W * H;
+    const tex = opt.texture, tw = tex ? tex.w : 0, th = tex ? tex.h : 0, td = tex ? tex.d : null;
+    const edge = opt.edge, gc = opt.gratColor, ref = opt.ref || 0;
+    const accent = opt.mode === 'map' ? [163, 25, 91] : [18, 74, 96];
+    const tissotR = Math.cos(5.5 * D2R);
+    for (let k = 0; k < N; k++) {
+      const q = 4 * k;
+      if (!ok[k]) { px[q + 3] = 0; continue; }
+      const la = lat[k], lo2 = lon[k];
+      let r, g, b;
+      if (td) {
+        let u = (lo2 + 180) * (tw / 360) - 0.5, v = (90 - la) * (th / 180) - 0.5;
+        if (v < 0) v = 0; else if (v > th - 1) v = th - 1;
+        let iu = Math.floor(u); const iv = Math.floor(v), fu = u - iu, fv = v - iv;
+        if (iu < 0) iu += tw; let iu1 = iu + 1; if (iu1 >= tw) iu1 = 0;
+        const iv1 = iv + 1 < th ? iv + 1 : iv;
+        const a0 = 4 * (iv * tw + iu), a1 = 4 * (iv * tw + iu1), a2 = 4 * (iv1 * tw + iu), a3 = 4 * (iv1 * tw + iu1);
+        const w0 = (1 - fu) * (1 - fv), w1 = fu * (1 - fv), w2 = (1 - fu) * fv, w3 = fu * fv;
+        r = td[a0] * w0 + td[a1] * w1 + td[a2] * w2 + td[a3] * w3;
+        g = td[a0 + 1] * w0 + td[a1 + 1] * w1 + td[a2 + 1] * w2 + td[a3 + 1] * w3;
+        b = td[a0 + 2] * w0 + td[a1 + 2] * w1 + td[a2 + 2] * w2 + td[a3 + 2] * w3;
+      } else {
+        const bnd = clamp(Math.floor((la + 90) / 15), 0, 11), c = clamp(Math.floor((lo2 + 180) / 15), 0, 23);
+        const t = 3 * (bnd * 24 + c); r = TEST[t]; g = TEST[t + 1]; b = TEST[t + 2];
+      }
+      if (opt.mode !== 'map') {
+        const lum = (0.3 * r + 0.59 * g + 0.11 * b) / 255, shade = 0.58 + 0.42 * lum;
+        let cr = 200, cg = 200, cb = 200;
+        if (opt.mode === 'area') { const v = ls[k]; if (v === v) { diverging(clamp((v - ref) / 3, -1, 1), CBUF); cr = CBUF[0]; cg = CBUF[1]; cb = CBUF[2]; } }
+        else { const v = om[k]; if (v === v) { sequential(Math.min(1, v / 90), CBUF); cr = CBUF[0]; cg = CBUF[1]; cb = CBUF[2]; } }
+        r = cr * shade; g = cg * shade; b = cb * shade;
+      }
+      if (opt.tissot) {
+        const pc = Math.round(la / 30) * 30, lc = Math.round(lo2 / 30) * 30, cp = Math.cos(pc * D2R);
+        const dot = vx[k] * cp * Math.cos(lc * D2R) + vy[k] * cp * Math.sin(lc * D2R) + vz[k] * Math.sin(pc * D2R);
+        if (dot > tissotR) { r = r * 0.42 + accent[0] * 0.58; g = g * 0.42 + accent[1] * 0.58; b = b * 0.42 + accent[2] * 0.58; }
+      }
+      const m = mark[k];
+      if (m & 2) { r = edge[0]; g = edge[1]; b = edge[2]; }
+      else if (m & 1) { r = r * 0.4 + gc[0] * 0.6; g = g * 0.4 + gc[1] * 0.6; b = b * 0.4 + gc[2] * 0.6; }
+      px[q] = r; px[q + 1] = g; px[q + 2] = b; px[q + 3] = 255;
+    }
+  }
+
+  // Full raster pipeline into an ImageData.
+  function renderRaster(ctx, W, H, o) {
+    const P = byKey[o.proj], params = o.params;
+    const B = o.ownBuffers ? allocBuffers(W * H) : sharedBuffers(W * H);
+    const g = sampleGrid(P, params, o.M, W, H, B);
+    const stats = (o.stats || o.mode !== 'map') ? computeDistortion(W, H, g, B) : null;
+    markLines(W, H, B, { graticule: o.graticule, step: o.step, thickness: o.thickness });
+    const img = ctx.createImageData(W, H);
+    colorize(W, H, B, { texture: o.texture, mode: o.mode, tissot: o.tissot, edge: o.edge, gratColor: o.gratColor,
+      ref: stats ? stats.median : (o.ref || 0) }, img.data);
+    return { img, W, H, stats, buf: B, geom: g };
+  }
+  function currentTexture() { return state.style === 'test' ? null : textures[state.style]; }
+  function rasterOptions(extra) {
+    return Object.assign({ proj: state.proj, params: curParams(), M: aspectM(), mode: state.mode, graticule: state.graticule, step: state.step,
+      tissot: state.tissot, texture: currentTexture(), gratColor: hexRgb(state.gratColor) }, extra);
+  }
+
+  /* ================= Vector maps =================
+   * Every projection only has an inverse, so points are projected forward numerically:
+   * a coarse lookup grid gives a starting point, then Gauss–Newton on the inverse refines it.
+   * The map edge is traced with marching squares on the inverse's domain. */
+  const kitCache = new Map();
+  const paramKey = (p) => JSON.stringify(Object.keys(p).filter((k) => k[0] !== '_').sort().map((k) => [k, p[k]]));
+  const BIN = 4 * D2R, NLAT = 45, NLON = 90;
+
+  function getKit(key, params) {
+    const id = key + paramKey(params);
+    if (kitCache.has(id)) return kitCache.get(id);
+    const P = byKey[key];
+    const inv = P.makeInv ? P.makeInv() : P.inv;
+    const b = P.bounds(params), [x0, x1, y0, y1] = b;
+    const tmp = new Float64Array(3);
+    const valid = (x, y, out) => x >= x0 && x <= x1 && y >= y0 && y <= y1 && inv(x, y, out || tmp, params);
+    const GW = 260, GH = clamp(Math.round(GW * (y1 - y0) / (x1 - x0)), 40, 520);
+    const n = GW * GH, gx = new Float64Array(n), gy = new Float64Array(n), gv = new Float64Array(3 * n);
+    const bins = Array.from({ length: NLAT * NLON }, () => []);
+    let cnt = 0;
+    const o = new Float64Array(3);
+    for (let j = 0; j < GH; j++) for (let i = 0; i < GW; i++) {
+      const x = x0 + (i + 0.5) * (x1 - x0) / GW, y = y1 - (j + 0.5) * (y1 - y0) / GH;
+      if (!valid(x, y, o)) continue;
+      gx[cnt] = x; gy[cnt] = y; gv[3 * cnt] = o[0]; gv[3 * cnt + 1] = o[1]; gv[3 * cnt + 2] = o[2];
+      bins[binIndex(o)].push(cnt); cnt++;
+    }
+    const kit = { key, params, b, valid, gx, gy, gv, cnt, bins, width: x1 - x0, outline: null };
+    kitCache.set(id, kit);
+    if (kitCache.size > 8) kitCache.delete(kitCache.keys().next().value);
+    return kit;
+  }
+  function binIndex(v) {
+    const la = Math.asin(clamp(v[2], -1, 1)), lo = Math.atan2(v[1], v[0]);
+    return clamp(Math.floor((la + Math.PI / 2) / BIN), 0, NLAT - 1) * NLON + clamp(Math.floor((lo + Math.PI) / BIN), 0, NLON - 1);
+  }
+  function nearestSample(kit, q) {
+    const bi = Math.floor(binIndex(q) / NLON), bj = binIndex(q) % NLON;
+    let best = -2, bestI = -1;
+    for (const r of [1, 2, 4, 8]) {
+      const polar = bi - r <= 1 || bi + r >= NLAT - 2;
+      for (let di = -r; di <= r; di++) {
+        const ii = bi + di; if (ii < 0 || ii >= NLAT) continue;
+        const span = polar ? NLON / 2 : r;
+        for (let dj = -span; dj <= span; dj++) {
+          const jj = ((bj + dj) % NLON + NLON) % NLON, list = kit.bins[ii * NLON + jj];
+          for (let t = 0; t < list.length; t++) {
+            const s = list[t], d = kit.gv[3 * s] * q[0] + kit.gv[3 * s + 1] * q[1] + kit.gv[3 * s + 2] * q[2];
+            if (d > best) { best = d; bestI = s; }
+          }
+        }
+      }
+      if (bestI >= 0) break;
+    }
+    return bestI;
+  }
+  const NA = new Float64Array(3), NB = new Float64Array(3), NC = new Float64Array(3);
+  function projectQ(kit, q) {
+    const s = nearestSample(kit, q); if (s < 0) return null;
+    let x = kit.gx[s], y = kit.gy[s];
+    const h = 1e-7 * kit.width, o = NC, a = NA, b = NB;
+    if (!kit.valid(x, y, o)) return null;
+    let err = (q[0] - o[0]) ** 2 + (q[1] - o[1]) ** 2 + (q[2] - o[2]) ** 2;
+    for (let it = 0; it < 30; it++) {
+      if (err < 1e-20) break;
+      let sx = 1, sy = 1;
+      if (!kit.valid(x + h, y, a)) { if (!kit.valid(x - h, y, a)) return null; sx = -1; }
+      if (!kit.valid(x, y + h, b)) { if (!kit.valid(x, y - h, b)) return null; sy = -1; }
+      const j1x = (a[0] - o[0]) * sx / h, j1y = (a[1] - o[1]) * sx / h, j1z = (a[2] - o[2]) * sx / h;
+      const j2x = (b[0] - o[0]) * sy / h, j2y = (b[1] - o[1]) * sy / h, j2z = (b[2] - o[2]) * sy / h;
+      const rx = q[0] - o[0], ry = q[1] - o[1], rz = q[2] - o[2];
+      const A11 = j1x * j1x + j1y * j1y + j1z * j1z, A12 = j1x * j2x + j1y * j2y + j1z * j2z, A22 = j2x * j2x + j2y * j2y + j2z * j2z;
+      const g1 = j1x * rx + j1y * ry + j1z * rz, g2 = j2x * rx + j2y * ry + j2z * rz;
+      const det = A11 * A22 - A12 * A12;
+      if (!(det > 0)) return null;
+      let dx = (A22 * g1 - A12 * g2) / det, dy = (A11 * g2 - A12 * g1) / det;
+      const len = Math.hypot(dx, dy), lim = 0.2 * kit.width;
+      if (len > lim) { dx *= lim / len; dy *= lim / len; }
+      let t = 1, moved = false;
+      for (let k = 0; k < 10; k++, t *= 0.5) {
+        const nx = x + t * dx, ny = y + t * dy;
+        if (!kit.valid(nx, ny, a)) continue;
+        const e2 = (q[0] - a[0]) ** 2 + (q[1] - a[1]) ** 2 + (q[2] - a[2]) ** 2;
+        if (e2 < err) { x = nx; y = ny; o[0] = a[0]; o[1] = a[1]; o[2] = a[2]; err = e2; moved = true; break; }
+      }
+      if (!moved) break;
+    }
+    return err < 1e-14 ? [x, y] : null;
+  }
+
+  function toQ(lon, lat, MT) {
+    const p = lat * D2R, l = lon * D2R, cp = Math.cos(p);
+    const g0 = cp * Math.cos(l), g1 = cp * Math.sin(l), g2 = Math.sin(p);
+    return [MT[0][0] * g0 + MT[0][1] * g1 + MT[0][2] * g2, MT[1][0] * g0 + MT[1][1] * g1 + MT[1][2] * g2, MT[2][0] * g0 + MT[2][1] * g1 + MT[2][2] * g2];
+  }
+  function slerp(a, b, t) {
+    const x = a[0] + (b[0] - a[0]) * t, y = a[1] + (b[1] - a[1]) * t, z = a[2] + (b[2] - a[2]) * t, n = Math.hypot(x, y, z) || 1;
+    return [x / n, y / n, z / n];
+  }
+  // lon/lat polyline → densified list of centre-frame vectors. Segments running along the ±180° cut in the
+  // source data are flagged "artificial" so they are not drawn as coastline.
+  function densify(pts, MT, maxStep) {
+    const list = []; let pq = null, plon = 0;
+    for (let i = 0; i < pts.length; i++) {
+      const q = toQ(pts[i][0], pts[i][1], MT);
+      if (pq) {
+        const art = Math.abs(pts[i][0]) > 179.9 && Math.abs(plon) > 179.9;
+        const d = Math.acos(clamp(pq[0] * q[0] + pq[1] * q[1] + pq[2] * q[2], -1, 1)), k = Math.max(1, Math.ceil(d / maxStep));
+        for (let s = 1; s <= k; s++) list.push({ q: s === k ? q : slerp(pq, q, s / k), art });
+      } else list.push({ q, art: false });
+      pq = q; plon = pts[i][0];
+    }
+    return list;
+  }
+  function boundaryPoint(kit, qIn, qOut) {
+    let a = qIn, b = qOut, best = null;
+    for (let i = 0; i < 12; i++) { const m = slerp(a, b, 0.5), xy = projectQ(kit, m); if (xy) { a = m; best = xy; } else b = m; }
+    return best;
+  }
+  function projectList(kit, list, refine) {
+    const parts = [], all = []; let cur = null, intact = true, prev = null;
+    for (const e of list) {
+      const xy = projectQ(kit, e.q);
+      if (!xy) {
+        intact = false;
+        if (prev && prev.xy && refine && cur) { const bxy = boundaryPoint(kit, prev.q, e.q); if (bxy) cur.push(bxy); }
+        if (cur && cur.length > 1) parts.push(cur);
+        cur = null; prev = { q: e.q, xy: null }; continue;
+      }
+      all.push(xy);
+      if (prev && prev.xy) {
+        let brk = e.art;
+        if (!brk) {
+          const d = Math.hypot(xy[0] - prev.xy[0], xy[1] - prev.xy[1]);
+          if (d > 0.012 * kit.width) {
+            const mxy = projectQ(kit, slerp(prev.q, e.q, 0.5));
+            if (!mxy || Math.hypot(mxy[0] - (prev.xy[0] + xy[0]) / 2, mxy[1] - (prev.xy[1] + xy[1]) / 2) > 0.3 * d) { brk = true; intact = false; }
+          }
+        }
+        if (brk) { if (cur && cur.length > 1) parts.push(cur); cur = [xy]; } else cur.push(xy);
+      } else if (prev && !prev.xy && refine) { const bxy = boundaryPoint(kit, e.q, prev.q); cur = bxy ? [bxy, xy] : [xy]; }
+      else cur = [xy];
+      prev = { q: e.q, xy };
+    }
+    if (cur && cur.length > 1) parts.push(cur);
+    return { parts, intact, all };
+  }
+
+  // Marching squares on the inverse's domain, with crossings refined by bisection.
+  function computeOutline(kit) {
+    if (kit.outline) return kit.outline;
+    const [x0, x1, y0, y1] = kit.b;
+    const GW = 420, GH = clamp(Math.round(GW * (y1 - y0) / (x1 - x0)), 60, 840);
+    const sx = (x1 - x0) / GW, sy = (y1 - y0) / GH, NX = GW + 3, NY = GH + 3;
+    const px = (i) => x0 + (i - 1) * sx, py = (j) => y1 - (j - 1) * sy;
+    const val = new Uint8Array(NX * NY);
+    for (let j = 1; j <= GH + 1; j++) for (let i = 1; i <= GW + 1; i++) {
+      // nudge samples on the bounding box inward so edges count as "inside"
+      const x = Math.min(x1 - 1e-9 * sx, Math.max(x0 + 1e-9 * sx, px(i))), y = Math.min(y1 - 1e-9 * sy, Math.max(y0 + 1e-9 * sy, py(j)));
+      val[j * NX + i] = kit.valid(x, y) ? 1 : 0;
+    }
+    const H_ = 0, V_ = 1, eid = (kind, i, j) => (kind * NY + j) * NX + i;
+    const adj = new Map();
+    const link = (a, b) => { (adj.get(a) || adj.set(a, []).get(a)).push(b); (adj.get(b) || adj.set(b, []).get(b)).push(a); };
+    for (let j = 0; j < NY - 1; j++) for (let i = 0; i < NX - 1; i++) {
+      const tl = val[j * NX + i], tr = val[j * NX + i + 1], br = val[(j + 1) * NX + i + 1], bl = val[(j + 1) * NX + i];
+      const c = tl | (tr << 1) | (br << 2) | (bl << 3);
+      if (c === 0 || c === 15) continue;
+      const T = eid(H_, i, j), B = eid(H_, i, j + 1), L = eid(V_, i, j), R = eid(V_, i + 1, j);
+      switch (c) {
+        case 1: case 14: link(L, T); break;
+        case 2: case 13: link(T, R); break;
+        case 3: case 12: link(L, R); break;
+        case 4: case 11: link(R, B); break;
+        case 6: case 9: link(T, B); break;
+        case 7: case 8: link(L, B); break;
+        case 5: link(L, T); link(R, B); break;
+        case 10: link(T, R); link(B, L); break;
+      }
+    }
+    const pointOf = (id) => {
+      const i = id % NX, j = Math.floor(id / NX) % NY, kind = Math.floor(id / (NX * NY));
+      let ax = px(i), ay = py(j), bx = kind === H_ ? px(i + 1) : ax, by = kind === H_ ? ay : py(j + 1);
+      const va = val[j * NX + i];
+      if (!va) { [ax, bx] = [bx, ax]; [ay, by] = [by, ay]; }
+      for (let t = 0; t < 22; t++) { const mx = (ax + bx) / 2, my = (ay + by) / 2; if (kit.valid(mx, my)) { ax = mx; ay = my; } else { bx = mx; by = my; } }
+      return [ax, ay];
+    };
+    const seen = new Set(), loops = [];
+    adj.forEach((_, start) => {
+      if (seen.has(start)) return;
+      const loop = []; let cur = start, prev = -1;
+      while (cur !== undefined && !seen.has(cur)) {
+        seen.add(cur); loop.push(pointOf(cur));
+        const nb = adj.get(cur), next = nb.find((v) => v !== prev && !seen.has(v));
+        prev = cur; cur = next;
+      }
+      if (loop.length > 2) loops.push(loop);
+    });
+    kit.outline = loops;
+    return loops;
+  }
+
+  function graticuleLines(step) {
+    const lines = [];
+    for (let lon = -180; lon < 180; lon += step) {
+      const polar = lon % 90 === 0, lim = polar ? 90 : 80, pts = [];
+      for (let la = -lim; la <= lim; la += 1) pts.push([lon, la]);
+      lines.push(pts);
+    }
+    for (let la = -90 + step; la < 90; la += step) { const pts = []; for (let lon = -180; lon <= 180; lon += 1) pts.push([lon, la]); lines.push(pts); }
+    return lines;
+  }
+  function tissotRings() {
+    const rings = [], r = 5.5 * D2R;
+    for (let la = -90; la <= 90; la += 30) for (let lo = -180; lo < 180; lo += 30) {
+      if (Math.abs(la) === 90 && lo !== -180) continue;
+      const c = [Math.cos(la * D2R) * Math.cos(lo * D2R), Math.cos(la * D2R) * Math.sin(lo * D2R), Math.sin(la * D2R)];
+      const e = Math.abs(c[2]) > 0.9 ? [1, 0, 0] : [0, 0, 1];
+      let u = [c[1] * e[2] - c[2] * e[1], c[2] * e[0] - c[0] * e[2], c[0] * e[1] - c[1] * e[0]]; const un = Math.hypot(...u); u = u.map((v) => v / un);
+      const w = [c[1] * u[2] - c[2] * u[1], c[2] * u[0] - c[0] * u[2], c[0] * u[1] - c[1] * u[0]];
+      const pts = [];
+      for (let t = 0; t <= 48; t++) {
+        const a = 2 * Math.PI * t / 48, v = [0, 1, 2].map((k) => Math.cos(r) * c[k] + Math.sin(r) * (Math.cos(a) * u[k] + Math.sin(a) * w[k]));
+        pts.push([Math.atan2(v[1], v[0]) * R2D, Math.asin(clamp(v[2], -1, 1)) * R2D]);
+      }
+      rings.push(pts);
+    }
+    return rings;
+  }
+
+  function buildSVG(widthPx, draft) {
+    const key = state.proj, params = curParams(), kit = getKit(key, params);
+    const [x0, x1, y0, y1] = kit.b, S = widthPx / (x1 - x0), Hpx = Math.round((y1 - y0) * S), pad = 2;
+    const M = aspectM(), MT = [[M[0][0], M[1][0], M[2][0]], [M[0][1], M[1][1], M[2][1]], [M[0][2], M[1][2], M[2][2]]];
+    const step = draft ? 3 * D2R : 1 * D2R, refine = !draft, V = state.vec;
+    const X = (p) => (pad + (p[0] - x0) * S).toFixed(1), Y = (p) => (pad + (y1 - p[1]) * S).toFixed(1);
+    const path = (pts, close) => 'M' + pts.map((p) => X(p) + ' ' + Y(p)).join('L') + (close ? 'Z' : '');
+    const out = [];
+    const outline = computeOutline(kit);
+    const sw = V.stroke;
+    if (V.fillOcean) out.push('<path fill="' + OCEAN + '" fill-rule="evenodd" d="' + outline.map((l) => path(l, true)).join('') + '"/>');
+    if (V.fillLand && world) {
+      const groups = PALETTE.map(() => []), ice = [];
+      world.forEach((c) => c.raw.forEach((poly) => poly.forEach((ring) => {
+        const r = projectList(kit, densify(ring, MT, step), false);
+        if (r.intact && r.all.length > 2) (c.id === 'ATA' ? ice : groups[c.color]).push(path(r.all, true));
+      })));
+      groups.forEach((g, i) => { if (g.length) out.push('<path fill="' + PALETTE[i] + '" fill-rule="evenodd" d="' + g.join('') + '"/>'); });
+      if (ice.length) out.push('<path fill="' + ICE + '" d="' + ice.join('') + '"/>');
+    }
+    if (V.tissot && !draft) {
+      const fills = [], strokes = [];
+      tissotRings().forEach((ring) => {
+        const r = projectList(kit, densify(ring, MT, step), false);
+        if (r.intact && r.all.length > 2) fills.push(path(r.all, true)); else r.parts.forEach((p) => strokes.push(path(p, false)));
+      });
+      out.push('<path fill="#A3195B" fill-opacity="0.55" d="' + fills.join('') + '"/>');
+      if (strokes.length) out.push('<path fill="none" stroke="#A3195B" stroke-width="' + sw + '" d="' + strokes.join('') + '"/>');
+    }
+    if (V.grat) {
+      const d = [];
+      graticuleLines(state.step).forEach((line) => projectList(kit, densify(line, MT, step), refine).parts.forEach((p) => d.push(path(p, false))));
+      out.push('<path fill="none" stroke="' + state.gratColor + '" stroke-opacity="0.7" stroke-width="' + (sw * 0.6).toFixed(2) + '" d="' + d.join('') + '"/>');
+    }
+    if (V.coast && world) {
+      const d = [];
+      worldArcs.forEach((arc) => projectList(kit, densify(arc, MT, step), refine).parts.forEach((p) => d.push(path(p, false))));
+      out.push('<path fill="none" stroke="' + INK + '" stroke-width="' + sw + '" stroke-linejoin="round" stroke-linecap="round" d="' + d.join('') + '"/>');
+    }
+    if (V.edge) out.push('<path fill="none" stroke="' + INK + '" stroke-width="' + (sw * 1.5).toFixed(2) + '" stroke-linejoin="round" d="' + outline.map((l) => path(l, true)).join('') + '"/>');
+    const W = Math.round(widthPx + 2 * pad), H = Hpx + 2 * pad;
+    return { W, H, svg: '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '">' +
+      '<title>' + byKey[key].name + '</title>' + out.join('') + '</svg>' };
+  }
+  let worldArcs = [];
+
+  /* ================= Measuring a projection ================= */
+  const IDENTITY = aspectMatrix(0, 0, 0);
+  const tick = () => new Promise((r) => setTimeout(r, 0));
+  function measure(P, params, width) {
+    const [x0, x1, y0, y1] = P.bounds(params);
+    const W = width, H = clamp(Math.round(W * (y1 - y0) / (x1 - x0)), 16, Math.round(width * 1.2));
+    const B = allocBuffers(W * H);
+    const g = sampleGrid(P, params, IDENTITY, W, H, B);
+    return computeDistortion(W, H, g, B);
+  }
+  const defaultParams = (P) => { const p = {}; (P.params || []).forEach((q) => { p[q.key] = q.value; }); return p; };
+
+  /* ================= Compare all projections (MapPlotter) ================= */
+  let compareResults = null, compareBusy = false;
+  async function runCompare(onProgress) {
+    if (compareBusy) return; compareBusy = true;
+    const res = [];
+    for (let i = 0; i < PROJECTIONS.length; i++) {
+      const P = PROJECTIONS[i], st = measure(P, defaultParams(P), 240);
+      if (st) res.push({ key: P.key, name: P.name, family: P.family, area: st.areaRMS, angle: st.omega, cover: Math.min(1, st.cover), partial: !!(P.partial || P.hemisphere) });
+      onProgress((i + 1) / PROJECTIONS.length);
+      await tick();
+    }
+    compareResults = res; compareBusy = false;
+    return res;
+  }
+
+  /* ================= Parameter optimiser (MapOptimizer) =================
+   * Nelder–Mead on the projection's optimisable parameters, minimising
+   *   w · (RMS of log₂ area scale) + (1 − w) · (mean angular distortion in radians). */
+  let optAbort = null;
+  async function optimise(weight, onProgress) {
+    const P = byKey[state.proj], qs = (P.params || []).filter((q) => q.opt);
+    if (!qs.length) return null;
+    const key = P.key, base = curParams();
+    const toParams = (u) => { const p = Object.assign({}, base); qs.forEach((q, i) => { const v = q.min + clamp(u[i], 0, 1) * (q.max - q.min); p[q.key] = Math.round(v / q.step) * q.step; }); return p; };
+    const fromParams = (p) => qs.map((q) => (p[q.key] - q.min) / (q.max - q.min));
+    let evals = 0;
+    const score = (st) => st ? weight * st.areaRMS + (1 - weight) * st.omega * D2R : 1e9;
+    const f = (u) => { evals++; return score(measure(P, toParams(u), 170)); };
+    const n = qs.length, start = fromParams(base), startScore = f(start);
+    let simplex = [{ u: start, f: startScore }];
+    for (let i = 0; i < n; i++) { const u = start.slice(); u[i] = u[i] + (u[i] > 0.5 ? -0.18 : 0.18); simplex.push({ u, f: f(u) }); }
+    const token = {}; optAbort = token;
+    const maxEval = 26 * n + 20;
+    while (evals < maxEval) {
+      if (optAbort !== token) return null;
+      simplex.sort((a, b) => a.f - b.f);
+      const best = simplex[0], worst = simplex[n];
+      const spread = Math.max(...simplex.map((s) => Math.max(...s.u.map((v, i) => Math.abs(v - best.u[i])))));
+      onProgress(evals / maxEval, toParams(best.u), best.f, startScore);
+      if (spread < 2e-3) break;
+      const cen = new Array(n).fill(0);
+      for (let i = 0; i < n; i++) for (let d = 0; d < n; d++) cen[d] += simplex[i].u[d] / n;
+      const pt = (t) => cen.map((c, d) => clamp(c + t * (worst.u[d] - c), 0, 1));
+      const r = { u: pt(-1) }; r.f = f(r.u);
+      if (r.f < best.f) { const e = { u: pt(-2) }; e.f = f(e.u); simplex[n] = e.f < r.f ? e : r; }
+      else if (r.f < simplex[n - 1].f) simplex[n] = r;
+      else {
+        const c = { u: pt(r.f < worst.f ? -0.5 : 0.5) }; c.f = f(c.u);
+        if (c.f < Math.min(worst.f, r.f)) simplex[n] = c;
+        else for (let i = 1; i <= n; i++) { simplex[i].u = simplex[i].u.map((v, d) => best.u[d] + 0.5 * (v - best.u[d])); simplex[i].f = f(simplex[i].u); }
+      }
+      await tick();
+    }
+    simplex.sort((a, b) => a.f - b.f);
+    if (optAbort !== token) return null;
+    optAbort = null;
+    return { key, params: toParams(simplex[0].u), score: simplex[0].f, startScore, evals };
+  }
+
+  /* ================= ZIP (stored, no compression; PNGs are already compressed) ================= */
+  const CRC_TABLE = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  function crc32(u8) { let c = 0xFFFFFFFF; for (let i = 0; i < u8.length; i++) c = CRC_TABLE[(c ^ u8[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+  function makeZip(files) {
+    const enc = new TextEncoder(), parts = [], central = [];
+    let offset = 0;
+    const d = new Date(), dosTime = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1), dosDate = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+    files.forEach((f) => {
+      const name = enc.encode(f.name), crc = crc32(f.data), size = f.data.length;
+      const lh = new DataView(new ArrayBuffer(30));
+      lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, 20, true); lh.setUint16(6, 0x0800, true); lh.setUint16(8, 0, true);
+      lh.setUint16(10, dosTime, true); lh.setUint16(12, dosDate, true); lh.setUint32(14, crc, true); lh.setUint32(18, size, true); lh.setUint32(22, size, true);
+      lh.setUint16(26, name.length, true); lh.setUint16(28, 0, true);
+      parts.push(new Uint8Array(lh.buffer), name, f.data);
+      const ch = new DataView(new ArrayBuffer(46));
+      ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, 20, true); ch.setUint16(6, 20, true); ch.setUint16(8, 0x0800, true); ch.setUint16(10, 0, true);
+      ch.setUint16(12, dosTime, true); ch.setUint16(14, dosDate, true); ch.setUint32(16, crc, true); ch.setUint32(20, size, true); ch.setUint32(24, size, true);
+      ch.setUint16(28, name.length, true); ch.setUint32(42, offset, true);
+      central.push(new Uint8Array(ch.buffer), name);
+      offset += 30 + name.length + size;
+    });
+    const cdSize = central.reduce((s, a) => s + a.length, 0);
+    const end = new DataView(new ArrayBuffer(22));
+    end.setUint32(0, 0x06054b50, true); end.setUint16(8, files.length, true); end.setUint16(10, files.length, true);
+    end.setUint32(12, cdSize, true); end.setUint32(16, offset, true);
+    return new Blob([...parts, ...central, new Uint8Array(end.buffer)], { type: 'application/zip' });
+  }
+
+  /* ================= Rendering for export ================= */
+  const MAX_EXPORT_PX = 7e6;
+  async function renderExportBlob(texture, width) {
+    const [x0, x1, y0, y1] = currentBoundsBox();
+    const ratio = (y1 - y0) / (x1 - x0);
+    let W = width, H = Math.round(W * ratio);
+    if (W * H > MAX_EXPORT_PX) { const s = Math.sqrt(MAX_EXPORT_PX / (W * H)); W = Math.round(W * s); H = Math.round(H * s); }
+    let ss = state.aa ? Math.min(2, Math.sqrt(MAX_EXPORT_PX / (W * H))) : 1;
+    if (ss < 1.15) ss = 1;
+    const RW = Math.round(W * ss), RH = Math.round(H * ss);
+    const cv = document.createElement('canvas'); cv.width = RW; cv.height = RH;
+    const c2 = cv.getContext('2d');
+    const fr = renderRaster(c2, RW, RH, rasterOptions({ texture, ownBuffers: true, stats: false, edge: hexRgb(INK),
+      thickness: state.gratWidth * ss * Math.max(1, W / 1200), ref: lastFrame && lastFrame.stats ? lastFrame.stats.median : 0 }));
+    c2.putImageData(fr.img, 0, 0);
+    let out = cv;
+    if (ss > 1) {
+      out = document.createElement('canvas'); out.width = W; out.height = H;
+      const c3 = out.getContext('2d'); c3.imageSmoothingEnabled = true; c3.imageSmoothingQuality = 'high'; c3.drawImage(cv, 0, 0, W, H);
+    }
+    return new Promise((r) => out.toBlob(r, 'image/png'));
+  }
+  function loadImageFile(file) {
+    return new Promise((resolve, reject) => {
+      const rd = new FileReader();
+      rd.onload = () => { const im = new Image(); im.onload = () => resolve(im); im.onerror = () => reject(new Error('decode')); im.src = rd.result; };
+      rd.onerror = () => reject(new Error('read'));
+      rd.readAsDataURL(file);
+    });
+  }
+
+  /* ================= Layout and drawing ================= */
+  const canvas = $('#map'), vecBox = $('#vec'), stage = $('#stage');
+  const ctx = canvas.getContext('2d');
+  let cssW = 800, cssH = 400, lastFrame = null, batchFiles = [];
+  const currentBoundsBox = () => byKey[state.proj].bounds(curParams());
+
+  function layout() {
+    const [x0, x1, y0, y1] = currentBoundsBox();
+    const ratio = (y1 - y0) / (x1 - x0);
+    const avail = stage.clientWidth - 2 * parseFloat(getComputedStyle(stage).paddingLeft || 0);
+    const maxH = Math.max(260, Math.min(window.innerHeight * 0.66, 760));
+    let w = Math.max(200, avail), h = w * ratio;
+    if (h > maxH) { h = maxH; w = h / ratio; }
+    cssW = Math.round(w); cssH = Math.round(h);
+    for (const el of [canvas, vecBox]) { el.style.width = cssW + 'px'; el.style.height = cssH + 'px'; }
+  }
+  function pixelSize(budget) {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let s = dpr; if (cssW * cssH * s * s > budget) s = Math.sqrt(budget / (cssW * cssH));
+    return { W: Math.max(16, Math.round(cssW * s)), H: Math.max(16, Math.round(cssH * s)), s };
+  }
+  function cssHex(name, fallback) {
+    const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return /^#[0-9a-f]{6}$/i.test(v) ? hexRgb(v) : fallback;
+  }
+  function drawRaster(full) {
+    const { W, H, s } = pixelSize(full ? 1.0e6 : 1.2e5);
+    const t0 = performance.now();
+    const fr = renderRaster(ctx, W, H, rasterOptions({ stats: full, edge: cssHex('--map-edge', hexRgb(INK)),
+      thickness: Math.max(1, state.gratWidth * s), ref: lastFrame && lastFrame.stats ? lastFrame.stats.median : 0 }));
+    canvas.width = W; canvas.height = H;
+    ctx.putImageData(fr.img, 0, 0);
+    if (full) { lastFrame = fr; showStats(fr.stats); } else lastFrame = Object.assign(fr, { stats: lastFrame && lastFrame.stats });
+    canvas.dataset.ms = Math.round(performance.now() - t0);
+  }
+  function drawVector(draft) {
+    const t0 = performance.now();
+    const r = buildSVG(cssW, draft);
+    vecBox.innerHTML = r.svg;
+    vecBox.dataset.ms = Math.round(performance.now() - t0);
+  }
+  let fullTimer = 0, rafId = 0;
+  function schedule(quickFirst) {
+    cancelAnimationFrame(rafId); clearTimeout(fullTimer);
+    const vector = state.tab === 'vector';
+    if (state.tab !== 'raster' && !vector) return;
+    if (quickFirst) rafId = requestAnimationFrame(() => (vector ? drawVector(true) : drawRaster(false)));
+    fullTimer = setTimeout(() => (vector ? drawVector(false) : drawRaster(true)), quickFirst ? (vector ? 260 : 160) : 0);
+  }
+  function refresh(opts) { if (opts && opts.relayout) layout(); updateLegend(); schedule(!(opts && opts.immediate)); }
+
+  /* ================= Analysis display ================= */
+  function showStats(st) {
+    const set = (id, v) => { $(id).textContent = v; };
+    if (!st) { ['#stat-area', '#stat-rms', '#stat-angle', '#stat-cover'].forEach((id) => set(id, '–')); $('#hist-area').innerHTML = ''; $('#hist-angle').innerHTML = ''; return; }
+    const ratio = Math.pow(2, st.p95 - st.p05);
+    set('#stat-area', ratio < 1.05 ? 'about equal (×' + ratio.toFixed(2) + ')' : '×' + (ratio < 10 ? ratio.toFixed(2) : ratio < 100 ? ratio.toFixed(1) : Math.round(ratio)));
+    set('#stat-rms', st.areaRMS.toFixed(3));
+    set('#stat-angle', st.omega.toFixed(1) + '°');
+    set('#stat-cover', Math.round(Math.min(1, st.cover) * 100) + '%');
+    // histograms
+    // neutral bars over a colour strip that matches the map's colour scale
+    const bars = (vals, colorOf) => {
+      const mx = Math.max(...vals) || 1, w = 200 / vals.length;
+      return vals.map((v, i) => { const h = Math.max(v > 0 ? 1 : 0, 54 * v / mx); return '<rect x="' + (i * w + 0.3).toFixed(2) + '" y="' + (57 - h).toFixed(2) + '" width="' + (w - 0.6).toFixed(2) + '" height="' + h.toFixed(2) + '" fill="var(--ink-2)"/>' +
+        '<rect x="' + (i * w).toFixed(2) + '" y="59" width="' + (w + 0.05).toFixed(2) + '" height="5" fill="' + colorOf(i, vals.length) + '"/>'; }).join('');
+    };
+    const per = (HIST_N - 1) / (HIST_HI - HIST_LO), nA = 40, aVals = new Array(nA).fill(0);
+    for (let b = 0; b < HIST_N; b++) {
+      const rel = HIST_LO + b / per - st.median, idx = Math.floor((rel + 3) / 6 * nA);
+      if (idx >= 0 && idx < nA) aVals[idx] += st.hist[b];
+    }
+    const rgb = (c) => 'rgb(' + c.map(Math.round).join(',') + ')';
+    $('#hist-area').innerHTML = bars(aVals, (i, n) => rgb(diverging((i + 0.5) / n * 2 - 1, [0, 0, 0])));
+    const wVals = new Array(30).fill(0);
+    for (let b = 0; b <= 90; b++) wVals[Math.min(29, Math.floor(b / 3))] += st.histW[b];
+    $('#hist-angle').innerHTML = bars(wVals, (i, n) => rgb(sequential(Math.min(1, (i + 0.5) / n + 0.08), [0, 0, 0])));
+  }
+  const fmtLat = (v) => Math.abs(v).toFixed(1) + '°' + (v >= 0 ? 'N' : 'S');
+  const fmtLon = (v) => Math.abs(v).toFixed(1) + '°' + (v >= 0 ? 'E' : 'W');
+  const fmtFactor = (f) => (f >= 100 ? Math.round(f).toString() : f >= 10 ? f.toFixed(1) : f.toFixed(2));
+  function hover(ev) {
+    const out = $('#probe');
+    if (!lastFrame || dragging || state.tab !== 'raster') return;
+    const r = canvas.getBoundingClientRect();
+    const i = Math.floor((ev.clientX - r.left) / r.width * lastFrame.W), j = Math.floor((ev.clientY - r.top) / r.height * lastFrame.H);
+    if (i < 0 || j < 0 || i >= lastFrame.W || j >= lastFrame.H) { out.hidden = true; return; }
+    const k = j * lastFrame.W + i, B = lastFrame.buf;
+    if (!B.ok[k]) { out.hidden = true; return; }
+    out.hidden = false;
+    const la = B.lat[k], lo = B.lon[k];
+    $('#probe-pos').textContent = fmtLat(la) + ', ' + fmtLon(lo);
+    const name = countryAt(la, lo);
+    $('#probe-place').textContent = name || (state.style === 'upload' || state.style === 'test' || !world ? '' : 'Ocean');
+    const st = lastFrame.stats, l2 = B.ls[k], w = B.om[k];
+    $('#probe-area').textContent = (l2 === l2 && st) ? '×' + fmtFactor(Math.pow(2, l2 - st.median)) : '–';
+    $('#probe-angle').textContent = (w === w) ? w.toFixed(1) + '°' : '–';
+  }
+  function updateLegend() {
+    const lg = $('#legend');
+    lg.hidden = state.mode === 'map' || state.tab !== 'raster';
+    const grad = (f, ts) => 'linear-gradient(90deg,' + ts.map((t) => 'rgb(' + f(t, [0, 0, 0]).map(Math.round).join(',') + ')').join(',') + ')';
+    if (state.mode === 'area') {
+      $('#legend-bar').style.background = grad(diverging, [-1, -0.5, 0, 0.5, 1]);
+      $('#legend-lo').textContent = 'smaller area (×1/8)'; $('#legend-mid').textContent = 'median'; $('#legend-hi').textContent = 'larger (×8)';
+    } else if (state.mode === 'angle') {
+      $('#legend-bar').style.background = grad(sequential, [0, 0.25, 0.5, 0.75, 1]);
+      $('#legend-lo').textContent = '0° (true shape)'; $('#legend-mid').textContent = '45°'; $('#legend-hi').textContent = '90° or more';
+    }
+  }
+
+  /* ================= Projection list and settings ================= */
+  const TAG_CLASS = { 'Equal-area': 't-area', 'Conformal': 't-conf', 'Compromise': 't-comp', 'Equidistant': 't-dist', 'Perspective': 't-pers', 'Interrupted': 't-int' };
+  const tagHtml = (g) => '<span class="tag ' + (TAG_CLASS[g] || '') + '">' + g + '</span>';
+  function buildList() {
+    const list = $('#proj-list'); list.innerHTML = '';
+    const fams = [...new Set(PROJECTIONS.map((p) => p.family))];
+    fams.forEach((f, fi) => {
+      const g = document.createElement('div'); g.className = 'fam'; g.setAttribute('role', 'group');
+      const h = document.createElement('h3'); h.textContent = f; h.id = 'fam-' + fi; g.setAttribute('aria-labelledby', h.id); g.appendChild(h);
+      PROJECTIONS.filter((p) => p.family === f).forEach((p) => {
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'proj'; b.dataset.key = p.key;
+        b.setAttribute('aria-pressed', p.key === state.proj ? 'true' : 'false');
+        b.innerHTML = '<span class="pname">' + p.name + '</span><span class="tags">' + p.tags.map(tagHtml).join('') + '</span>';
+        b.addEventListener('click', () => selectProj(p.key));
+        g.appendChild(b);
+      });
+      list.appendChild(g);
+    });
+  }
+  function selectProj(key) {
+    if (optAbort) { optAbort = null; endOptimiseUI(); }
+    state.proj = key;
+    document.querySelectorAll('.proj').forEach((b) => b.setAttribute('aria-pressed', b.dataset.key === key ? 'true' : 'false'));
+    const p = byKey[key];
+    $('#info-name').textContent = p.name;
+    $('#info-tags').innerHTML = p.tags.map(tagHtml).join('');
+    $('#info-note').textContent = p.note;
+    $('#info-who').textContent = p.who;
+    buildParams();
+    if (state.preset) applyPreset(state.preset, true);
+    lastFrame = null;
+    updateBatchSummary();
+    refresh({ relayout: true });
+  }
+  function fmtParam(q, v) { return (q.step < 1 ? (+v).toFixed(q.step < 0.1 ? 2 : 1) : String(Math.round(v))) + q.unit; }
+  function buildParams() {
+    const p = byKey[state.proj], box = $('#params');
+    box.innerHTML = '';
+    $('#params-wrap').hidden = !(p.params && p.params.length);
+    $('#opt-box').hidden = !(p.params || []).some((q) => q.opt);
+    $('#opt-status').textContent = '';
+    (p.params || []).forEach((q) => {
+      const id = 'param-' + q.key, row = document.createElement('div'); row.className = 'slider';
+      row.innerHTML = '<label for="' + id + '">' + q.label + '</label><input type="range" id="' + id + '" min="' + q.min + '" max="' + q.max + '" step="' + q.step + '"><output for="' + id + '"></output>';
+      const inp = row.querySelector('input'), out = row.querySelector('output');
+      inp.value = paramState[p.key][q.key]; out.textContent = fmtParam(q, inp.value);
+      inp.addEventListener('input', () => { paramState[p.key][q.key] = +inp.value; out.textContent = fmtParam(q, inp.value); refresh({ relayout: true }); });
+      box.appendChild(row);
+    });
+    if (p.presets) {
+      const pre = document.createElement('div'); pre.className = 'chips';
+      p.presets.forEach(([n, vals]) => {
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'chip';
+        b.textContent = n + ' ' + Object.values(vals).map((v) => v + '°').join(', ');
+        b.addEventListener('click', () => { Object.assign(paramState[p.key], vals); buildParams(); refresh({ relayout: true }); });
+        pre.appendChild(b);
+      });
+      box.appendChild(pre);
+    }
+  }
+
+  /* ================= Aspect ================= */
+  const aspectInputs = { lat: $('#a-lat'), lon: $('#a-lon'), rot: $('#a-rot') };
+  const wrap180 = (v) => { v = ((v + 180) % 360 + 360) % 360 - 180; return v === -180 ? 180 : v; };
+  function syncAspect() { Object.entries(aspectInputs).forEach(([k, inp]) => { inp.value = state[k]; inp.nextElementSibling.textContent = (+state[k]).toFixed(1) + '°'; }); }
+  Object.entries(aspectInputs).forEach(([k, inp]) => inp.addEventListener('input', () => { state[k] = +inp.value; setPreset(null); syncAspect(); refresh(); }));
+  function setPreset(v) {
+    state.preset = v;
+    document.querySelectorAll('[data-preset]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.preset === v ? 'true' : 'false'));
+  }
+  // Presets mean different things per projection (an azimuthal map's normal aspect is polar), so they are re-applied on every switch.
+  function applyPreset(v, silent) {
+    const p = byKey[state.proj], n = p.aspect, polar = n[0] === 90, std = n[0] === 0 && n[1] === 0 && n[2] === 0;
+    let a;
+    if (v === 'normal') a = n.slice();
+    else if (v === 'transverse') a = polar ? [0, 0, 0] : [n[0], n[1], 90];
+    else if (v === 'pacific') a = p.fixedLon ? n.slice() : polar ? [90, -30, 0] : std ? [0, 150, 0] : n.slice();
+    else if (v === 'seoul') a = [37.57, 126.98, 0];
+    else if (v === 'nemo') a = [-48.88, -123.39, 0];
+    else a = [n[0], n[1], wrap180(n[2] + 180)];
+    state.lat = a[0]; state.lon = a[1]; state.rot = a[2];
+    setPreset(v); syncAspect();
+    if (!silent) refresh({ immediate: true });
+  }
+  document.querySelectorAll('[data-preset]').forEach((b) => b.addEventListener('click', () => applyPreset(b.dataset.preset)));
+
+  // Dragging and keyboard
+  let dragging = false, dragLast = null;
+  function attachDrag(el) {
+    el.addEventListener('pointerdown', (e) => { dragging = true; dragLast = [e.clientX, e.clientY]; el.setPointerCapture(e.pointerId); el.classList.add('grabbing'); $('#probe').hidden = true; });
+    el.addEventListener('pointermove', (e) => {
+      if (!dragging) { if (el === canvas) hover(e); return; }
+      const p = byKey[state.proj], span = p.hemisphere ? 180 : p.key === 'gnomonic' ? 110 : 360, k = span / cssW;
+      const dx = e.clientX - dragLast[0], dy = e.clientY - dragLast[1]; dragLast = [e.clientX, e.clientY];
+      const g = state.rot * D2R, ex = dx * Math.cos(g) - dy * Math.sin(g), ey = dx * Math.sin(g) + dy * Math.cos(g);
+      state.lon = wrap180(state.lon - ex * k); state.lat = clamp(state.lat + ey * k, -90, 90);
+      setPreset(null); syncAspect(); refresh();
+    });
+    const end = () => { if (!dragging) return; dragging = false; el.classList.remove('grabbing'); schedule(false); };
+    el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
+    el.addEventListener('pointerleave', () => { if (!dragging) $('#probe').hidden = true; });
+    el.addEventListener('keydown', (e) => {
+      const s = e.shiftKey ? 1 : 5;
+      if (e.key === 'ArrowLeft') state.lon = wrap180(state.lon - s);
+      else if (e.key === 'ArrowRight') state.lon = wrap180(state.lon + s);
+      else if (e.key === 'ArrowUp') state.lat = Math.min(90, state.lat + s);
+      else if (e.key === 'ArrowDown') state.lat = Math.max(-90, state.lat - s);
+      else return;
+      e.preventDefault(); setPreset(null); syncAspect(); refresh();
+    });
+  }
+  attachDrag(canvas); attachDrag(vecBox);
+
+  /* ================= View, layers and output options ================= */
+  document.querySelectorAll('input[name="mode"]').forEach((r) => r.addEventListener('change', () => { state.mode = r.value; refresh({ immediate: true }); }));
+  const syncStep = (v) => { state.step = +v; $('#o-step').value = v; $('#v-step').value = v; };
+  $('#o-grat').addEventListener('change', (e) => { state.graticule = e.target.checked; $('#o-step').disabled = !state.graticule; refresh({ immediate: true }); });
+  $('#o-step').addEventListener('change', (e) => { syncStep(e.target.value); refresh({ immediate: true }); });
+  $('#v-step').addEventListener('change', (e) => { syncStep(e.target.value); refresh({ immediate: true }); });
+  $('#o-tissot').addEventListener('change', (e) => { state.tissot = e.target.checked; refresh({ immediate: true }); });
+  [['#v-coast', 'coast'], ['#v-grat', 'grat'], ['#v-edge', 'edge'], ['#v-tissot', 'tissot'], ['#v-ocean', 'fillOcean'], ['#v-land', 'fillLand']].forEach(([id, k]) => {
+    $(id).addEventListener('change', (e) => { state.vec[k] = e.target.checked; if (k === 'grat') $('#v-step').disabled = !e.target.checked; refresh({ immediate: true }); });
+  });
+  $('#v-stroke').addEventListener('input', (e) => { state.vec.stroke = +e.target.value; e.target.nextElementSibling.textContent = (+e.target.value).toFixed(1) + ' px'; refresh(); });
+  $('#x-width').addEventListener('change', (e) => { state.exportWidth = +e.target.value; updateBatchSummary(); });
+  $('#x-aa').addEventListener('change', (e) => { state.aa = e.target.checked; });
+  $('#x-gcolor').addEventListener('input', (e) => { state.gratColor = e.target.value; refresh(); });
+  $('#x-gwidth').addEventListener('input', (e) => { state.gratWidth = +e.target.value; e.target.nextElementSibling.textContent = e.target.value + ' px'; refresh(); });
+
+  const styleSel = $('#style');
+  styleSel.addEventListener('change', () => setStyle(styleSel.value));
+  function setStyle(s) {
+    if ((s === 'political' || s === 'land') && !world) { styleSel.value = state.style; return; }
+    if (s === 'upload' && !textures.upload) { $('#file').click(); styleSel.value = state.style; return; }
+    if ((s === 'political' || s === 'land') && !textures[s]) textures[s] = buildWorldTexture(s);
+    state.style = s; styleSel.value = s; refresh({ immediate: true });
+  }
+  let uploadName = '';
+  $('#file').addEventListener('change', async (e) => {
+    const f = e.target.files && e.target.files[0]; e.target.value = ''; if (!f) return;
+    try {
+      const im = await loadImageFile(f);
+      textures.upload = imageToTexture(im);
+      uploadName = f.name.slice(0, 28);
+      styleSel.querySelector('option[value="upload"]').textContent = 'My image: ' + uploadName;
+      const ratio = im.naturalWidth / im.naturalHeight;
+      note(Math.abs(ratio - 2) > 0.05 ? 'The image isn’t 2:1, so it was stretched to span 360° × 180°.' : '');
+      setStyle('upload');
+    } catch (err) { note('This file can’t be opened as an image. Choose a PNG or JPG file.'); }
+  });
+  $('#open-image').addEventListener('click', () => $('#file').click());
+  function note(msg) { const n = $('#note'); n.textContent = msg; n.hidden = !msg; }
+
+  /* ================= Saving ================= */
+  let downloads = null;
+  (async () => {
+    try { if (window.claude && typeof window.claude.use === 'function') downloads = await window.claude.use('downloads'); } catch (e) { downloads = null; }
+    updateSaveButton(); updateBatchSummary();
+  })();
+  const slug = () => byKey[state.proj].name.replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  function updateSaveButton() {
+    const b = $('#save');
+    b.hidden = !downloads || (state.tab !== 'raster' && state.tab !== 'vector');
+    b.textContent = state.tab === 'vector' ? 'Save SVG' : 'Save PNG';
+  }
+  async function saveFile(filename, data) {
+    try { await downloads.save({ filename, data }); return true; }
+    catch (e) { if (e && e.code && e.code !== 'declined') note('Couldn’t save the file (' + e.code + ').'); return false; }
+  }
+  $('#save').addEventListener('click', async () => {
+    const btn = $('#save'), label = btn.textContent; btn.disabled = true; btn.textContent = 'Rendering…';
+    await new Promise((r) => setTimeout(r, 30));
+    try {
+      if (state.tab === 'vector') { const r = buildSVG(1600, false); await saveFile(slug() + '.svg', r.svg); }
+      else { const blob = await renderExportBlob(currentTexture(), state.exportWidth); await saveFile(slug() + '.png', blob); }
+    } finally { btn.disabled = false; btn.textContent = label; }
+  });
+
+  /* ================= Optimiser UI ================= */
+  const optW = $('#opt-w');
+  const wLabel = (w) => (w < 0.35 ? 'Shapes first' : w > 0.65 ? 'Areas first' : 'Balanced');
+  optW.addEventListener('input', () => { $('#opt-w-out').textContent = wLabel(+optW.value); });
+  function endOptimiseUI() { $('#opt-run').textContent = 'Find best parameters'; $('#opt-prog').hidden = true; }
+  $('#opt-run').addEventListener('click', async () => {
+    if (optAbort) { optAbort = null; endOptimiseUI(); $('#opt-status').textContent = 'Stopped.'; return; }
+    const btn = $('#opt-run'), bar = $('#opt-prog'); btn.textContent = 'Stop'; bar.hidden = false;
+    const key = state.proj;
+    const res = await optimise(+optW.value, (frac, params, best, start) => {
+      bar.firstElementChild.style.width = Math.round(frac * 100) + '%';
+      $('#opt-status').textContent = 'Score ' + start.toFixed(3) + ' → ' + best.toFixed(3);
+    });
+    endOptimiseUI();
+    if (!res || state.proj !== key) return;
+    Object.keys(res.params).forEach((k) => { if (k[0] !== '_') paramState[key][k] = res.params[k]; });
+    buildParams();
+    $('#opt-status').textContent = 'Score ' + res.startScore.toFixed(3) + ' → ' + res.score.toFixed(3) + ' after ' + res.evals + ' tries. Lower is better.';
+    refresh({ relayout: true });
+  });
+
+  /* ================= Compare all (plotter) ================= */
+  const FAM_COLOR = (r) => { const t = byKey[r.key].tags; return t.includes('Equal-area') ? 'var(--t-area)' : t.includes('Conformal') ? 'var(--t-conf)' : t.includes('Equidistant') ? 'var(--t-dist)' : t.includes('Perspective') ? 'var(--t-pers)' : 'var(--t-comp)'; };
+  function drawCompare(res) {
+    const svg = $('#cmp-svg'), Wd = 760, Hd = 460, m = { l: 64, r: 20, t: 16, b: 50 };
+    const xmax = Math.ceil(Math.max(...res.map((r) => r.area)) * 5) / 5 || 1, ymax = Math.ceil(Math.max(...res.map((r) => r.angle)) / 10) * 10 || 10;
+    const X = (v) => m.l + v / xmax * (Wd - m.l - m.r), Y = (v) => Hd - m.b - v / ymax * (Hd - m.t - m.b);
+    const g = [];
+    for (let v = 0; v <= xmax + 1e-9; v += xmax / 5) g.push('<line x1="' + X(v) + '" x2="' + X(v) + '" y1="' + m.t + '" y2="' + (Hd - m.b) + '" stroke="var(--rule-2)"/><text x="' + X(v) + '" y="' + (Hd - m.b + 18) + '" text-anchor="middle" font-size="12" fill="var(--ink-2)">' + v.toFixed(1) + '</text>');
+    for (let v = 0; v <= ymax; v += 10) g.push('<line x1="' + m.l + '" x2="' + (Wd - m.r) + '" y1="' + Y(v) + '" y2="' + Y(v) + '" stroke="var(--rule-2)"/><text x="' + (m.l - 8) + '" y="' + (Y(v) + 4) + '" text-anchor="end" font-size="12" fill="var(--ink-2)">' + v + '°</text>');
+    g.push('<text x="' + ((m.l + Wd - m.r) / 2) + '" y="' + (Hd - 10) + '" text-anchor="middle" font-size="13" fill="var(--ink)">Area distortion (RMS of log₂ area scale)</text>');
+    g.push('<text transform="translate(16 ' + ((m.t + Hd - m.b) / 2) + ') rotate(-90)" text-anchor="middle" font-size="13" fill="var(--ink)">Mean angular distortion</text>');
+    res.forEach((r, i) => {
+      const c = FAM_COLOR(r), sel = r.key === state.proj;
+      g.push('<circle class="dot" data-i="' + i + '" cx="' + X(r.area).toFixed(1) + '" cy="' + Y(r.angle).toFixed(1) + '" r="' + (sel ? 7 : 5.5) + '" fill="' + (r.partial ? 'var(--panel)' : c) + '" stroke="' + (sel ? 'var(--accent)' : c) + '" stroke-width="' + (sel ? 3 : 2) + '" tabindex="0" role="button" aria-label="' + r.name + '"/>');
+      if (sel) g.push('<text x="' + (X(r.area) + 10) + '" y="' + (Y(r.angle) - 8) + '" font-size="12.5" font-weight="600" fill="var(--ink)">' + r.name + '</text>');
+    });
+    svg.innerHTML = g.join('');
+    const tip = $('#cmp-tip');
+    svg.querySelectorAll('.dot').forEach((d) => {
+      const r = res[+d.dataset.i];
+      const show = () => { const box = $('#cmp-plot').getBoundingClientRect(), b = d.getBoundingClientRect(); tip.hidden = false; tip.textContent = r.name + ': area ' + r.area.toFixed(2) + ', angles ' + r.angle.toFixed(1) + '°'; tip.style.left = (b.left - box.left + 12) + 'px'; tip.style.top = (b.top - box.top - 30) + 'px'; };
+      d.addEventListener('mouseenter', show); d.addEventListener('focus', show);
+      d.addEventListener('mouseleave', () => { tip.hidden = true; }); d.addEventListener('blur', () => { tip.hidden = true; });
+      const go = () => { selectProj(r.key); switchTab('raster'); };
+      d.addEventListener('click', go); d.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+    });
+    const tb = $('#cmp-table tbody');
+    tb.innerHTML = '';
+    res.slice().sort((a, b) => (a.area + a.angle * D2R) - (b.area + b.angle * D2R)).forEach((r) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = '<td>' + r.name + '</td><td>' + r.family + '</td><td class="num">' + r.area.toFixed(3) + '</td><td class="num">' + r.angle.toFixed(1) + '°</td><td class="num">' + Math.round(r.cover * 100) + '%</td>';
+      tr.tabIndex = 0;
+      const go = () => { selectProj(r.key); switchTab('raster'); };
+      tr.addEventListener('click', go); tr.addEventListener('keydown', (e) => { if (e.key === 'Enter') go(); });
+      tb.appendChild(tr);
+    });
+    $('#cmp-plot').hidden = false; $('#cmp-table').hidden = false;
+  }
+  $('#cmp-run').addEventListener('click', async () => {
+    const btn = $('#cmp-run'), bar = $('#cmp-prog'); btn.disabled = true; bar.hidden = false;
+    $('#cmp-status').textContent = 'Measuring…';
+    const t0 = performance.now();
+    const res = await runCompare((f) => { bar.firstElementChild.style.width = Math.round(f * 100) + '%'; });
+    btn.disabled = false; bar.hidden = true; btn.textContent = 'Measure again';
+    if (res) { $('#cmp-status').textContent = res.length + ' projections measured in ' + ((performance.now() - t0) / 1000).toFixed(1) + ' s. Click a point or a row to open it.'; drawCompare(res); }
+  });
+
+  /* ================= Batch convert (converter) ================= */
+  function updateBatchSummary() {
+    $('#batch-summary').textContent = 'Current settings: ' + byKey[state.proj].name + ', centre ' + fmtLat(state.lat) + ' ' + fmtLon(state.lon) + ', rotation ' + state.rot.toFixed(1) + '°, ' + state.exportWidth.toLocaleString('en') + ' px wide.' +
+      (downloads ? '' : ' Saving files isn’t available in this view.');
+    $('#batch-run').disabled = !batchFiles.length || !downloads;
+  }
+  $('#batch-pick').addEventListener('click', () => $('#batch-files').click());
+  $('#batch-files').addEventListener('change', (e) => {
+    batchFiles = [...(e.target.files || [])]; e.target.value = '';
+    const ul = $('#batch-list'); ul.innerHTML = '';
+    batchFiles.forEach((f) => { const li = document.createElement('li'); li.innerHTML = '<span></span><span class="muted"></span>'; li.firstChild.textContent = f.name; li.lastChild.textContent = (f.size / 1024 / 1024).toFixed(1) + ' MB'; ul.appendChild(li); });
+    $('#batch-status').textContent = batchFiles.length ? batchFiles.length + ' image' + (batchFiles.length > 1 ? 's' : '') + ' ready.' : '';
+    updateBatchSummary();
+  });
+  $('#batch-run').addEventListener('click', async () => {
+    const btn = $('#batch-run'), bar = $('#batch-prog'); btn.disabled = true; bar.hidden = false;
+    const out = [], items = $('#batch-list').children;
+    for (let i = 0; i < batchFiles.length; i++) {
+      const f = batchFiles[i];
+      $('#batch-status').textContent = 'Converting ' + (i + 1) + ' of ' + batchFiles.length + '…';
+      try {
+        const im = await loadImageFile(f), tex = imageToTexture(im);
+        const saveMode = state.mode; state.mode = 'map';
+        const blob = await renderExportBlob(tex, state.exportWidth); state.mode = saveMode;
+        out.push({ name: f.name.replace(/\.[^.]+$/, '') + '-' + slug() + '.png', data: new Uint8Array(await blob.arrayBuffer()) });
+        items[i].lastChild.textContent = 'done';
+      } catch (err) { items[i].lastChild.textContent = 'couldn’t read this image'; }
+      bar.firstElementChild.style.width = Math.round((i + 1) / batchFiles.length * 100) + '%';
+      await tick();
+    }
+    bar.hidden = true;
+    if (!out.length) { $('#batch-status').textContent = 'None of the images could be converted.'; btn.disabled = false; return; }
+    $('#batch-status').textContent = 'Packing ' + out.length + ' image' + (out.length > 1 ? 's' : '') + '…';
+    const ok = await saveFile('reprojected-' + slug() + '.zip', makeZip(out));
+    $('#batch-status').textContent = ok ? 'Saved ' + out.length + ' image' + (out.length > 1 ? 's' : '') + ' as a ZIP file.' : 'The ZIP file wasn’t saved.';
+    btn.disabled = false;
+  });
+
+  /* ================= Tabs ================= */
+  function switchTab(t) {
+    state.tab = t;
+    ['raster', 'vector', 'compare', 'batch'].forEach((n) => $('#tab-' + n).setAttribute('aria-selected', n === t ? 'true' : 'false'));
+    const work = t === 'raster' || t === 'vector';
+    $('#panel-work').hidden = !work; $('#panel-compare').hidden = t !== 'compare'; $('#panel-batch').hidden = t !== 'batch';
+    $('#panel-work').setAttribute('aria-labelledby', 'tab-' + (t === 'vector' ? 'vector' : 'raster'));
+    document.querySelectorAll('.raster-only').forEach((el) => { el.hidden = t !== 'raster'; });
+    document.querySelectorAll('.vector-only').forEach((el) => { el.hidden = t !== 'vector'; });
+    canvas.hidden = t !== 'raster'; vecBox.hidden = t !== 'vector';
+    $('#probe').hidden = true;
+    updateSaveButton(); updateBatchSummary();
+    if (work) refresh({ relayout: true, immediate: true });
+    if (t === 'compare' && !compareResults && !compareBusy) $('#cmp-run').click();
+    else if (t === 'compare' && compareResults) drawCompare(compareResults);
+  }
+  ['raster', 'vector', 'compare', 'batch'].forEach((n) => $('#tab-' + n).addEventListener('click', () => switchTab(n)));
+  $('.tabs').addEventListener('keydown', (e) => {
+    const order = ['raster', 'vector', 'compare', 'batch'], i = order.indexOf(state.tab);
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const n = order[(i + (e.key === 'ArrowRight' ? 1 : 3)) % 4]; switchTab(n); $('#tab-' + n).focus(); e.preventDefault(); }
+  });
+
+  /* ================= World data ================= */
+  function loadWorld() {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/datamaps/0.5.9/datamaps.all.min.js';
+    s.async = true;
+    let done = false;
+    const fail = () => {
+      if (done) return; done = true; worldStatus = 'failed';
+      $('#loading').hidden = true;
+      styleSel.querySelectorAll('option[value="political"],option[value="land"]').forEach((o) => { o.disabled = true; });
+      note('Couldn’t load the world map data, so a checkerboard is shown instead. Open an equirectangular (2:1) map image to draw with it.');
+      if (state.style !== 'upload') setStyle('test');
+    };
+    s.onload = () => {
+      if (done) return;
+      try {
+        const topo = window.Datamap && window.Datamap.prototype && window.Datamap.prototype.worldTopo;
+        if (!topo || !topo.arcs) return fail();
+        world = decodeWorld(topo); worldArcs = world.arcs;
+        idTex = buildIdTexture();
+        done = true; worldStatus = 'ready';
+        $('#loading').hidden = true;
+        if (state.style === 'political' || state.style === 'land') textures[state.style] = buildWorldTexture(state.style);
+        refresh({ immediate: true });
+      } catch (e) { console.error(e); fail(); }
+    };
+    s.onerror = fail;
+    setTimeout(() => { if (!done) fail(); }, 12000);
+    document.head.appendChild(s);
+  }
+
+  /* ================= Start ================= */
+  buildList();
+  setPreset(state.preset);
+  selectProj(state.proj);
+  syncAspect();
+  let resizeT = 0;
+  new ResizeObserver(() => { clearTimeout(resizeT); resizeT = setTimeout(() => { if (state.tab === 'raster' || state.tab === 'vector') refresh({ relayout: true, immediate: true }); }, 60); }).observe(stage);
+  if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => refresh({ immediate: true }));
+  loadWorld();
+  layout(); drawRaster(true);
+  window.__mapApp = { state, paramState, selectProj, switchTab, setStyle, drawRaster, drawVector, buildSVG, optimise, runCompare, makeZip,
+    get worldStatus() { return worldStatus; }, get lastFrame() { return lastFrame; }, get compareResults() { return compareResults; } };
+
+
+})();
+</script>
+</body>
+</html>
