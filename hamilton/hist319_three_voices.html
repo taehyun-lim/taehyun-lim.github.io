@@ -1,0 +1,1037 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Three Voices on the Civil War</title>
+<meta name="description" content="A two-hour session for Hamilton College history students: compare what talkie (an AI that knows nothing after 1930), real texts from 1861 to 1914, and a 2026 AI say about the Civil War, then find the pattern and the exceptions.">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: fixed thumbnail rail on the left, one slide panel on the right (same system as the Coding Day Handbook). */
+  :root{
+    --ground:#e9ebef; --surface:#f9fafb; --surface-2:#f1f3f6; --screen:#1b2230;
+    --ink:#14171d; --ink-2:#4c5563; --ink-3:#77818f;
+    --rule:#cdd3dc; --rule-soft:#dee2e9;
+    --rubric:#8f2a24; --lapis:#1f3c78;
+    --good:#1f5c4d; --warn:#8a5a11;
+    --good-bg:#eef5f2; --warn-bg:#f8f3e8; --rub-bg:#f8eeed; --lap-bg:#eef1f8;
+    --code-bg:#f4f6f8; --slide-link:#f5c451;
+    --scr-ink:#ffffff; --scr-ink-2:#c3ccdb; --scr-ink-3:#8fa0bd; --scr-quote:#dfe6f0;
+    --shadow:0 1px 2px rgba(20,23,29,.06), 0 10px 26px -18px rgba(20,23,29,.34);
+    --disp:"Newsreader",Georgia,serif;
+    --body:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+    --ground:#111419; --surface:#171b21; --surface-2:#1d222a; --screen:#0c1017;
+    --ink:#e7eaef; --ink-2:#a6b0bd; --ink-3:#7d8794;
+    --rule:#2d343e; --rule-soft:#232931; --rubric:#dd8b83; --lapis:#93b0e8;
+    --good:#79c3ad; --warn:#d8ab5e;
+    --good-bg:#16241f; --warn-bg:#241d12; --rub-bg:#241615; --lap-bg:#161b26; --code-bg:#12161b; --slide-link:#f5c451;
+    --scr-ink:#ffffff; --scr-ink-2:#c3ccdb; --scr-ink-3:#8fa0bd; --scr-quote:#dfe6f0;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 30px -20px rgba(0,0,0,.9);
+    color-scheme:dark;
+  }}
+  :root[data-theme="dark"]{
+    --ground:#111419; --surface:#171b21; --surface-2:#1d222a; --screen:#0c1017;
+    --ink:#e7eaef; --ink-2:#a6b0bd; --ink-3:#7d8794;
+    --rule:#2d343e; --rule-soft:#232931; --rubric:#dd8b83; --lapis:#93b0e8;
+    --good:#79c3ad; --warn:#d8ab5e;
+    --good-bg:#16241f; --warn-bg:#241d12; --rub-bg:#241615; --lap-bg:#161b26; --code-bg:#12161b; --slide-link:#f5c451;
+    --scr-ink:#ffffff; --scr-ink-2:#c3ccdb; --scr-ink-3:#8fa0bd; --scr-quote:#dfe6f0;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 30px -20px rgba(0,0,0,.9);
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+  body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;
+    line-height:1.62;-webkit-font-smoothing:antialiased;margin:0}
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ground)}
+  p{margin:0 0 15px}
+  a{color:var(--lapis);text-decoration-thickness:1px;text-underline-offset:2px}
+  a.slink{text-decoration-style:dotted;text-decoration-thickness:1px;white-space:nowrap;cursor:pointer}
+  a.slink:hover{text-decoration-style:solid}
+  code{font-family:var(--mono);font-size:.875em;background:var(--code-bg);padding:1px 4px;border-radius:2px}
+
+  .wrap{max-width:1220px;margin:0 auto;
+    padding-left:max(16px, env(safe-area-inset-left, 0px));
+    padding-right:max(16px, env(safe-area-inset-right, 0px));
+    padding-block:0 60px}
+
+  /* header */
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;
+    flex-wrap:wrap;padding-top:20px}
+  .inst{font-family:var(--mono);font-size:clamp(11px,2.6vw,13.5px);font-weight:500;letter-spacing:.07em;
+    text-transform:uppercase;color:var(--ink);margin:0;display:flex;gap:11px;align-items:center;flex-wrap:wrap}
+  .inst .sep{width:20px;height:2px;background:var(--rubric);display:inline-block;flex:none}
+  .inst .code{color:var(--rubric)}
+  .switches{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .langbar{display:flex;align-items:center;gap:9px}
+  .langbar .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+  .seg{display:inline-flex;border:1px solid var(--rule);border-radius:3px;overflow:hidden;background:var(--surface)}
+  .seg button{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+    padding:5px 11px;border:0;background:transparent;color:var(--ink-3);cursor:pointer;line-height:1.6}
+  .seg button[aria-pressed="true"]{background:var(--lapis);color:var(--surface)}
+  .seg button:focus-visible{outline:2px solid var(--rubric);outline-offset:-2px}
+  header.head{padding-block:22px 22px;border-bottom:1px solid var(--rule);margin-bottom:26px}
+  .eyebrow{font-family:var(--disp);font-style:italic;font-size:18px;line-height:1.3;color:var(--ink-2);
+    margin:0 0 12px;text-wrap:balance}
+  h1{font-family:var(--disp);font-weight:600;font-size:clamp(28px,5.4vw,42px);line-height:1.08;
+    letter-spacing:-.015em;margin:0 0 16px;text-wrap:balance}
+  .standfirst{font-size:16.5px;color:var(--ink-2);margin:0;max-width:72ch;text-wrap:pretty}
+
+  /* two-column shell */
+  .deck{display:grid;grid-template-columns:268px minmax(0,1fr);gap:26px;align-items:start}
+
+  /* rail */
+  .rail{position:sticky;top:env(safe-area-inset-top, 0px);max-height:100vh;overflow-y:auto;
+    padding-right:6px;padding-block:4px 10px;min-width:0}
+  .rail-sec{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--ink-3);margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--rule-soft)}
+  .rail-sec:first-child{margin-top:0}
+  .railitem{display:grid;grid-template-columns:92px minmax(0,1fr);gap:10px;align-items:center;
+    width:100%;text-align:left;background:transparent;border:0;padding:5px;margin-bottom:3px;
+    border-radius:3px;cursor:pointer;color:inherit;font:inherit}
+  .railitem:hover{background:var(--surface-2)}
+  .railitem:focus-visible{outline:2px solid var(--rubric);outline-offset:1px}
+  .railitem[aria-selected="true"],.railitem[aria-current="true"]{background:var(--lap-bg)}
+  .thumb{aspect-ratio:16/9;max-width:100%;background:var(--screen);border:1px solid var(--rule);border-radius:2px;
+    padding:14px 6px 5px;display:flex;align-items:flex-end;overflow:hidden;position:relative}
+  .railitem[aria-selected="true"] .thumb,.railitem[aria-current="true"] .thumb{border-color:var(--lapis);box-shadow:0 0 0 1px var(--lapis)}
+  .thn{position:absolute;top:3px;left:5px;font-family:var(--mono);font-size:6.5px;letter-spacing:.08em;color:var(--scr-ink-3)}
+  .tht{font-family:var(--disp);font-weight:600;font-size:8px;line-height:1.16;color:var(--scr-ink);
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .rlab{font-size:12.5px;line-height:1.3;color:var(--ink-2);min-width:0}
+  .railitem[aria-selected="true"] .rlab,.railitem[aria-current="true"] .rlab{color:var(--ink);font-weight:600}
+
+  /* panel */
+  .panel{min-width:0;overflow-anchor:none}
+  .slide{background:var(--surface);border:1px solid var(--rule);box-shadow:var(--shadow)}
+  .slide-h{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;padding:15px 20px 11px;
+    border-bottom:1px solid var(--rule-soft)}
+  .slide-h .no{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.09em;
+    color:var(--surface);background:var(--lapis);padding:2px 8px;border-radius:2px;white-space:nowrap}
+  .slide-h .no.ref{background:var(--ink-3)}
+  .slide-h h2{margin:0;font-family:var(--disp);font-size:22px;font-weight:600;letter-spacing:-.01em;
+    flex:1 1 200px;min-width:0;text-wrap:pretty}
+  .slide-h .min{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+  .onscreen{background:var(--screen);padding:28px 26px}
+  .onscreen .big{font-family:var(--disp);font-size:clamp(23px,3.4vw,34px);line-height:1.18;
+    font-weight:600;margin:0 0 14px;color:var(--scr-ink);text-wrap:balance}
+  .onscreen p{color:var(--scr-ink-2);font-size:18px;line-height:1.55;margin:0 0 12px}
+  .onscreen p:last-child{margin-bottom:0}
+  .onscreen ul,.onscreen ol{margin:0;padding-left:22px;color:var(--scr-ink-2);font-size:18px;line-height:1.55}
+  .onscreen li{margin-bottom:10px}
+  .onscreen li:last-child{margin-bottom:0}
+  .onscreen strong{color:var(--scr-ink)}
+  .onscreen em{color:var(--scr-quote)}
+  .onscreen code{background:rgba(255,255,255,.1);color:var(--scr-quote)}
+  .onscreen a{color:var(--slide-link);text-decoration-color:rgba(245,196,81,.5);
+    text-decoration-thickness:1px;text-underline-offset:3px}
+  .onscreen a:hover{text-decoration-color:var(--slide-link)}
+  .onscreen a code{color:inherit;background:rgba(245,196,81,.14)}
+  .onscreen a:focus-visible{outline:2px solid var(--slide-link);outline-offset:2px;border-radius:2px}
+
+  /* period quotations on the projected panel */
+  .pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:22px;margin-top:18px}
+  .pair > div{min-width:0}
+  .onscreen .src{font-family:var(--mono);font-size:11px;line-height:1.5;letter-spacing:.09em;text-transform:uppercase;color:var(--scr-ink-3);margin:0 0 8px}
+  .onscreen blockquote{margin:0;padding:2px 0 2px 16px;border-left:2px solid var(--slide-link);
+    font-family:var(--disp);font-size:19px;line-height:1.5;color:var(--scr-quote)}
+  .onscreen blockquote mark{background:rgba(245,196,81,.22);color:var(--scr-ink);padding:0 2px;border-radius:2px}
+
+  .say{padding:17px 20px}
+  .say .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--rubric);display:block;margin-bottom:9px}
+  .say p{font-size:15.5px;color:var(--ink-2);margin:0 0 11px;max-width:78ch}
+  .cp + p{margin-top:17px}
+  .say .tbl + p,.say .demo + p{margin-top:15px}
+  .say p + .tag,.say .demo + .tag{margin-top:20px}
+  .say p:last-child{margin-bottom:0}
+  .say strong{color:var(--ink)}
+  .say ul{margin:0 0 11px;padding-left:20px;color:var(--ink-2);font-size:15.5px}
+  .say li{margin-bottom:6px}
+  .demo{background:var(--lap-bg);border-left:2px solid var(--lapis);padding:9px 13px;margin:12px 0 0;
+    font-size:15px;color:var(--ink-2)}
+  .demo b{color:var(--lapis);font-family:var(--mono);font-size:10px;letter-spacing:.09em;
+    text-transform:uppercase;display:block;margin-bottom:3px}
+
+  /* copy block */
+  .cp{border:1px solid var(--rule);background:var(--code-bg);margin:14px 0}
+  .cp-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 12px;
+    border-bottom:1px solid var(--rule-soft);background:var(--surface-2)}
+  .cp-h .t{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);min-width:0}
+  .cp-h button{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+    padding:4px 10px;border:1px solid var(--rule);background:var(--surface);color:var(--lapis);
+    border-radius:2px;cursor:pointer;flex:none}
+  .cp-h button:hover{background:var(--lap-bg)}
+  .cp-h button:focus-visible{outline:2px solid var(--rubric);outline-offset:1px}
+  .cp pre{margin:0;padding:15px;font-family:var(--mono);font-size:13px;line-height:1.6;
+    color:var(--ink);overflow-x:auto;white-space:pre-wrap;word-break:break-word}
+  .cp pre .fill{background:var(--lap-bg);border-bottom:1px solid var(--lapis);padding:0 3px;
+    border-radius:2px;font-weight:500;color:var(--lapis)}
+  .cp pre .fill.empty{background:var(--warn-bg);border-bottom-color:var(--warn);color:var(--warn)}
+  .fillrow{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;margin:4px 0 0}
+  .fillrow label{display:flex;flex-direction:column;gap:5px;font-family:var(--mono);font-size:10.5px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  .fillrow select{font-family:var(--mono);font-size:14px;padding:7px 10px;
+    border:1px solid var(--rule);border-radius:2px;background:var(--surface);color:var(--ink);min-width:180px;max-width:100%}
+  .fillrow select:focus-visible{outline:2px solid var(--rubric);outline-offset:1px}
+  .fillrow .hint{flex:1 1 240px;min-width:0;font-size:13px;color:var(--ink-3);line-height:1.5}
+
+  .tbl{overflow-x:auto;border:1px solid var(--rule);background:var(--surface);margin:0}
+  .say .tbl{margin:12px 0 0}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:540px}
+  th,td{text-align:left;padding:10px 13px;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+  thead th{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink-3);font-weight:500;background:var(--surface-2);border-bottom:1px solid var(--rule)}
+  tbody tr:last-child td{border-bottom:0}
+  td.mono{font-family:var(--mono);font-size:13.5px;white-space:nowrap}
+  table.wide{min-width:820px}
+  tr.cut td{background:var(--rub-bg);color:var(--rubric);font-family:var(--mono);font-size:12px;
+    letter-spacing:.08em;text-transform:uppercase}
+  .callout{background:var(--rub-bg);border:1px solid var(--rubric);padding:15px 17px;margin:16px 0 0}
+  .callout.good{background:var(--good-bg);border-color:var(--good)}
+  .callout.warn{background:var(--warn-bg);border-color:var(--warn)}
+  .callout p{margin:0 0 10px;font-size:15.5px;color:var(--ink-2)}
+  .callout p:last-child{margin-bottom:0}
+  .callout strong{color:var(--ink)}
+  ol.chk{list-style:none;counter-reset:c;margin:0;padding:0}
+  ol.chk li{counter-increment:c;position:relative;padding-left:38px;padding-bottom:12px;
+    font-size:15.5px;color:var(--ink-2)}
+  ol.chk li::before{content:counter(c,decimal-leading-zero);position:absolute;left:0;top:2px;
+    font-family:var(--mono);font-size:11.5px;color:var(--rubric)}
+  ol.chk b{color:var(--ink)}
+
+  /* continuous mode */
+  .panel.flow .slide{margin-bottom:26px;scroll-margin-top:calc(14px + env(safe-area-inset-top, 0px))}
+  .panel.flow .slide:last-of-type{margin-bottom:0}
+  .panel.flow .nav{display:none}
+
+  /* prev / next */
+  .nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px}
+  .nav button{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    padding:8px 15px;border:1px solid var(--rule);background:var(--surface);color:var(--lapis);
+    border-radius:3px;cursor:pointer}
+  .nav button:hover:not(:disabled){background:var(--lap-bg)}
+  .nav button:disabled{color:var(--ink-3);cursor:default;opacity:.55}
+  .nav button:focus-visible{outline:2px solid var(--rubric);outline-offset:1px}
+  .nav .pos{font-family:var(--mono);font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+
+  footer{border-top:1px solid var(--rule);padding-top:20px;margin-top:34px;color:var(--ink-3);font-size:13px}
+  .contact{margin:16px 0 0;font-size:15.5px;color:var(--ink-2)}
+  .contact a{font-weight:500}
+  footer .contact.end{margin:0 0 16px;padding:14px 17px;font-size:16px;color:var(--ink);
+    background:var(--surface);border:1px solid var(--rule)}
+
+  @media (max-width:860px){
+    .deck{grid-template-columns:minmax(0,1fr);gap:16px}
+    .rail{position:static;max-height:none;display:flex;gap:10px;overflow-x:auto;overflow-y:hidden;
+      padding-bottom:10px;border-bottom:1px solid var(--rule-soft)}
+    .rail-sec{flex:0 0 auto;margin:0;align-self:center;border-bottom:0;padding:0 4px 0 10px;
+      white-space:nowrap;border-left:1px solid var(--rule)}
+    .rail-sec:first-child{border-left:0;padding-left:0}
+    .railitem{flex:0 0 116px;grid-template-columns:minmax(0,1fr);gap:5px;margin-bottom:0}
+    .rlab{font-size:11.5px}
+    .onscreen{padding:20px 16px}
+    .onscreen blockquote{font-size:17px}
+    .slide-h,.say{padding-left:16px;padding-right:16px}
+  }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important;scroll-behavior:auto!important} }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<div class="topbar">
+  <p class="inst"><span>Hamilton College</span><span class="sep"></span><span class="code">History</span><span class="sep"></span><span>Civil War historiography, with AI</span></p>
+  <div class="switches">
+    <div class="langbar"><span class="lbl">View</span><div class="seg" role="group" aria-label="Slide view">
+      <button id="btn-flow" type="button" aria-pressed="true">Scroll</button><button id="btn-slides" type="button" aria-pressed="false">One at a time</button>
+    </div></div>
+  </div>
+</div>
+
+<header class="head">
+  <p class="eyebrow">Everything for today, and the reference to keep open while you work.</p>
+  <h1>Three Voices on the Civil War</h1>
+  <p class="standfirst">An AI that stopped reading in 1930, real texts written between 1861 and 1914, and an AI from 2026 will each tell you what caused the Civil War and who its heroes were. Your job is to work out where each voice learned what it says. Every prompt you need is on this page, ready to copy. Your printed packet holds the old texts and your expert card.</p>
+</header>
+
+<div class="deck">
+
+<nav class="rail" id="rail" role="tablist" aria-label="Slides" aria-orientation="vertical">
+  <p class="rail-sec">1 · Why we are doing this</p>
+  <button class="railitem" type="button" role="tab" id="t01" aria-controls="s01" aria-selected="true">
+    <span class="thumb" aria-hidden="true"><span class="thn">01</span><span class="tht">Who wrote the war?</span></span>
+    <span class="rlab">Title</span>
+  </button>
+  <button class="railitem" type="button" role="tab" id="t02" aria-controls="s02" aria-selected="false" tabindex="-1">
+    <span class="thumb" aria-hidden="true"><span class="thn">02</span><span class="tht">Three voices, three blind spots</span></span>
+    <span class="rlab">The three voices</span>
+  </button>
+
+  <button class="railitem" type="button" role="tab" id="tai" aria-controls="sai" aria-selected="false" tabindex="-1">
+    <span class="thumb" aria-hidden="true"><span class="thn">03</span><span class="tht">Three machines, three jobs</span></span>
+    <span class="rlab">The AI tools</span>
+  </button>
+  <button class="railitem" type="button" role="tab" id="tsize" aria-controls="ssize" aria-selected="false" tabindex="-1">
+    <span class="thumb" aria-hidden="true"><span class="thn">04</span><span class="tht">How Large Language Models are Built</span></span>
+    <span class="rlab">How LLMs are built</span>
+  </button>
+  <button class="railitem" type="button" role="tab" id="tshallu" aria-controls="shallu" aria-selected="false" tabindex="-1">
+    <span class="thumb" aria-hidden="true"><span class="thn">05</span><span class="tht">Hallucination</span></span>
+    <span class="rlab">Hallucination</span>
+  </button>
+
+  <p class="rail-sec">2 · Opening</p>
+  <button class="railitem" type="button" role="tab" id="t03" aria-controls="s03" aria-selected="false" tabindex="-1">
+    <span class="thumb" aria-hidden="true"><span class="thn">06</span><span class="tht">One meeting, two versions</span></span>
+    <span class="rlab">Lincoln meets Stowe</span>
+  </button>
+  <button class="railitem" type="button" role="tab" id="t04" aria-controls="s04" aria-selected="false" tabindex="-1">
+    <span class="thumb" aria-hidden="true"><span class="thn">07</span><span class="tht">Now ask the machines</span></span>
+    <span class="rlab">Ask the machines</span>
+  </button>
+
+  <p class="rail-sec">3 · Expert teams</p>
+  <button class="railitem" type="button" role="tab" id="t05" aria-controls="s05" aria-selected="false" tabindex="-1">
+    <span class="thumb" aria-hidden="true"><span class="thn">08</span><span class="tht">Four teams, four topics, one method</span></span>
+    <span class="rlab">Your team</span>
+  </button>
+  <button class="railitem" type="button" role="tab" id="t06" aria-controls="s06" aria-selected="false" tabindex="-1">
+    <span class="thumb" aria-hidden="true"><span class="thn">09</span><span class="tht">Interview talkie</span></span>
+    <span class="rlab">Step 1 · talkie</span>
+  </button>
+  <button class="railitem" type="button" role="tab" id="t07" aria-controls="s07" aria-selected="false" tabindex="-1">
+    <span class="thumb" aria-hidden="true"><span class="thn">10</span><span class="tht">Read the old text, then let the AI read it</span></span>
+    <span class="rlab">Step 2 · The old text</span>
+  </button>
+  <button class="railitem" type="button" role="tab" id="t08" aria-controls="s08" aria-selected="false" tabindex="-1">
+    <span class="thumb" aria-hidden="true"><span class="thn">11</span><span class="tht">What historians say now, and one check</span></span>
+    <span class="rlab">Step 3 · Today and a check</span>
+  </button>
+
+  <p class="rail-sec">4 · Mixed groups</p>
+  <button class="railitem" type="button" role="tab" id="t09" aria-controls="s09" aria-selected="false" tabindex="-1">
+    <span class="thumb" aria-hidden="true"><span class="thn">12</span><span class="tht">Teach it in three minutes</span></span>
+    <span class="rlab">Teach and compare</span>
+  </button>
+
+  <p class="rail-sec">5 · Closing</p>
+  <button class="railitem" type="button" role="tab" id="t10" aria-controls="s10" aria-selected="false" tabindex="-1">
+    <span class="thumb" aria-hidden="true"><span class="thn">13</span><span class="tht">Why did the story change?</span></span>
+    <span class="rlab">Discussion</span>
+  </button>
+  <button class="railitem" type="button" role="tab" id="t11" aria-controls="s11" aria-selected="false" tabindex="-1">
+    <span class="thumb" aria-hidden="true"><span class="thn">14</span><span class="tht">You are a historian in 2126</span></span>
+    <span class="rlab">The historian of 2126</span>
+  </button>
+
+  <p class="rail-sec">Reference</p>
+  <button class="railitem" type="button" role="tab" id="t12" aria-controls="s12" aria-selected="false" tabindex="-1">
+    <span class="thumb" aria-hidden="true"><span class="thn">REF</span><span class="tht">If something goes wrong</span></span>
+    <span class="rlab">Troubleshooting</span>
+  </button>
+  <button class="railitem" type="button" role="tab" id="t13" aria-controls="s13" aria-selected="false" tabindex="-1">
+    <span class="thumb" aria-hidden="true"><span class="thn">REF</span><span class="tht">Where every text comes from</span></span>
+    <span class="rlab">Sources</span>
+  </button>
+</nav>
+
+<div class="panel" id="panel">
+
+<!-- 01 -->
+<article class="slide" id="s01" role="tabpanel" aria-labelledby="t01">
+  <div class="slide-h"><span class="no">01</span><h2>Title</h2></div>
+  <div class="onscreen">
+    <p class="big">Who wrote the war?</p>
+    <p><strong><a href="https://talkie-lm.com/chat">talkie</a></strong>, an AI whose knowledge stops in 1930 · <strong>the old texts</strong>, 1861–1914 · <strong>a 2026 AI</strong></p>
+    <p>Same questions, three voices. Find out where each one learned what it says.</p>
+  </div>
+  <div class="say">
+    <p>You are not here to learn what an AI thinks about the Civil War. You are here to read what it says the way a historian reads any source: who is speaking, when, and from what.</p>
+  </div>
+</article>
+
+<!-- 02 -->
+<article class="slide" id="s02" role="tabpanel" aria-labelledby="t02" hidden>
+  <div class="slide-h"><span class="no">02</span><h2>The three voices</h2></div>
+  <div class="onscreen">
+    <p class="big">Three voices, three blind spots</p>
+  </div>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Voice</th><th>What it is</th><th>Its blind spot</th></tr></thead>
+    <tbody>
+      <tr><td><strong><a href="https://talkie-lm.com/chat">talkie</a></strong></td><td>An AI trained only on English books, newspapers, journals, patents and court decisions published before 1931</td><td>It knows nothing after 1930, and it can only repeat what got printed</td></tr>
+      <tr><td><strong>The old text</strong></td><td>A real speech or book from 1861 to 1914, in your team packet</td><td>One author, one moment, one side</td></tr>
+      <tr><td><strong>The modern AI</strong></td><td>A large model from today, picked in Amplify or Gemini. In each team, every member uses a different model</td><td>It sounds certain, and it is a product of 2026</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="say">
+    <p>talkie has 13 billion parameters and learned from 260 billion tokens of pre-1931 text. Its chat version was then polished with conversations written together with a modern AI, so a little of the present has leaked in. Treat it as a voice from 1930 that has had some modern coaching.</p>
+    <p>It is also small by today's standards, so expect it to make things up more often than the modern AIs do (slides 4 and 5).</p>
+    <p>None of the three is neutral. That is the point of putting them side by side.</p>
+  </div>
+</article>
+
+<!-- 03 AI tools -->
+<article class="slide" id="sai" role="tabpanel" aria-labelledby="tai" hidden>
+  <div class="slide-h"><span class="no">03</span><h2>The AI tools</h2></div>
+  <div class="onscreen">
+    <p class="big">Three machines, three jobs</p>
+    <p><a href="https://talkie-lm.com/chat">talkie</a> speaks for 1930. Amplify and Gemini give you today's models, to read with you and help you check. <strong>In each team, every member uses a different model</strong> (Amplify alone offers several), and everyone writes the tool and model on their card.</p>
+  </div>
+  <div class="tbl">
+  <table class="wide">
+    <thead><tr><th></th><th>talkie</th><th>Amplify</th><th>Gemini</th></tr></thead>
+    <tbody>
+      <tr><td><strong>What it is</strong></td><td>A research model with 13 billion parameters, trained only on English books, newspapers, journals, patents and court decisions published before 1931</td><td>Hamilton's own AI site, hosted by LITS. You choose a model from Anthropic, OpenAI or Mistral</td><td>Google's AI assistant</td></tr>
+      <tr><td><strong>What it knows</strong></td><td>Nothing after 1930</td><td>The present, up to the training date of the model you pick</td><td>The present, up to its training date</td></tr>
+      <tr><td><strong>How to get in</strong></td><td><a href="https://talkie-lm.com/chat"><code>talkie-lm.com/chat</code></a>. Type in the box; no sign-in</td><td><a href="http://amplify.hamilton.edu/"><code>amplify.hamilton.edu</code></a>, with your Hamilton sign-in</td><td><a href="https://gemini.google.com/app"><code>gemini.google.com</code></a>, with your Hamilton sign-in</td></tr>
+      <tr><td><strong>Its job today</strong></td><td>The voice of 1930: the opening demo and step 1</td><td>A modern AI for steps 2 and 3 and the 2126 paragraph. You pick the model</td><td>The same job, with Google's model</td></tr>
+      <tr><td><strong>Watch out</strong></td><td>It repeats the prejudices of its sources. A filter checks each reply only after it finishes, so offensive text may flash before it is hidden. Its chat version was trained with help from a modern AI, so a little of the present leaks in.</td><td>Different models give different answers, so write down which model you picked. It runs on Hamilton's servers, which LITS describes as the more private option.</td><td>It can draw on Google Search for some answers, so ask where an answer came from and check that page.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="say">
+    <p>talkie is the source you are studying. Amplify and Gemini are tools you are testing. None of them is an authority: whatever they say goes on your card only after you have checked it. When two models disagree, that is where to check first.</p>
+    <p>Tool details follow the <a href="https://www.hamilton.edu/offices/lits/tech-lab/artificial-intelligence/tools">LITS AI tools page</a> and the <a href="https://talkie-lm.com/introducing-talkie">talkie announcement</a>.</p>
+  </div>
+</article>
+
+<!-- 04 How LLMs are built -->
+<article class="slide" id="ssize" role="tabpanel" aria-labelledby="tsize" hidden>
+  <div class="slide-h"><span class="no">04</span><h2>How LLMs are built</h2></div>
+  <div class="onscreen">
+    <p class="big">How Large Language Models are Built</p>
+    <ol>
+      <li><strong>Collect text.</strong> For <a href="https://talkie-lm.com/chat">talkie</a>: books, newspapers, journals, patents and court decisions printed before 1931. For today's models: text gathered from the web and many other sources.</li>
+      <li><strong>Cut it into tokens.</strong> A token is a word or a piece of a word.</li>
+      <li><strong>Train.</strong> The model reads the tokens and adjusts billions of numbers, its <strong>parameters</strong>, until it gets good at predicting the next token.</li>
+      <li><strong>Teach it to chat.</strong> A second round of training turns it into an assistant. talkie's was done with help from a modern AI.</li>
+    </ol>
+  </div>
+  <div class="tbl">
+  <table class="wide">
+    <thead><tr><th>Model</th><th>Maker</th><th>Size the maker published</th><th>Outside guesses</th></tr></thead>
+    <tbody>
+      <tr><td><strong>talkie-1930</strong></td><td>Research project</td><td class="mono">13 billion</td><td>—</td></tr>
+      <tr><td><strong>Gemini 4</strong></td><td>Google</td><td>Not published</td><td>No public guess found</td></tr>
+      <tr><td><strong>Claude Opus 5.5</strong></td><td>Anthropic</td><td>Not published</td><td>About 2 trillion for the earlier Opus 5 (likely between 0.6 and 7 trillion). An unverified claim by Elon Musk says 5 trillion.</td></tr>
+      <tr><td><strong>GPT-6 Sol</strong></td><td>OpenAI</td><td>Not published</td><td>About 2 trillion for the earlier GPT-5.6 Sol (likely between 0.6 and 7 trillion)</td></tr>
+      <tr><td>For scale: Llama 3.1, an open model (2024)</td><td>Meta</td><td class="mono">405 billion</td><td>—</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="say">
+    <p>More parameters give a model more room to hold what it read; more tokens give it more to learn from. talkie is small on both counts, and it is also weak at reasoning a problem through.</p>
+    <p>The outside guesses come from an analyst who measured how much each model knows, and they cover the previous version of each model. They span a factor of ten, so read them as a sense of scale, not as facts. If they are roughly right, today's leading models are somewhere between 50 and 500 times talkie's size. The open model in the last row, released two years ago, is already about 30 times talkie's size.</p>
+    <p>Size is not the only gap. talkie read 260 billion tokens, all printed before 1931. Llama 3.1 read about 15 trillion, nearly 60 times as much. Google, Anthropic and OpenAI have not said how much their models read.</p>
+    <div class="demo"><b>What is a token?</b> Before a model reads anything, it cuts the text into tokens. A common word is usually one token; a rare word or an old-fashioned name is split into pieces. In English a token averages about three-quarters of a word, so talkie's 260 billion tokens come to roughly 200 billion words. To watch it happen, paste a sentence from your excerpt into the <a href="https://platform.openai.com/tokenizer">OpenAI Tokenizer</a> or <a href="https://tiktokenizer.vercel.app">Tiktokenizer</a> (no sign-in needed) and see which words get split.</div>
+    <p>Sizes as of November 6, 2026. Sources are in the footer of this page.</p>
+  </div>
+</article>
+
+<!-- 05 Hallucination -->
+<article class="slide" id="shallu" role="tabpanel" aria-labelledby="tshallu" hidden>
+  <div class="slide-h"><span class="no">05</span><h2>Hallucination</h2></div>
+  <div class="onscreen">
+    <p class="big">Hallucination</p>
+    <p>A model predicts likely words. Unless it is searching the web, it is not looking anything up. When it does not know, it can still give a fluent, confident answer that is wrong. That is a <strong>hallucination</strong>.</p>
+    <p><strong>It is more likely when</strong></p>
+    <ul>
+      <li>the model is small or read little, like talkie</li>
+      <li>the question assumes something false (watch for this in the Lincoln–Stowe demo next)</li>
+      <li>you ask for an exact quotation, a page number, a date or a count</li>
+      <li>the person or event is obscure, so little was written about it</li>
+      <li>you ask the model about itself</li>
+    </ul>
+  </div>
+  <div class="say">
+    <p>Large models hallucinate too, only more smoothly. Whenever any machine invents a name, date, quotation or source, note it on your card with the model and the question. In the discussion you will compare which voices invented the most, and on what kind of question.</p>
+    <div class="demo"><b>One-minute test</b> Ask your model, "How many parameters do you have?" Its maker has not published the number. A good answer says so; an exact figure stated as fact is made up.</div>
+  </div>
+</article>
+
+<!-- 03 -->
+<article class="slide" id="s03" role="tabpanel" aria-labelledby="t03" hidden>
+  <div class="slide-h"><span class="no">06</span><h2>Lincoln meets Stowe</h2><span class="min">Opening · 10 min</span></div>
+  <div class="onscreen">
+    <p class="big">One meeting. Two versions, fourteen years apart.</p>
+    <p>Harriet Beecher Stowe, author of <em>Uncle Tom's Cabin</em>, met President Lincoln at the White House in December 1862. Neither of them wrote down what he said.</p>
+    <div class="pair">
+      <div>
+        <p class="src">1897 · Annie Fields, <em>Life and Letters of Harriet Beecher Stowe</em>, p. 269</p>
+        <blockquote>It was left for others to speak of Mrs. Stowe's interview with President Lincoln. Her daughter was told that when the President heard her name he seized her hand, saying, <mark>"Is this the little woman who made this great war?"</mark></blockquote>
+      </div>
+      <div>
+        <p class="src">1911 · Her son and grandson, <em>Harriet Beecher Stowe: The Story of Her Life</em>, pp. 202–203</p>
+        <blockquote>It was Mr. Seward who introduced her, and Mr. Lincoln rose awkwardly from his chair, saying, "Why, Mrs. Stowe, right glad to see you!" Then with a humorous twinkle in his eye, he said, <mark>"So you're the little woman who wrote the book that made this great war!</mark> Sit down, please," he added, as he seated himself once more before the fire […].</blockquote>
+      </div>
+    </div>
+  </div>
+  <div class="say">
+    <span class="tag">Compare the two</span>
+    <ul>
+      <li>Who is the source of the story in 1897? Who is it in 1911?</li>
+      <li>What details does the 1911 version add?</li>
+      <li>Which version have you heard before, and why might that one have won?</li>
+    </ul>
+    <p>Both passages are in full on the first page of your team packet.</p>
+  </div>
+</article>
+
+<!-- 04 -->
+<article class="slide" id="s04" role="tabpanel" aria-labelledby="t04" hidden>
+  <div class="slide-h"><span class="no">07</span><h2>Ask the machines</h2><span class="min">Opening · demo</span></div>
+  <div class="onscreen">
+    <p class="big">Now ask the machines the same question</p>
+    <p>Your instructor runs these live. Watch whether either machine tells you <strong>how it knows</strong>.</p>
+  </div>
+  <div class="say">
+    <div class="cp">
+      <div class="cp-h"><span class="t">To <a href="https://talkie-lm.com/chat">talkie</a></span><button class="copy" type="button">Copy</button></div>
+      <pre>Did President Lincoln once greet Mrs. Harriet Beecher Stowe as the little woman who made the great war? What exactly did he say?</pre>
+    </div>
+    <div class="cp">
+      <div class="cp-h"><span class="t">To the modern AI</span><button class="copy" type="button">Copy</button></div>
+      <pre>Did President Lincoln once greet Harriet Beecher Stowe as "the little woman who wrote the book that made this great war"? How do we know? Name the earliest source for the quotation.</pre>
+    </div>
+    <p><strong>What historians found.</strong> The greeting first appeared in print in 1896, thirty-four years after the meeting, as a story told to Stowe's daughter. Lincoln left no record of it, and neither did Stowe. Daniel Vollaro traced every version and concluded that the words cannot be confirmed.</p>
+    <div class="demo"><b>Today's job</b> The anecdote grew more vivid as it moved away from the event. AI answers can do the same thing. Today you check them the way Vollaro checked this one.</div>
+  </div>
+</article>
+
+<!-- 05 -->
+<article class="slide" id="s05" role="tabpanel" aria-labelledby="t05" hidden>
+  <div class="slide-h"><span class="no">08</span><h2>Your team</h2><span class="min">Expert teams · 5 min</span></div>
+  <div class="onscreen">
+    <p class="big">Four teams, four topics, one method</p>
+    <p>Every team does the same three steps: <strong><a href="https://talkie-lm.com/chat">talkie</a></strong>, then <strong>the old text</strong>, then <strong>the modern AI and one check</strong>. Write everything on your expert card.</p>
+    <p>Before you start, settle two things in your team. <strong>Your letter</strong> (a, b, and c in Team 4) decides your mixed group later. <strong>Your model</strong>: each of you picks a different one, in Amplify or Gemini.</p>
+  </div>
+  <div class="tbl">
+  <table class="wide">
+    <thead><tr><th>Team</th><th>Topic</th><th>Your old texts</th><th>Course book for step 3</th><th>Mixed group</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">Team 1 · 2</td><td>Robert E. Lee</td><td>Lee's farewell order to his army (1865) · Charles Francis Adams, a Union officer, at Lee's 100th birthday (1907)</td><td>Seidule, <em>Robert E. Lee and Me</em> (2021)</td><td class="mono">1a → A · 1b → B</td></tr>
+      <tr><td class="mono">Team 2 · 2</td><td>Grant and the defeat</td><td>Jubal Early, a Confederate general (1872) · Frederick Douglass (1881)</td><td>Blight, <em>Race and Reunion</em> (2001)</td><td class="mono">2a → A · 2b → B</td></tr>
+      <tr><td class="mono">Team 3 · 2</td><td>Reconstruction</td><td>Thomas Dixon, novelist (1905) · William Dunning, historian (1907) · W. E. B. Du Bois (1910)</td><td>Du Bois, <em>Black Reconstruction in America</em> (1935)</td><td class="mono">3a → A · 3b → B</td></tr>
+      <tr><td class="mono">Team 4 · 3</td><td>What caused the war</td><td>Alexander Stephens (1861 and 1868) · Mildred Rutherford (1914)</td><td>Cox, <em>Dixie's Daughters</em> (2003)</td><td class="mono">4a, 4c → A · 4b → B</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="say">
+    <div class="fillrow">
+      <label for="team-a">Your team
+        <select id="team-a" class="team-pick"><option value="">—</option><option value="1">Team 1 · Lee</option><option value="2">Team 2 · Grant</option><option value="3">Team 3 · Reconstruction</option><option value="4">Team 4 · Causes</option></select>
+      </label>
+      <span class="hint">Pick your team once and the prompts on slides <span data-num="s07">10</span> and <span data-num="s08">11</span> fill in your topic, your course book and your check.</span>
+    </div>
+    <div class="demo"><b>Before you open talkie</b> Write your letter, your tool and your model at the top of your expert card. Then write your prediction (①): how did books and newspapers before 1930 describe your topic? If the machine surprises you, the surprise is a finding.</div>
+  </div>
+</article>
+
+<!-- 06 -->
+<article class="slide" id="s06" role="tabpanel" aria-labelledby="t06" hidden>
+  <div class="slide-h"><span class="no">09</span><h2>Step 1 · talkie</h2><span class="min">12 min</span></div>
+  <div class="onscreen">
+    <p class="big">Interview <a href="https://talkie-lm.com/chat">talkie</a></p>
+    <ul>
+      <li>Open <a href="https://talkie-lm.com/chat"><code>talkie-lm.com/chat</code></a>.</li>
+      <li><strong>Never mention a year</strong> or "1930," and never tell it what you expect.</li>
+      <li>Start with your team's questions below, then follow up in your own words.</li>
+      <li>Copy its most striking sentence <strong>word for word</strong> onto your card (②), and take a screenshot.</li>
+    </ul>
+  </div>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Team</th><th>Start with these</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">Team 1</td><td>What sort of man was General Robert E. Lee? · What did General Lee say to his army when it surrendered? · Was Lee right to resign from the United States Army and fight for Virginia? · Should Americans honor General Lee? Why or why not?</td></tr>
+      <tr><td class="mono">Team 2</td><td>What sort of man was General Ulysses S. Grant? · How did General Grant defeat General Lee? · Was Grant a good President? · What did Frederick Douglass think of General Grant?</td></tr>
+      <tr><td class="mono">Team 3</td><td>What happened in the Southern States after the war, during Reconstruction? · Were the Reconstruction governments of the Southern States good or bad? · Should the freedmen have been given the vote? · What was the Ku Klux Klan, and what did it do?</td></tr>
+      <tr><td class="mono">Team 4</td><td>What caused the war between the North and the South? · Did the South fight to keep slavery? · Upon what idea was the Confederate government founded? · Was secession lawful?</td></tr>
+      <tr><td class="mono">Every team</td><td>Last question: Who are the best writers to read on this subject? Note the names it gives, and whose names are missing.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="say">
+    <p>Ask in plain words, the way a visitor might. A leading question gets you your own opinion back.</p>
+    <div class="demo"><b>Listen for</b> Does it say "the Rebellion" (the Northern name) or "the War between the States" (the Southern one)? Does it mention slavery without being asked? If talkie will not take your question, use the printed transcript for your team.</div>
+  </div>
+</article>
+
+<!-- 07 -->
+<article class="slide" id="s07" role="tabpanel" aria-labelledby="t07" hidden>
+  <div class="slide-h"><span class="no">10</span><h2>Step 2 · The old text</h2><span class="min">15 min</span></div>
+  <div class="onscreen">
+    <p class="big">Read the old text yourself, then let the AI read it too</p>
+    <ul>
+      <li>Read the <strong>context card</strong> first, then the excerpt once, straight through.</li>
+      <li>Open your tool, <a href="http://amplify.hamilton.edu/"><code>amplify.hamilton.edu</code></a> or <a href="https://gemini.google.com/app"><code>gemini.google.com</code></a>, and pick your model. Each of you runs the prompt in your own model.</li>
+      <li>Paste the prompt below with your excerpt. <strong>Check that the sentence it quotes is really in your excerpt.</strong></li>
+      <li>On your card (③): does <a href="https://talkie-lm.com/chat">talkie</a> sound like this author? Yes, partly, or no, and why.</li>
+    </ul>
+  </div>
+  <div class="say">
+    <div class="fillrow">
+      <label for="team-b">Your team
+        <select id="team-b" class="team-pick"><option value="">—</option><option value="1">Team 1 · Lee</option><option value="2">Team 2 · Grant</option><option value="3">Team 3 · Reconstruction</option><option value="4">Team 4 · Causes</option></select>
+      </label>
+      <span class="hint">Same choice as slide <span data-num="s05">8</span>. Change it on either slide.</span>
+    </div>
+    <div class="cp">
+      <div class="cp-h"><span class="t">Old-text prompt · paste your excerpt at the end</span><button class="copy" type="button">Copy</button></div>
+<pre>Below is a passage from [AUTHOR, TITLE, YEAR — copy these from your context card].
+
+1. In two sentences, what is the author's argument about {{TOPIC}}?
+2. Quote, word for word, the one sentence from the passage that shows this argument most clearly. Quote only from the passage below.
+3. What do you know about the author that might shape this view? Say how sure you are about each point.
+
+PASSAGE:
+[paste the excerpt here]</pre>
+    </div>
+    <p>Question 2 is the test. A sentence in quotation marks that is not in your excerpt means the AI was writing, not reading. Also notice whether its summary softens the author's sharpest words.</p>
+    <div class="demo"><b>Teams 3 and 4</b> Team 3: one of you takes Dixon and Dunning, the other takes Du Bois. Team 4: one text each. Run the prompt on yours, then tell your teammates what it says.</div>
+  </div>
+</article>
+
+<!-- 08 -->
+<article class="slide" id="s08" role="tabpanel" aria-labelledby="t08" hidden>
+  <div class="slide-h"><span class="no">11</span><h2>Step 3 · Today and a check</h2><span class="min">13 min</span></div>
+  <div class="onscreen">
+    <p class="big">Ask what historians say now. Then check it against a book you have read.</p>
+    <ul>
+      <li>Each of you sends <strong>prompt A</strong> in your own model. Write today's view in one line on your card (④).</li>
+      <li>Prompt A also asks about <strong>your team's course book</strong>. You have read it; the AI has only read about it. Does its summary match what you read? Where is it vague, or wrong?</li>
+      <li>Put your two answers side by side. <strong>Where they disagree is where to check first.</strong></li>
+      <li>Send <strong>prompt B</strong>, your team's check, and test the answer against a source you can cite (⑤).</li>
+    </ul>
+  </div>
+  <div class="say">
+    <div class="cp">
+      <div class="cp-h"><span class="t">Prompt A · today's view and your course book</span><button class="copy" type="button">Copy</button></div>
+<pre>How do historians today assess {{TOPIC}}, and how has that assessment changed since about 1900? Answer in about 120 words.
+
+Then, in about 80 words, summarize what {{BOOK}} argues about this subject. If you are not sure what the book says, tell me rather than guessing.</pre>
+    </div>
+    <div class="cp">
+      <div class="cp-h"><span class="t">Prompt B · your team's check</span><button class="copy" type="button">Copy</button></div>
+<pre>{{CHECK}}</pre>
+    </div>
+    <p>A summary that sounds right is not a summary that is right. Neither is a confident number or a famous quotation. Whatever the AI tells you, find it somewhere else before it goes on your card.</p>
+  </div>
+</article>
+
+<!-- 09 -->
+<article class="slide" id="s09" role="tabpanel" aria-labelledby="t09" hidden>
+  <div class="slide-h"><span class="no">12</span><h2>Teach and compare</h2><span class="min">Mixed groups · 25 min</span></div>
+  <div class="onscreen">
+    <p class="big">Teach it in three minutes</p>
+    <ul>
+      <li><strong>Group A</strong> (table A): 1a, 2a, 3a, 4a, 4c · <strong>Group B</strong> (table B): 1b, 2b, 3b, 4b</li>
+      <li>Each person teaches their topic from the expert card only. Three minutes each. Say which model gave which answer, and what any of them made up.</li>
+      <li><strong>Team 4:</strong> in group A, 4a and 4c share three minutes; in group B, 4b has four minutes for all three texts.</li>
+      <li>Then fill one table together and write three sentences: <strong>one pattern</strong>, <strong>one exception</strong>, <strong>one question</strong>.</li>
+    </ul>
+  </div>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Topic</th><th><a href="https://talkie-lm.com/chat">talkie</a> (stops 1930)</th><th>The old texts</th><th>Modern AI (2026)</th><th>What changed</th></tr></thead>
+    <tbody>
+      <tr><td>Robert E. Lee</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Ulysses S. Grant</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Reconstruction</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>What caused the war</td><td></td><td></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="say">
+    <p>Fill the printed sheet. This table is here so you can see its shape. Team 4 fills one shared expert card in step 3, so whoever goes to each group can teach all three texts.</p>
+    <div class="callout good"><p><strong>An exception is a result.</strong> If talkie praised someone you expected it to attack, or the old text disagreed with talkie, that is exactly what the exception line is for. Say why you think it happened.</p></div>
+  </div>
+</article>
+
+<!-- 10 -->
+<article class="slide" id="s10" role="tabpanel" aria-labelledby="t10" hidden>
+  <div class="slide-h"><span class="no">13</span><h2>Discussion</h2><span class="min">15 min</span></div>
+  <div class="onscreen">
+    <p class="big">Why did the story change?</p>
+    <ul>
+      <li>Whose books did <a href="https://talkie-lm.com/chat">talkie</a> learn from? Whose writing is missing?</li>
+      <li>Du Bois wrote in 1910, inside talkie's world, and again in 1935, outside it. Did talkie sound like Du Bois, or like Dunning?</li>
+      <li>What did the modern AI learn from? Is it neutral, or is it simply 2026?</li>
+      <li>Which voice made up the most? Was it the smallest model, or the hardest kind of question?</li>
+    </ul>
+  </div>
+  <div class="say">
+    <span class="tag">What was happening before 1930</span>
+    <ul>
+      <li><strong>A defeat explained by numbers.</strong> Lee's farewell order (1865) and Early's speech (1872) said the South was beaten only by greater numbers and resources.</li>
+      <li><strong>Reunion.</strong> White Northerners and Southerners honored each other's soldiers, and slavery slipped out of the story (Adams, 1907).</li>
+      <li><strong>Reconstruction as a wrong done to the white South.</strong> A best-selling novel and a Columbia professor told the same story (Dixon, 1905; Dunning, 1907).</li>
+      <li><strong>Control of the schoolbook.</strong> The United Daughters of the Confederacy pressed schools to teach that the South had not fought for slavery (Rutherford, 1914).</li>
+      <li><strong>Counter-voices.</strong> Black writers kept slavery and freedom at the center (Douglass, 1881; Du Bois, 1910).</li>
+    </ul>
+    <span class="tag">And after 1930, in your course books</span>
+    <ul>
+      <li>Du Bois answered the Dunning School at book length in <em>Black Reconstruction in America</em> (1935).</li>
+      <li>Paul Buck's <em>The Road to Reunion</em> (1937) praised the reunion of North and South. David Blight's <em>Race and Reunion</em> (2001) argues that Black Americans paid for it.</li>
+      <li>Robert Penn Warren (1961) called the South's use of the war to excuse everything its "Great Alibi."</li>
+    </ul>
+  </div>
+</article>
+
+<!-- 11 -->
+<article class="slide" id="s11" role="tabpanel" aria-labelledby="t11" hidden>
+  <div class="slide-h"><span class="no">14</span><h2>The historian of 2126</h2><span class="min">15 min</span></div>
+  <div class="onscreen">
+    <p class="big">You are a historian in 2126</p>
+    <p><a href="https://talkie-lm.com/chat">talkie</a> is a source about 1930. The modern AI you used today is a source about 2026. Pick one answer it gave you and write <strong>one paragraph, about 120 words</strong>, as a historian a hundred years from now.</p>
+  </div>
+  <div class="say">
+    <div class="cp">
+      <div class="cp-h"><span class="t">Start your paragraph with</span><button class="copy" type="button">Copy</button></div>
+      <pre>In 2026, AI systems usually explained the Civil War by saying that ______. This tells us that the society of 2026 ______.</pre>
+    </div>
+    <p>Answer at least one of these in your paragraph:</p>
+    <ul>
+      <li>What could a 2026 AI not know, or not say?</li>
+      <li>Whose writing was it most likely trained on, and whose was left out?</li>
+      <li>What might a historian in 2126 find old-fashioned about it?</li>
+    </ul>
+  </div>
+</article>
+
+<!-- REF: troubleshooting -->
+<article class="slide" id="s12" role="tabpanel" aria-labelledby="t12" hidden>
+  <div class="slide-h"><span class="no ref">Ref</span><h2>If something goes wrong</h2></div>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Problem</th><th>What to do</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://talkie-lm.com/chat">talkie</a> will not load, or will not take your question</td><td>Use the printed transcript for your team. Your instructor has one for every team.</td></tr>
+      <tr><td>talkie's answer is the opposite of your prediction</td><td>Copy it exactly. It may be the exception your mixed group needs.</td></tr>
+      <tr><td>The modern AI refuses, or softens the old text</td><td>Write down what it did. That is a finding for card ③.</td></tr>
+      <tr><td>Your two models give different answers</td><td>Good. Write both down with the tool and model, then check them against the text or a source.</td></tr>
+      <tr><td>A model gives an exact quotation, page number or source</td><td>Treat it as unchecked until you find it in the text or the source itself. If it is not there, note it on your card as made up.</td></tr>
+      <tr><td>A text or an answer uses language that is hard to read</td><td>Do not read it aloud. Ask who wrote it, for whom, and why it was printed.</td></tr>
+      <tr><td>You are running out of time in step 2</td><td>Find the one sentence that states the author's view and work from that.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="say">
+    <p>Keep this tab open while you work.</p>
+  </div>
+</article>
+
+<!-- REF: sources -->
+<article class="slide" id="s13" role="tabpanel" aria-labelledby="t13" hidden>
+  <div class="slide-h"><span class="no ref">Ref</span><h2>Sources</h2></div>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Text</th><th>Pages</th><th>See it</th></tr></thead>
+    <tbody>
+      <tr><td>Annie Fields, <em>Life and Letters of Harriet Beecher Stowe</em> (1897)</td><td class="mono">269</td><td><a href="https://archive.org/details/lifelettersofhar00stow">Internet Archive</a></td></tr>
+      <tr><td>Charles E. Stowe and Lyman B. Stowe, <em>Harriet Beecher Stowe: The Story of Her Life</em> (1911)</td><td class="mono">202–203</td><td><a href="https://archive.org/details/harrietbeecherst00stow">Internet Archive</a></td></tr>
+      <tr><td>Daniel R. Vollaro, "Lincoln, Stowe, and the 'Little Woman/Great War' Story," <em>Journal of the Abraham Lincoln Association</em> 30, no. 1 (2009)</td><td class="mono">18–34</td><td><a href="https://historycooperative.org/?p=22461">History Cooperative</a></td></tr>
+      <tr><td>Robert E. Lee, General Order No. 9 (1865), manuscript copy</td><td class="mono">—</td><td><a href="https://collections.libraries.indiana.edu/lilly/exhibitions/exhibits/show/americanhistorydocs/generalorder9/generalorder9text">Lilly Library</a></td></tr>
+      <tr><td>Charles Francis Adams, <em>Lee's Centennial</em> (1907)</td><td class="mono">4–6, 8, 20–21</td><td><a href="https://archive.org/details/leescentennialad00adam">Internet Archive</a></td></tr>
+      <tr><td>Jubal A. Early, <em>The Campaigns of Gen. Robert E. Lee</em> (1872)</td><td class="mono">44–45</td><td><a href="https://distantreader.org/stacks/trust/uc2/uc2_ark+=13960=fk5bc3t82w.txt">HathiTrust text</a></td></tr>
+      <tr><td>Frederick Douglass, <em>Life and Times of Frederick Douglass</em> (1881)</td><td class="mono">397</td><td><a href="https://gutenberg.org/cache/epub/71893/pg71893-images.html">Project Gutenberg</a></td></tr>
+      <tr><td>Thomas Dixon Jr., <em>The Clansman</em> (1905)</td><td class="mono">To the Reader</td><td><a href="https://gutenberg.org/cache/epub/26240/pg26240-images.html">Project Gutenberg</a></td></tr>
+      <tr><td>William A. Dunning, <em>Reconstruction, Political and Economic, 1865–1877</em> (1907)</td><td class="mono">213, 341</td><td><a href="https://archive.org/details/reconstructionpoec00dunnrich">Internet Archive</a></td></tr>
+      <tr><td>W. E. B. Du Bois, "Reconstruction and Its Benefits," <em>American Historical Review</em> 15, no. 4 (1910)</td><td class="mono">781, 799</td><td><a href="https://archive.org/details/jstor-1836959">Internet Archive</a></td></tr>
+      <tr><td>Alexander H. Stephens, "Corner Stone Speech" (1861), in Henry Cleveland, ed., <em>Alexander H. Stephens, in Public and Private</em> (1866)</td><td class="mono">717–728</td><td><a href="https://teachingamericanhistory.org/document/cornerstone-speech/">Teaching American History</a></td></tr>
+      <tr><td>Alexander H. Stephens, <em>A Constitutional View of the Late War Between the States</em>, vol. 1 (1868)</td><td class="mono">9–10</td><td><a href="https://archive.org/details/constitutionalvi00lcstep">Internet Archive</a></td></tr>
+      <tr><td>Mildred Lewis Rutherford, <em>Wrongs of History Righted</em> (1914)</td><td class="mono">opening, 13–14</td><td><a href="https://archive.org/details/addressdelivered4939ruth">Internet Archive</a></td></tr>
+      <tr><td>National Park Service, "Paroling the Army of Northern Virginia"</td><td class="mono">—</td><td><a href="https://www.nps.gov/apco/learn/historyculture/paroling-the-army-of-northern-virginia.htm">nps.gov</a></td></tr>
+      <tr><td>talkie: a 13B vintage language model from 1930</td><td class="mono">—</td><td><a href="https://talkie-lm.com/">talkie-lm.com</a></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="say">
+    <p>Every old text on this page was printed before 1929 and is in the public domain. Each excerpt was checked against the copy linked here on November 2, 2026.</p>
+  </div>
+</article>
+
+<div class="nav">
+  <button id="prev" type="button">← Previous</button>
+  <span class="pos" id="pos">Slide 1</span>
+  <button id="next" type="button">Next →</button>
+</div>
+
+</div><!-- /panel -->
+</div><!-- /deck -->
+
+<footer>
+  <p class="contact end">Questions? Email Data Science/Analysis Research Librarian Tae Hyun Lim at <a href="mailto:tlim@hamilton.edu">tlim@hamilton.edu</a>.</p>
+  <p>Built from public-domain texts printed between 1861 and 1914, each checked against a scanned or transcribed copy on November 2, 2026 (see Sources). The texts follow the course reading list, cut off at 1930 to match talkie. The description of talkie follows its makers' <a href="https://talkie-lm.com/introducing-talkie">announcement</a> of April 28, 2026, and the tool details follow the <a href="https://www.hamilton.edu/offices/lits/tech-lab/artificial-intelligence/tools">LITS AI tools page</a>. Model sizes follow the talkie announcement and Meta's Llama 3.1 release (<a href="https://www.infoq.com/news/2024/07/meta-releases-llama31-405b">InfoQ, July 2024</a>); as of November 6, 2026, Google, Anthropic and OpenAI had published no parameter counts for Gemini 4, Claude Opus 5.5 or GPT-6 Sol. Outside guesses: <a href="https://eigenigma.io/en/articles/estimating-parameter-counts-of-claude-5-and-gpt-5-6/">Eigenigma, July 31, 2026</a> (Opus 5 and GPT-5.6 Sol) and <a href="https://www.nextbigfuture.com/2026/04/anthropic-and-xai-model-parameter-counts.html">NextBigFuture, April 9, 2026</a> (the Musk claim).</p>
+</footer>
+</div>
+
+<script>
+(function(){
+  var rail   = document.getElementById('rail'),
+      panelEl= document.getElementById('panel'),
+      vSlide = document.getElementById('btn-slides'),
+      vFlow  = document.getElementById('btn-flow'),
+      prev   = document.getElementById('prev'),
+      next   = document.getElementById('next'),
+      pos    = document.getElementById('pos');
+
+  var tabs   = Array.prototype.slice.call(document.querySelectorAll('.railitem')),
+      panels = tabs.map(function(t){ return document.getElementById(t.getAttribute('aria-controls')); }),
+      cur    = 0,
+      mode   = 'slides',
+      ready  = false;
+
+  function reduced(){
+    try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+    catch(e){ return false; }
+  }
+  function store(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }
+  function recall(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+
+  /* keep the active rail item in view without moving the page */
+  function railReveal(el){
+    var r = rail.getBoundingClientRect(), e = el.getBoundingClientRect();
+    if(rail.scrollHeight > rail.clientHeight + 2){
+      if(e.top < r.top)            rail.scrollTop -= (r.top - e.top) + 8;
+      else if(e.bottom > r.bottom) rail.scrollTop += (e.bottom - r.bottom) + 8;
+    } else if(rail.scrollWidth > rail.clientWidth + 2){
+      if(e.left < r.left)          rail.scrollLeft -= (r.left - e.left) + 8;
+      else if(e.right > r.right)   rail.scrollLeft += (e.right - r.right) + 8;
+    }
+  }
+
+  function mark(i){
+    cur = i;
+    tabs.forEach(function(t, k){
+      var on = k === i;
+      if(mode === 'slides'){
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+      } else {
+        if(on) t.setAttribute('aria-current', 'true');
+        else   t.removeAttribute('aria-current');
+      }
+    });
+    pos.textContent = 'Slide ' + (i + 1) + ' of ' + tabs.length;
+    if(ready){
+      try{ if(history && history.replaceState) history.replaceState(null, '', '#' + panels[i].id); }catch(e){}
+    }
+  }
+
+  /* one slide at a time */
+  function show(i, focusTab, scroll){
+    if(i < 0 || i >= tabs.length) return;
+    panels.forEach(function(p, k){ p.hidden = k !== i; });
+    mark(i);
+    prev.disabled = i === 0;
+    next.disabled = i === tabs.length - 1;
+    if(focusTab) tabs[i].focus();
+    if(scroll) railReveal(tabs[i]);
+  }
+
+  /* continuous */
+  var ticking = false;
+  function spy(){
+    if(mode !== 'flow' || ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      ticking = false;
+      var best = 0, bestTop = -Infinity;
+      for(var i = 0; i < panels.length; i++){
+        var top = panels[i].getBoundingClientRect().top;
+        if(top <= 140 && top > bestTop){ bestTop = top; best = i; }
+      }
+      if(best !== cur){ mark(best); railReveal(tabs[best]); }
+    });
+  }
+
+  function setMode(m, save){
+    mode = m;
+    vSlide.setAttribute('aria-pressed', m === 'slides' ? 'true' : 'false');
+    vFlow.setAttribute('aria-pressed',  m === 'flow'   ? 'true' : 'false');
+    panelEl.classList.toggle('flow', m === 'flow');
+
+    if(m === 'slides'){
+      rail.setAttribute('role', 'tablist');
+      rail.setAttribute('aria-orientation', 'vertical');
+      window.removeEventListener('scroll', spy);
+      tabs.forEach(function(t, k){
+        t.setAttribute('role', 'tab');
+        t.removeAttribute('aria-current');
+        panels[k].setAttribute('role', 'tabpanel');
+      });
+      show(cur, false, true);
+    } else {
+      rail.removeAttribute('role');
+      rail.removeAttribute('aria-orientation');
+      tabs.forEach(function(t, k){
+        t.removeAttribute('role');
+        t.removeAttribute('aria-selected');
+        t.tabIndex = 0;
+        panels[k].setAttribute('role', 'region');
+        panels[k].hidden = false;
+      });
+      mark(cur);
+      window.addEventListener('scroll', spy, { passive: true });
+      spy();
+    }
+    if(save) store('threevoices.view', m);
+  }
+
+  function go(i, focusTab){
+    if(i < 0 || i >= tabs.length) return;
+    if(mode === 'slides'){
+      show(i, focusTab, true);
+    } else {
+      mark(i);
+      railReveal(tabs[i]);
+      try{ panels[i].scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' }); }
+      catch(e){ panels[i].scrollIntoView(); }
+      if(focusTab) tabs[i].focus();
+    }
+  }
+
+  tabs.forEach(function(t, i){
+    t.addEventListener('click', function(){ go(i, false); });
+    t.addEventListener('keydown', function(e){
+      var k = e.key, n = null;
+      if(k === 'ArrowDown' || k === 'ArrowRight') n = i + 1;
+      else if(k === 'ArrowUp' || k === 'ArrowLeft') n = i - 1;
+      else if(k === 'Home') n = 0;
+      else if(k === 'End') n = tabs.length - 1;
+      if(n !== null && n >= 0 && n < tabs.length){ e.preventDefault(); go(n, true); }
+    });
+  });
+  prev.addEventListener('click', function(){ go(cur - 1, false); });
+  next.addEventListener('click', function(){ go(cur + 1, false); });
+  vSlide.addEventListener('click', function(){ setMode('slides', true); });
+  vFlow.addEventListener('click',  function(){ setMode('flow',   true); });
+
+  /* in-text slide numbers stay right, and data-go links jump in either mode */
+  function idxOf(id){
+    for(var i = 0; i < panels.length; i++){ if(panels[i].id === id) return i; }
+    return -1;
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-num]'), function(sp){
+    var p = document.getElementById(sp.getAttribute('data-num'));
+    if(!p) return;
+    var n = p.querySelector('.slide-h .no');
+    if(n) sp.textContent = String(parseInt(n.textContent, 10) || n.textContent.trim());
+  });
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('[data-go]') : null;
+    if(!a) return;
+    var i = idxOf(a.getAttribute('data-go'));
+    if(i < 0) return;
+    e.preventDefault();
+    go(i, false);
+  });
+
+  /* opens on the title slide; a #sNN link wins */
+  var start = 0, hash = '';
+  try{ hash = (location.hash || '').replace('#',''); }catch(e){}
+  if(hash){
+    var idx = idxOf(hash);
+    if(idx > -1) start = idx;
+  }
+  cur = start;
+  setMode(recall('threevoices.view') === 'slides' ? 'slides' : 'flow', false);
+  if(hash && start > 0){ go(start, false); }
+  else { try{ window.scrollTo(0, 0); }catch(e){} }
+  function arm(){ ready = true; }
+  if(document.readyState === 'complete') setTimeout(arm, 0);
+  else window.addEventListener('load', function(){ setTimeout(arm, 0); });
+
+  /* the team picker fills {{TOPIC}} and {{CHECK}} in the prompts */
+  (function(){
+    var picks = Array.prototype.slice.call(document.querySelectorAll('.team-pick'));
+    if(!picks.length) return;
+    var TEAMS = {
+      '1': { TOPIC: 'Robert E. Lee',
+             BOOK: 'Ty Seidule\'s Robert E. Lee and Me: A Southerner\'s Reckoning with the Myth of the Lost Cause (2021)',
+             CHECK: 'In a Senate speech after Robert E. Lee\'s death, did Charles Sumner say that he would hand Lee "over to the avenging pen of History"? When was it, and in what debate? Give me a source I can check, and say how sure you are.' },
+      '2': { TOPIC: 'Ulysses S. Grant and the defeat of the Confederacy',
+             BOOK: 'David W. Blight\'s Race and Reunion: The Civil War in American Memory (2001)',
+             CHECK: 'How many Confederate soldiers surrendered, or were paroled, at Appomattox in April 1865? Give me a source I can check, and say how sure you are.' },
+      '3': { TOPIC: 'Reconstruction in the South',
+             BOOK: 'W. E. B. Du Bois\'s Black Reconstruction in America (1935)',
+             CHECK: 'In 1910 W. E. B. Du Bois wrote that several Southern states kept their Reconstruction constitutions for decades: Mississippi until 1890, South Carolina until 1895, Virginia until 1902. Are those dates right? What did the new constitutions change for Black voters? Give me a source I can check, and say how sure you are.' },
+      '4': { TOPIC: 'the causes of the American Civil War',
+             BOOK: 'Karen L. Cox\'s Dixie\'s Daughters: The United Daughters of the Confederacy and the Preservation of Confederate Culture (2003)',
+             CHECK: 'Mildred Rutherford quoted Ulysses S. Grant as saying, "If I thought this war was to abolish slavery, I would resign my commission and offer my sword to the other side." Did Grant say this? Where did the quotation first appear, and is it in Grant\'s own letters or memoirs? Give me a source I can check, and say how sure you are.' }
+    };
+    var BLANK = { TOPIC: '[YOUR TOPIC — pick your team on slide 8]', BOOK: '[YOUR COURSE BOOK — pick your team on slide 8]', CHECK: '[YOUR TEAM\'S CHECK — pick your team on slide 8]' };
+    var targets = [];
+    Array.prototype.forEach.call(document.querySelectorAll('.cp pre'), function(pre){
+      if(pre.textContent.indexOf('{{') > -1) targets.push({ el: pre, tpl: pre.textContent });
+    });
+    function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function render(team){
+      var v = TEAMS[team] || null;
+      targets.forEach(function(t){
+        t.el.innerHTML = esc(t.tpl).replace(/\{\{(TOPIC|BOOK|CHECK)\}\}/g, function(_, k){
+          var filled = v ? v[k] : '';
+          return '<span class="fill' + (filled ? '' : ' empty') + '">' + esc(filled || BLANK[k]) + '</span>';
+        });
+      });
+    }
+    // never carry one person's choice over to the next
+    picks.forEach(function(sel){
+      sel.value = '';
+      sel.addEventListener('change', function(){
+        var val = sel.value;
+        picks.forEach(function(o){ if(o !== sel) o.value = val; });
+        render(val);
+      });
+    });
+    render('');
+  })();
+
+  /* copy buttons */
+  function selectText(pre, btn){
+    try{
+      var r = document.createRange(); r.selectNodeContents(pre);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      var old = btn.textContent;
+      btn.textContent = 'Selected';
+      setTimeout(function(){ btn.textContent = old; }, 1600);
+    }catch(e){}
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('button.copy'), function(btn){
+    btn.addEventListener('click', function(){
+      var box = btn.closest('.cp'), pre = box && box.querySelector('pre');
+      if(!pre) return;
+      var text = pre.textContent;
+      var done = function(){
+        var old = btn.textContent;
+        btn.textContent = 'Copied';
+        setTimeout(function(){ btn.textContent = old; }, 1600);
+      };
+      try{
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(done, function(){ selectText(pre, btn); });
+        } else {
+          selectText(pre, btn);
+        }
+      }catch(e){ selectText(pre, btn); }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
