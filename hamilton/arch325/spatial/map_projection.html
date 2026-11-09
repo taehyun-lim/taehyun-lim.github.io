@@ -13,6 +13,7 @@
   --accent: #A3195B; --accent-ink: #FFFFFF; --accent-soft: #F5E3EC; --grid: rgba(27,40,54,0.06);
   --map-edge: #1B2836;
   --t-area: #1F6F6B; --t-conf: #2B5C9E; --t-comp: #5D6873; --t-dist: #7A6420; --t-pers: #6B4C8A;
+  --std: #0F62C9; --ray: #D9700B; --stage-a: #F7FAFB; --stage-b: #DCE6EB;
   --font: "IBM Plex Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
   --display: "Fraunces", Georgia, "Times New Roman", serif;
   box-sizing: border-box;
@@ -24,6 +25,7 @@
     --accent: #E06A9F; --accent-ink: #1A0D14; --accent-soft: #3A2132; --grid: rgba(227,234,240,0.05);
     --map-edge: #DCE5EC;
     --t-area: #6FC4BE; --t-conf: #8DB4EA; --t-comp: #A9B4BE; --t-dist: #D7BE6E; --t-pers: #BFA2DD;
+    --std: #5AA9FF; --ray: #F2C04A; --stage-a: #1D2E3C; --stage-b: #101A23;
   }
 }
 :root[data-theme="dark"] {
@@ -31,6 +33,7 @@
   --accent: #E06A9F; --accent-ink: #1A0D14; --accent-soft: #3A2132; --grid: rgba(227,234,240,0.05);
   --map-edge: #DCE5EC;
   --t-area: #6FC4BE; --t-conf: #8DB4EA; --t-comp: #A9B4BE; --t-dist: #D7BE6E; --t-pers: #BFA2DD;
+    --std: #5AA9FF; --ray: #F2C04A; --stage-a: #1D2E3C; --stage-b: #101A23;
 }
 *, *::before, *::after { box-sizing: inherit; }
 html { scroll-padding-top: env(safe-area-inset-top, 0px); }
@@ -156,6 +159,64 @@ tbody tr:hover { background: var(--rule-2); }
 .filelist li { padding: 4px 0; border-bottom: 1px solid var(--rule-2); display: flex; justify-content: space-between; gap: 12px; }
 .filelist .muted { color: var(--ink-2); }
 
+
+/* How it works */
+.hw-lede { max-width: 72ch; margin: 0 0 14px; }
+.classpick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0 0 12px; }
+.classpick button { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); text-align: left; cursor: pointer; min-width: 0; }
+.classpick button:hover { border-color: var(--ink-2); }
+.classpick button[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); background: var(--accent-soft); }
+.classpick svg { width: 54px; height: 54px; flex: none; color: var(--ink); }
+.classpick .pk-surf { fill: var(--accent); fill-opacity: 0.16; stroke: var(--ink); stroke-width: 1.4; }
+.classpick .pk-globe { fill: var(--panel); stroke: var(--ink); stroke-width: 1.4; }
+.classpick .pk-std { fill: none; stroke: var(--std); stroke-width: 2.4; }
+.classpick strong { display: block; font-size: 15px; }
+.classpick .pk-sub { display: block; color: var(--ink-2); font-size: 12.5px; line-height: 1.35; }
+.stage3d { position: relative; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: radial-gradient(120% 90% at 50% 35%, var(--stage-a), var(--stage-b)); }
+#hw-canvas { display: block; touch-action: none; cursor: grab; }
+#hw-canvas.grabbing { cursor: grabbing; }
+.hw-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 10px; }
+.hw-bar .slider { flex: 1 1 320px; margin: 0; grid-template-columns: 5.5em minmax(0, 1fr) 70px; }
+.hw-hint { color: var(--ink-2); font-size: 12.5px; }
+.hw-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 16px; margin-top: 14px; align-items: start; }
+.hw-grid fieldset .seg { margin: 2px 0 8px; flex-wrap: wrap; }
+.hw-grid h4 { margin: 8px 0 2px; font-size: 12.5px; font-weight: 600; color: var(--ink-2); }
+.hw-grid h4:first-of-type { margin-top: 0; }
+.hw-explain { display: grid; gap: 10px; }
+.hw-explain p { margin: 0; max-width: 68ch; }
+.hw-explain .lead { font-size: 15px; }
+.keyrow { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--ink-2); padding-top: 8px; border-top: 1px solid var(--rule-2); }
+.keyrow span { display: inline-flex; align-items: center; gap: 6px; }
+.keyrow i { display: inline-block; width: 18px; height: 0; border-top: 3px solid var(--std); }
+.keyrow i.k-tis { width: 11px; height: 11px; border: 0; border-radius: 50%; background: var(--accent); opacity: 0.7; }
+.keyrow i.k-ray { border-top: 2px solid var(--ray); }
+.hw-note { font-size: 13px; color: var(--ink-2); }
+.hw-classes { margin-top: 26px; }
+.hw-classes > h2 { font: 650 22px/1.2 var(--display); margin: 0 0 4px; }
+.hw-classes > p { margin: 0 0 12px; max-width: 72ch; color: var(--ink-2); }
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.classcard { border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.classcard.current { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.cc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.classcard h3 { font: 650 18px/1.2 var(--display); margin: 0; }
+.cc-surf { font-size: 11.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2); }
+.classcard p { margin: 0; font-size: 13.5px; }
+.cc-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.cc-chip { display: inline-flex; align-items: baseline; gap: 6px; border: 1px solid var(--rule); background: transparent; border-radius: 4px; padding: 3px 8px; font-size: 13px; cursor: pointer; }
+.cc-chip:hover { border-color: var(--accent); }
+.cc-chip small { font-size: 11px; }
+.cc-show { align-self: flex-start; margin-top: auto; }
+@media (max-width: 1100px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 860px) {
+  .hw-grid { grid-template-columns: 1fr; }
+  .classpick { gap: 6px; }
+  .classpick svg { width: 38px; height: 38px; }
+  .classpick button { flex-direction: column; justify-content: center; text-align: center; padding: 8px 4px; gap: 4px; }
+  .classpick strong { font-size: 14px; }
+  .classpick .pk-sub { display: none; }
+  .cards { grid-template-columns: 1fr; }
+}
+
 footer { margin: 28px 2px 0; padding-top: 14px; border-top: 1px solid var(--rule); color: var(--ink-2); font-size: 12.5px; max-width: 86ch; }
 footer p { margin: 0 0 4px; }
 footer a { color: inherit; }
@@ -193,13 +254,83 @@ footer details.license p { margin: 6px 0 0; font-size: 12px; line-height: 1.5; }
 
   <main>
     <div class="tabs" role="tablist" aria-label="Tools">
-      <button type="button" role="tab" id="tab-raster" aria-selected="true" aria-controls="panel-work">Raster map</button>
+      <button type="button" role="tab" id="tab-how" aria-selected="true" aria-controls="panel-how">How it works</button>
+      <button type="button" role="tab" id="tab-raster" aria-selected="false" aria-controls="panel-work">Raster map</button>
       <button type="button" role="tab" id="tab-vector" aria-selected="false" aria-controls="panel-work">Vector map</button>
       <button type="button" role="tab" id="tab-compare" aria-selected="false" aria-controls="panel-compare">Compare all</button>
       <button type="button" role="tab" id="tab-batch" aria-selected="false" aria-controls="panel-batch">Batch convert</button>
     </div>
 
-    <section id="panel-work" role="tabpanel">
+    <section id="panel-how" class="panel" role="tabpanel" aria-labelledby="tab-how">
+      <h2>How a globe becomes a flat map</h2>
+      <p class="hw-lede">Paper cannot be wrapped smoothly around a ball, but it can be rolled into a cylinder or a cone, or laid flat. Classic projections wrap one of these surfaces around the globe, transfer the map onto it, and then unroll it. Three choices describe the result: the <strong>class</strong> (which surface), the <strong>case</strong> (whether it touches or cuts the globe) and the <strong>aspect</strong> (where it sits on the globe).</p>
+      <div class="classpick" role="group" aria-label="Projection class">
+        <button type="button" data-cls="cylinder" aria-pressed="true">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><circle class="pk-globe" cx="32" cy="32" r="15"/><path class="pk-surf" d="M17 10 V54 A15 4 0 0 0 47 54 V10 Z"/><ellipse class="pk-surf" cx="32" cy="10" rx="15" ry="4"/><ellipse class="pk-std" cx="32" cy="32" rx="15" ry="3.6"/></svg>
+          <span><strong>Cylinder</strong><span class="pk-sub">Cylindrical projections</span></span>
+        </button>
+        <button type="button" data-cls="cone" aria-pressed="false">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><circle class="pk-globe" cx="32" cy="38" r="15"/><path class="pk-surf" d="M32 6 L9 52 A23 5 0 0 0 55 52 Z"/><ellipse class="pk-std" cx="32" cy="28.4" rx="11.5" ry="2.6"/></svg>
+          <span><strong>Cone</strong><span class="pk-sub">Conic projections</span></span>
+        </button>
+        <button type="button" data-cls="plane" aria-pressed="false">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><circle class="pk-globe" cx="32" cy="38" r="16"/><path class="pk-surf" d="M6 23 L38 15 L58 22 L26 30 Z"/><circle cx="32" cy="22.2" r="2.6" fill="var(--std)"/></svg>
+          <span><strong>Plane</strong><span class="pk-sub">Planar (azimuthal) projections</span></span>
+        </button>
+      </div>
+      <div class="stage3d" id="hw-stage">
+        <canvas id="hw-canvas" tabindex="0" aria-label="A 3D globe with a sheet of paper wrapped around it. Drag to look around, scroll to zoom."></canvas>
+      </div>
+      <div class="hw-bar">
+        <button type="button" class="btn primary" id="hw-play">Unroll</button>
+        <div class="slider"><label for="hw-t">Unroll</label><input type="range" id="hw-t" min="0" max="1" step="0.01" value="0"><output for="hw-t" id="hw-t-out">Wrapped</output></div>
+        <span class="hw-hint">Drag the scene to look around. Scroll or pinch to zoom. Double-click to reset.</span>
+      </div>
+      <div class="hw-grid">
+        <fieldset>
+          <legend>Settings</legend>
+          <h4 id="hw-case-h">Case</h4>
+          <div class="seg" role="radiogroup" aria-labelledby="hw-case-h">
+            <label><input type="radio" name="hw-case" id="hw-case-tangent" value="tangent" checked><span>Tangent</span></label>
+            <label><input type="radio" name="hw-case" id="hw-case-secant" value="secant"><span>Secant</span></label>
+          </div>
+          <h4 id="hw-asp-h">Aspect</h4>
+          <div class="seg" role="radiogroup" aria-labelledby="hw-asp-h">
+            <label><input type="radio" name="hw-asp" id="hw-asp-normal" value="normal" checked><span>Normal</span></label>
+            <label><input type="radio" name="hw-asp" id="hw-asp-transverse" value="transverse"><span>Transverse</span></label>
+            <label><input type="radio" name="hw-asp" id="hw-asp-oblique" value="oblique"><span>Oblique</span></label>
+          </div>
+          <h4 id="hw-light-h">Light source</h4>
+          <div class="seg" role="radiogroup" aria-labelledby="hw-light-h" id="hw-light"></div>
+          <label class="check"><input type="checkbox" id="hw-rays" checked> Light rays</label>
+          <label class="check"><input type="checkbox" id="hw-tissot" checked> Same-size circles (Tissot)</label>
+          <label class="check"><input type="checkbox" id="hw-grat" checked> Graticule (every 15°)</label>
+          <div class="slider"><label for="hw-op">Paper opacity</label><input type="range" id="hw-op" min="0.3" max="1" step="0.01" value="0.82"><output for="hw-op">82%</output></div>
+          <div class="slider"><label for="hw-spin">Turn globe</label><input type="range" id="hw-spin" min="-180" max="180" step="1" value="0"><output for="hw-spin">0.0°E</output></div>
+        </fieldset>
+        <div class="hw-explain" aria-live="polite">
+          <p class="lead" id="hw-class-text"></p>
+          <p id="hw-case-text"></p>
+          <p id="hw-std-text"></p>
+          <p>The magenta circles are all the same size on the globe. Watch how they grow, shrink or stretch on the paper.</p>
+          <p id="hw-light-text"></p>
+          <div><button type="button" class="btn" id="hw-open" hidden></button></div>
+          <p class="hw-note">Lamps make the idea easy to see, but most named projections, such as Mercator, Albers and the azimuthal equidistant, are calculated with formulas instead. They still belong to a class: the class tells you the shape of the grid and where the map is most accurate.</p>
+          <div class="keyrow" aria-label="Key">
+            <span><i></i>Standard line</span>
+            <span><i class="k-tis"></i>Same-size circles</span>
+            <span><i class="k-ray"></i>Light rays</span>
+          </div>
+        </div>
+      </div>
+      <section class="hw-classes" aria-labelledby="hw-classes-h">
+        <h2 id="hw-classes-h">Common projections by class</h2>
+        <p>Every projection in this app, grouped by the surface it comes from. Select a name to open it.</p>
+        <div class="cards" id="hw-cards"></div>
+      </section>
+    </section>
+
+    <section id="panel-work" role="tabpanel" aria-labelledby="tab-raster" hidden>
       <div class="toolbar">
         <label class="field-inline raster-only" for="style">Base map
           <select id="style">
@@ -345,7 +476,7 @@ footer details.license p { margin: 6px 0 0; font-size: 12px; line-height: 1.5; }
     </section>
 
     <footer>
-      <p>A from-scratch browser reimplementation of <a href="https://github.com/jkunimune/Map-Projections" target="_blank" rel="noopener">Map-Projections</a> by Justin Kunimune (MIT license): Map Designer (raster and vector), Map Analyzer, Map Plotter, Map Optimizer and Map Converter.</p>
+      <p>A from-scratch browser reimplementation of <a href="https://github.com/jkunimune/Map-Projections" target="_blank" rel="noopener">Map-Projections</a> by Justin Kunimune (MIT license): Map Designer (raster and vector), Map Analyzer, Map Plotter, Map Optimizer and Map Converter. The How it works tab is an addition for teaching.</p>
       <p>Borders come from Natural Earth 1:110m data (public domain), via Datamaps 0.5.9 (MIT license). The TetraPower projection follows Kunimune’s published AuthaGraph formulas (CC BY 4.0). AuthaGraph is the work of Hajime Narukawa and AuthaGraph Co., Ltd.; this page is not affiliated with them.</p>
       <details class="license" open>
         <summary>License notice for Map-Projections</summary>
@@ -1085,6 +1216,7 @@ function aspectMatrix(latDeg, lonDeg, rotDeg) {
 
 if (typeof module !== 'undefined') module.exports = { TETRA, OCTA, ICOSA, lenticularFwd, vdgFwd, toblerSetup, lccSetup, lccFwd, eqdcSetup, eqdcFwd, perspectiveC, ellipjFast, PROJECTIONS, aspectMatrix, winkelFwd, ellipjHalf, zetaToVector, albersSetup, albersFwd, K_HALF, ROB_X, ROB_Y, GOODE_DY };
 
+
 </script>
 <script>
 (function () {
@@ -1695,7 +1827,7 @@ if (typeof module !== 'undefined') module.exports = { TETRA, OCTA, ICOSA, lentic
     if (V.edge) out.push('<path fill="none" stroke="' + INK + '" stroke-width="' + (sw * 1.5).toFixed(2) + '" stroke-linejoin="round" d="' + outline.map((l) => path(l, true)).join('') + '"/>');
     const W = Math.round(widthPx + 2 * pad), H = Hpx + 2 * pad;
     return { W, H, svg: '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '">' +
-      '<title>' + byKey[key].name + '</title>' + out.join('') + '</svg>' };
+      '<title>' + displayName(key) + '</title>' + out.join('') + '</svg>' };
   }
   let worldArcs = [];
 
@@ -1942,6 +2074,10 @@ if (typeof module !== 'undefined') module.exports = { TETRA, OCTA, ICOSA, lentic
 
   /* ================= Projection list and settings ================= */
   const TAG_CLASS = { 'Equal-area': 't-area', 'Conformal': 't-conf', 'Compromise': 't-comp', 'Equidistant': 't-dist', 'Perspective': 't-pers', 'Interrupted': 't-int' };
+  // The cylindrical equal-area entry covers several named maps; title it by its standard parallel.
+  const CEA_NAMES = { 0: 'Lambert Cylindrical Equal-Area', 30: 'Behrmann', 37.5: 'Hobo–Dyer', 45: 'Gall–Peters' };
+  const displayName = (key) => (key === 'cea' ? CEA_NAMES[paramState.cea.std] || 'Cylindrical Equal-Area' : byKey[key].name);
+  const updateTitle = () => { $('#info-name').textContent = displayName(state.proj); };
   const tagHtml = (g) => '<span class="tag ' + (TAG_CLASS[g] || '') + '">' + g + '</span>';
   function buildList() {
     const list = $('#proj-list'); list.innerHTML = '';
@@ -1953,7 +2089,7 @@ if (typeof module !== 'undefined') module.exports = { TETRA, OCTA, ICOSA, lentic
         const b = document.createElement('button'); b.type = 'button'; b.className = 'proj'; b.dataset.key = p.key;
         b.setAttribute('aria-pressed', p.key === state.proj ? 'true' : 'false');
         b.innerHTML = '<span class="pname">' + p.name + '</span><span class="tags">' + p.tags.map(tagHtml).join('') + '</span>';
-        b.addEventListener('click', () => selectProj(p.key));
+        b.addEventListener('click', () => { selectProj(p.key); if (state.tab === 'how') switchTab('raster'); });
         g.appendChild(b);
       });
       list.appendChild(g);
@@ -1964,7 +2100,7 @@ if (typeof module !== 'undefined') module.exports = { TETRA, OCTA, ICOSA, lentic
     state.proj = key;
     document.querySelectorAll('.proj').forEach((b) => b.setAttribute('aria-pressed', b.dataset.key === key ? 'true' : 'false'));
     const p = byKey[key];
-    $('#info-name').textContent = p.name;
+    updateTitle();
     $('#info-tags').innerHTML = p.tags.map(tagHtml).join('');
     $('#info-note').textContent = p.note;
     $('#info-who').textContent = p.who;
@@ -1986,7 +2122,7 @@ if (typeof module !== 'undefined') module.exports = { TETRA, OCTA, ICOSA, lentic
       row.innerHTML = '<label for="' + id + '">' + q.label + '</label><input type="range" id="' + id + '" min="' + q.min + '" max="' + q.max + '" step="' + q.step + '"><output for="' + id + '"></output>';
       const inp = row.querySelector('input'), out = row.querySelector('output');
       inp.value = paramState[p.key][q.key]; out.textContent = fmtParam(q, inp.value);
-      inp.addEventListener('input', () => { paramState[p.key][q.key] = +inp.value; out.textContent = fmtParam(q, inp.value); refresh({ relayout: true }); });
+      inp.addEventListener('input', () => { paramState[p.key][q.key] = +inp.value; out.textContent = fmtParam(q, inp.value); updateTitle(); refresh({ relayout: true }); });
       box.appendChild(row);
     });
     if (p.presets) {
@@ -1994,7 +2130,7 @@ if (typeof module !== 'undefined') module.exports = { TETRA, OCTA, ICOSA, lentic
       p.presets.forEach(([n, vals]) => {
         const b = document.createElement('button'); b.type = 'button'; b.className = 'chip';
         b.textContent = n + ' ' + Object.values(vals).map((v) => v + '°').join(', ');
-        b.addEventListener('click', () => { Object.assign(paramState[p.key], vals); buildParams(); refresh({ relayout: true }); });
+        b.addEventListener('click', () => { Object.assign(paramState[p.key], vals); buildParams(); updateTitle(); refresh({ relayout: true }); });
         pre.appendChild(b);
       });
       box.appendChild(pre);
@@ -2094,12 +2230,27 @@ if (typeof module !== 'undefined') module.exports = { TETRA, OCTA, ICOSA, lentic
   function note(msg) { const n = $('#note'); n.textContent = msg; n.hidden = !msg; }
 
   /* ================= Saving ================= */
+  // Inside the Claude artifact viewer, files are saved through its downloads capability. Opened as an
+  // ordinary web page (a course site, a local file), the page saves with a normal browser download.
+  const browserDownloads = {
+    save: async ({ filename, data }) => {
+      const type = /\.svg$/i.test(filename) ? 'image/svg+xml' : /\.zip$/i.test(filename) ? 'application/zip' : 'image/png';
+      const blob = data instanceof Blob ? data : new Blob([data], { type });
+      const url = URL.createObjectURL(blob), a = document.createElement('a');
+      a.href = url; a.download = filename; a.hidden = true;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 10000);
+      return { status: 'saved' };
+    },
+  };
   let downloads = null;
   (async () => {
-    try { if (window.claude && typeof window.claude.use === 'function') downloads = await window.claude.use('downloads'); } catch (e) { downloads = null; }
+    if (window.claude && typeof window.claude.use === 'function') {
+      try { downloads = await window.claude.use('downloads'); } catch (e) { downloads = null; }
+    } else downloads = browserDownloads;
     updateSaveButton(); updateBatchSummary();
   })();
-  const slug = () => byKey[state.proj].name.replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const slug = () => displayName(state.proj).replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '');
   function updateSaveButton() {
     const b = $('#save');
     b.hidden = !downloads || (state.tab !== 'raster' && state.tab !== 'vector');
@@ -2188,7 +2339,7 @@ if (typeof module !== 'undefined') module.exports = { TETRA, OCTA, ICOSA, lentic
 
   /* ================= Batch convert (converter) ================= */
   function updateBatchSummary() {
-    $('#batch-summary').textContent = 'Current settings: ' + byKey[state.proj].name + ', centre ' + fmtLat(state.lat) + ' ' + fmtLon(state.lon) + ', rotation ' + state.rot.toFixed(1) + '°, ' + state.exportWidth.toLocaleString('en') + ' px wide.' +
+    $('#batch-summary').textContent = 'Current settings: ' + displayName(state.proj) + ', centre ' + fmtLat(state.lat) + ' ' + fmtLon(state.lon) + ', rotation ' + state.rot.toFixed(1) + '°, ' + state.exportWidth.toLocaleString('en') + ' px wide.' +
       (downloads ? '' : ' Saving files isn’t available in this view.');
     $('#batch-run').disabled = !batchFiles.length || !downloads;
   }
@@ -2224,12 +2375,646 @@ if (typeof module !== 'undefined') module.exports = { TETRA, OCTA, ICOSA, lentic
     btn.disabled = false;
   });
 
+  /* ================= How it works: globe → developable surface → flat map =================
+   * A small ray tracer. Frames:
+   *   P  "surface frame": the cylinder, cone or plane is built around the P z-axis, its front faces P +x.
+   *   S  "scene frame": what the camera sees, with the Earth's axis up. S = A·P, A = aspect rotation.
+   *   G  geographic: G = Rz(spin)·S.
+   * Every point on the paper has parameters (u, v). place(u, v, t) bends the paper for unroll amount t,
+   * toGlobe(u, v) follows the light ray back to the globe, fromGlobe(p) does the reverse. */
+  const HW = { cls: 'cylinder', kase: 'tangent', aspect: 'normal', light: 'centre', t: 0, rays: true, tissot: true, grat: true,
+    opacity: 0.82, spin: 0, yaw: 0, pitch: 0, zoom: 1 }; // yaw/pitch: the reader's own turn on top of the default view
+  const HW_CAM = { cylinder: [32, 14], cone: [32, 22], plane: [31, 40] }; // default view, in the paper's own frame
+  const HW_LIGHTS = { cylinder: ['centre', 'axis'], cone: ['centre'], plane: ['centre', 'far', 'infinity'] };
+  const HW_LIGHT_LABEL = { centre: 'At the centre', axis: 'From the axis', far: 'At the far side', infinity: 'Far away' };
+  const CYL_SEC = Math.acos(0.75);            // 41.4°: with axis light this gives exactly the Behrmann shape
+  const CONE_TAN = 40 * D2R, CONE_SEC = [25 * D2R, 55 * D2R], PLANE_SEC = 60 * D2R;
+  const { sin: Sn, cos: Cs, tan: Tn, atan2: At2, sqrt: Sq, abs: Ab, PI: PI_ } = Math;
+
+  function hwSurface(cls, kase, light) {
+    const S = { cls, kase, light };
+    if (cls === 'cylinder') {
+      const r = kase === 'tangent' ? 1 : Cs(CYL_SEC);
+      const vmax = light === 'axis' ? 1 : r * Tn(57 * D2R);
+      Object.assign(S, { r, u0: -PI_ * r, u1: PI_ * r, v0: -vmax, v1: vmax, std: kase === 'tangent' ? [0] : [CYL_SEC, -CYL_SEC], seam: true });
+      S.prepare = () => {};
+      S.place = (u, v, t, o) => {
+        const k = (1 - t) / r;
+        if (k < 1e-6) { o[0] = r; o[1] = u; o[2] = v; } else { const a = k * u; o[0] = r - (1 - Cs(a)) / k; o[1] = Sn(a) / k; o[2] = v; }
+        return o;
+      };
+      S.normal = (u, v, t, o) => { const a = (1 - t) * u / r; o[0] = Cs(a); o[1] = Sn(a); o[2] = 0; return o; };
+      S.toGlobe = (u, v, o) => {
+        const th = u / r;
+        if (light === 'axis') { const h = Sq(Math.max(0, 1 - v * v)); o[0] = h * Cs(th); o[1] = h * Sn(th); o[2] = v; }
+        else { const x = r * Cs(th), y = r * Sn(th), n = Sq(x * x + y * y + v * v); o[0] = x / n; o[1] = y / n; o[2] = v / n; }
+        return true;
+      };
+      S.fromGlobe = (p, o) => {
+        const lam = At2(p[1], p[0]), h = Sq(p[0] * p[0] + p[1] * p[1]);
+        const v = light === 'axis' ? p[2] : (h < 1e-9 ? Infinity : r * p[2] / h);
+        if (!(v >= S.v0 && v <= S.v1)) return null;
+        o[0] = r * lam; o[1] = v; return o;
+      };
+      S.intersect = (o, d, t, push) => {
+        const k = (1 - t) / r;
+        if (k < 1e-6) {
+          if (Ab(d[0]) < 1e-12) return;
+          const tau = (r - o[0]) / d[0]; if (tau <= 1e-9) return;
+          const y = o[1] + tau * d[1], z = o[2] + tau * d[2];
+          if (y >= S.u0 && y <= S.u1 && z >= S.v0 && z <= S.v1) push(tau, y, z);
+          return;
+        }
+        const R = 1 / k, ox = o[0] - (r - R), a = d[0] * d[0] + d[1] * d[1];
+        if (a < 1e-14) return;
+        const b = ox * d[0] + o[1] * d[1], c = ox * ox + o[1] * o[1] - R * R, disc = b * b - a * c;
+        if (disc < 0) return;
+        const sq = Sq(disc);
+        for (let s = -1; s <= 1; s += 2) {
+          const tau = (-b + s * sq) / a; if (tau <= 1e-9) continue;
+          const z = o[2] + tau * d[2]; if (z < S.v0 || z > S.v1) continue;
+          const u = At2(o[1] + tau * d[1], ox + tau * d[0]) * R;
+          if (u >= S.u0 && u <= S.u1) push(tau, u, z);
+        }
+      };
+      S.outline = () => [[[S.u0, S.v0], [S.u1, S.v0]], [[S.u0, S.v1], [S.u1, S.v1]], [[S.u0, S.v0], [S.u0, S.v1]], [[S.u1, S.v0], [S.u1, S.v1]]];
+    } else if (cls === 'cone') {
+      let beta, za;
+      if (kase === 'tangent') { beta = CONE_TAN; za = 1 / Sn(beta); S.std = [CONE_TAN]; }
+      else {
+        const [f1, f2] = CONE_SEC;
+        beta = Math.atan((Cs(f1) - Cs(f2)) / (Sn(f2) - Sn(f1))); za = Sn(f1) + Cs(f1) / Tn(beta); S.std = [f1, f2];
+      }
+      const n = Sn(beta), cb = Cs(beta), tb = Tn(beta);
+      const fs = -10 * D2R, tauS = za * tb / (Cs(fs) + Sn(fs) * tb), rhoMax = (za - tauS * Sn(fs)) / cb;
+      Object.assign(S, { beta, za, n, u0: -PI_ * n, u1: PI_ * n, v0: 0, v1: rhoMax, seam: true });
+      const ur = [n, 0, -cb], N = [cb, 0, n], F = {};
+      S.prepare = (t) => {
+        const bp = Math.min(PI_ / 2, beta + t * (PI_ / 2 - beta)), sb = Sn(bp), cbp = Cs(bp);
+        const a = [cbp * ur[0] - sb * N[0], cbp * ur[1] - sb * N[1], cbp * ur[2] - sb * N[2]];
+        const e1 = [(ur[0] - cbp * a[0]) / sb, (ur[1] - cbp * a[1]) / sb, (ur[2] - cbp * a[2]) / sb];
+        Object.assign(F, { t, sb, cbp, a, e1, flat: cbp < 1e-5 });
+      };
+      S.prepare(0);
+      const frame = (t) => { if (F.t !== t) S.prepare(t); return F; };
+      S.place = (u, v, t, o) => {
+        const f = frame(t), th = u / f.sb, c = Cs(th), s = Sn(th);
+        o[0] = v * (f.cbp * f.a[0] + f.sb * c * f.e1[0]);
+        o[1] = v * (f.sb * s);
+        o[2] = za + v * (f.cbp * f.a[2] + f.sb * c * f.e1[2]);
+        return o;
+      };
+      S.normal = (u, v, t, o) => {
+        const f = frame(t), th = u / f.sb, c = Cs(th), s = Sn(th);
+        o[0] = f.cbp * c * f.e1[0] - f.sb * f.a[0]; o[1] = f.cbp * s; o[2] = f.cbp * c * f.e1[2] - f.sb * f.a[2];
+        return o;
+      };
+      S.toGlobe = (u, v, o) => {
+        const th = u / n, x = v * n * Cs(th), y = v * n * Sn(th), z = za - v * cb, m = Sq(x * x + y * y + z * z);
+        if (m < 1e-12) return false;
+        o[0] = x / m; o[1] = y / m; o[2] = z / m; return true;
+      };
+      S.fromGlobe = (p, o) => {
+        const phi = Math.asin(clamp(p[2], -1, 1)), den = Cs(phi) + Sn(phi) * tb;
+        if (den <= 1e-6) return null;
+        const tau = za * tb / den, rho = (za - tau * Sn(phi)) / cb;
+        if (rho < -1e-9 || rho > rhoMax) return null;
+        o[0] = At2(p[1], p[0]) * n; o[1] = Math.max(0, rho); return o;
+      };
+      S.intersect = (o, d, t, push) => {
+        const f = frame(t), a = f.a, e1 = f.e1;
+        const wx = o[0], wy = o[1], wz = o[2] - za;
+        const wa = wx * a[0] + wy * a[1] + wz * a[2], da = d[0] * a[0] + d[1] * a[1] + d[2] * a[2];
+        const test = (tau) => {
+          if (tau <= 1e-9) return;
+          const px = wx + tau * d[0], py = wy + tau * d[1], pz = wz + tau * d[2];
+          if (!f.flat && px * a[0] + py * a[1] + pz * a[2] <= 0) return;
+          const rho = Sq(px * px + py * py + pz * pz); if (rho > rhoMax) return;
+          const u = At2(py, px * e1[0] + py * e1[1] + pz * e1[2]) * f.sb;
+          if (u >= S.u0 && u <= S.u1) push(tau, u, rho);
+        };
+        if (f.flat) { if (Ab(da) > 1e-12) test(-wa / da); return; }
+        const c2 = f.cbp * f.cbp, wd = wx * d[0] + wy * d[1] + wz * d[2], ww = wx * wx + wy * wy + wz * wz;
+        const A2 = da * da - c2, B2 = 2 * (wa * da - c2 * wd), C2 = wa * wa - c2 * ww;
+        if (Ab(A2) < 1e-12) { if (Ab(B2) > 1e-12) test(-C2 / B2); return; }
+        const disc = B2 * B2 - 4 * A2 * C2; if (disc < 0) return;
+        const sq = Sq(disc); test((-B2 - sq) / (2 * A2)); test((-B2 + sq) / (2 * A2));
+      };
+      S.outline = () => [[[S.u0, S.v1], [S.u1, S.v1]], [[S.u0, 0], [S.u0, S.v1]], [[S.u1, 0], [S.u1, S.v1]]];
+    } else {
+      const h = kase === 'tangent' ? 1 : Sn(PLANE_SEC);
+      const Rmax = light === 'centre' ? h * Tn(62 * D2R) : light === 'far' ? (h + 1) * Tn(50 * D2R) : 1;
+      Object.assign(S, { h, Rmax, u0: -Rmax, u1: Rmax, v0: -Rmax, v1: Rmax, std: kase === 'tangent' ? [] : [PLANE_SEC], seam: false });
+      S.prepare = () => {};
+      S.place = (u, v, t, o) => { const a = t * PI_ / 2, c = Cs(a), s = Sn(a); o[0] = u * c + h * s; o[1] = v; o[2] = -u * s + h * c; return o; };
+      S.normal = (u, v, t, o) => { const a = t * PI_ / 2; o[0] = Sn(a); o[1] = 0; o[2] = Cs(a); return o; };
+      S.toGlobe = (u, v, o) => {
+        if (light === 'centre') { const m = Sq(u * u + v * v + h * h); o[0] = u / m; o[1] = v / m; o[2] = h / m; return true; }
+        if (light === 'far') { const dz = h + 1, k = 2 * dz / (u * u + v * v + dz * dz); o[0] = k * u; o[1] = k * v; o[2] = -1 + k * dz; return true; }
+        const s = u * u + v * v; if (s > 1) return false;
+        o[0] = u; o[1] = v; o[2] = Sq(1 - s); return true;
+      };
+      S.fromGlobe = (p, o) => {
+        let k;
+        if (light === 'centre') { if (p[2] < 0.05) return null; k = h / p[2]; }
+        else if (light === 'far') { if (p[2] <= -0.999) return null; k = (h + 1) / (p[2] + 1); }
+        else { if (p[2] < 0) return null; k = 1; }
+        const u = k * p[0], v = k * p[1];
+        if (u * u + v * v > Rmax * Rmax) return null;
+        o[0] = u; o[1] = v; return o;
+      };
+      S.intersect = (o, d, t, push) => {
+        const a = t * PI_ / 2, c = Cs(a), s = Sn(a);
+        const lz = o[0] * s + o[2] * c, dz = d[0] * s + d[2] * c;
+        if (Ab(dz) < 1e-12) return;
+        const tau = (h - lz) / dz; if (tau <= 1e-9) return;
+        const u = (o[0] + tau * d[0]) * c - (o[2] + tau * d[2]) * s, v = o[1] + tau * d[1];
+        if (u * u + v * v <= Rmax * Rmax) push(tau, u, v);
+      };
+      S.outline = () => { const ring = []; for (let i = 0; i <= 120; i++) { const a = 2 * PI_ * i / 120; ring.push([Rmax * Cs(a), Rmax * Sn(a)]); } return [ring]; };
+    }
+    return S;
+  }
+
+  /* ---------- small vector helpers ---------- */
+  const mv = (M, v) => [M[0][0] * v[0] + M[0][1] * v[1] + M[0][2] * v[2], M[1][0] * v[0] + M[1][1] * v[1] + M[1][2] * v[2], M[2][0] * v[0] + M[2][1] * v[1] + M[2][2] * v[2]];
+  const mT = (M) => [[M[0][0], M[1][0], M[2][0]], [M[0][1], M[1][1], M[2][1]], [M[0][2], M[1][2], M[2][2]]];
+  const mm = (A, B) => A.map((r) => [0, 1, 2].map((j) => r[0] * B[0][j] + r[1] * B[1][j] + r[2] * B[2][j]));
+  const rotX = (a) => [[1, 0, 0], [0, Cs(a), -Sn(a)], [0, Sn(a), Cs(a)]];
+  const rotZ = (a) => [[Cs(a), -Sn(a), 0], [Sn(a), Cs(a), 0], [0, 0, 1]];
+  const vnrm = (v) => { const n = Math.hypot(v[0], v[1], v[2]) || 1; return [v[0] / n, v[1] / n, v[2] / n]; };
+  const hwAspectM = () => rotX({ normal: 0, transverse: -90, oblique: -45 }[HW.aspect] * D2R);
+
+  let hwSurf = null;
+  function hwCurrentSurface() {
+    const key = HW.cls + HW.kase + HW.light;
+    if (!hwSurf || hwSurf.key !== key) { hwSurf = hwSurface(HW.cls, HW.kase, HW.light); hwSurf.key = key; }
+    return hwSurf;
+  }
+  // The view turns to face the paper as it unrolls; HW.yaw/pitch hold the reader's own adjustments on top.
+  const wrapPI = (x) => Math.atan2(Sn(x), Cs(x));
+  function hwView(S, A, t) {
+    const e = t * t * (3 - 2 * t), def = HW_CAM[S.cls], y0 = (HW.aspect === 'normal' ? 1 : -1) * def[0] * D2R, p0 = def[1] * D2R;
+    // default direction is set relative to the paper, then carried into the scene with the aspect
+    const dS = mv(A, [Cs(p0) * Cs(y0), Cs(p0) * Sn(y0), Sn(p0)]), dy = At2(dS[1], dS[0]), dp = Math.asin(clamp(dS[2], -1, 1));
+    const n = mv(A, S.normal(0, (S.v0 + S.v1) / 2, 1, [0, 0, 0]));
+    const fy = At2(n[1], n[0]), fp = Math.asin(clamp(n[2], -1, 1));
+    const by = dy + e * wrapPI(fy - dy), bp = dp + e * (fp - dp);
+    return { baseYaw: by, basePitch: bp, yaw: by + HW.yaw, pitch: clamp(bp + HW.pitch, -85 * D2R, 88 * D2R) };
+  }
+  const basisOf = (yaw, pitch) => {
+    const cp = Cs(pitch), F = [-cp * Cs(yaw), -cp * Sn(yaw), -Sn(pitch)];
+    const Rt = vnrm([F[1], -F[0], 0]), U = [Rt[1] * F[2] - Rt[2] * F[1], Rt[2] * F[0] - Rt[0] * F[2], Rt[0] * F[1] - Rt[1] * F[0]];
+    return { F, Rt, U };
+  };
+  const SPHERE_PTS = (() => { const p = []; for (const x of [-1, 0, 1]) for (const y of [-1, 0, 1]) for (const z of [-1, 0, 1]) if (x || y || z) p.push(vnrm([x, y, z])); return p; })();
+  // Perspective fit of the paper (at its current shape) and the globe, for the un-adjusted view direction.
+  function hwFitScene(S, A, t, tX, tY) {
+    const pts = SPHERE_PTS.slice(), o = [0, 0, 0];
+    S.prepare(t);
+    for (let i = 0; i <= 12; i++) for (let j = 0; j <= 12; j++) {
+      let u = S.u0 + (S.u1 - S.u0) * i / 12, v = S.v0 + (S.v1 - S.v0) * j / 12;
+      if (S.cls === 'plane') { const m = Math.hypot(u, v); if (m > S.Rmax) { u *= S.Rmax / m; v *= S.Rmax / m; } }
+      pts.push(mv(A, S.place(u, v, t, o)));
+    }
+    const lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity];
+    pts.forEach((p) => { for (let k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], p[k]); hi[k] = Math.max(hi[k], p[k]); } });
+    const c = [(lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2];
+    const v = hwView(S, A, t), B = basisOf(v.baseYaw, v.basePitch), m = 0.9;
+    let dist = 0;
+    pts.forEach((p) => {
+      const d = [p[0] - c[0], p[1] - c[1], p[2] - c[2]];
+      const x = d[0] * B.Rt[0] + d[1] * B.Rt[1] + d[2] * B.Rt[2], y = d[0] * B.U[0] + d[1] * B.U[1] + d[2] * B.U[2], z = d[0] * B.F[0] + d[1] * B.F[1] + d[2] * B.F[2];
+      dist = Math.max(dist, Ab(x) / (tX * m) - z, Ab(y) / (tY * m) - z);
+    });
+    return { c, dist: Math.max(dist, 2.2) };
+  }
+  function hwCamera(W, H, S, A, t) {
+    const vfov = 30 * D2R, tY = Tn(vfov / 2), tX = tY * W / H;
+    const fit = hwFitScene(S, A, t, tX, tY), v = hwView(S, A, t), dist = fit.dist / HW.zoom;
+    const { F, Rt, U } = basisOf(v.yaw, v.pitch);
+    const pos = [fit.c[0] - F[0] * dist, fit.c[1] - F[1] * dist, fit.c[2] - F[2] * dist];
+    const L = vnrm([-0.35 * Rt[0] + 0.55 * U[0] - 0.75 * F[0], -0.35 * Rt[1] + 0.55 * U[1] - 0.75 * F[1], -0.35 * Rt[2] + 0.55 * U[2] - 0.75 * F[2]]);
+    return { pos, F, Rt, U, L, tX, tY, fpx: (H / 2) / tY, W, H };
+  }
+
+  function texSample(tex, latDeg, lonDeg, out) {
+    if (!tex) {
+      const b = clamp(Math.floor((latDeg + 90) / 15), 0, 11), c = clamp(Math.floor(((lonDeg + 540) % 360) / 15), 0, 23), k = 3 * (b * 24 + c);
+      out[0] = TEST[k]; out[1] = TEST[k + 1]; out[2] = TEST[k + 2]; return out;
+    }
+    const tw = tex.w, th = tex.h, td = tex.d;
+    let u = (((lonDeg + 540) % 360)) * (tw / 360) - 0.5, v = (90 - latDeg) * (th / 180) - 0.5;
+    if (v < 0) v = 0; else if (v > th - 1) v = th - 1;
+    let iu = Math.floor(u); const iv = Math.floor(v), fu = u - iu, fv = v - iv;
+    if (iu < 0) iu += tw; const iu1 = iu + 1 >= tw ? 0 : iu + 1, iv1 = iv + 1 < th ? iv + 1 : iv;
+    const a0 = 4 * (iv * tw + iu), a1 = 4 * (iv * tw + iu1), a2 = 4 * (iv1 * tw + iu), a3 = 4 * (iv1 * tw + iu1);
+    const w0 = (1 - fu) * (1 - fv), w1 = fu * (1 - fv), w2 = (1 - fu) * fv, w3 = fu * fv;
+    out[0] = td[a0] * w0 + td[a1] * w1 + td[a2] * w2 + td[a3] * w3;
+    out[1] = td[a0 + 1] * w0 + td[a1 + 1] * w1 + td[a2 + 1] * w2 + td[a3 + 1] * w3;
+    out[2] = td[a0 + 2] * w0 + td[a1 + 2] * w1 + td[a2 + 2] * w2 + td[a3 + 2] * w3;
+    return out;
+  }
+
+  /* ---------- the ray tracer ---------- */
+  const PAPER = [255, 251, 242], PAPER_BACK = [228, 221, 205];
+  function hwTrace(ctx2, W, H) {
+    const S = hwCurrentSurface(), A = hwAspectM(), AT = mT(A), t = HW.t;
+    const cam = hwCamera(W, H, S, A, t);
+    const G = mm(rotZ(HW.spin * D2R), A); // P → geographic
+    const g00 = G[0][0], g01 = G[0][1], g02 = G[0][2], g10 = G[1][0], g11 = G[1][1], g12 = G[1][2], g20 = G[2][0], g21 = G[2][1], g22 = G[2][2];
+    S.prepare(t);
+    const oP = mv(AT, cam.pos), Lp = mv(AT, cam.L);
+    const F = cam.F, Rt = cam.Rt, U = cam.U;
+    const tex = currentTexture();
+    const img = ctx2.createImageData(W, H), px = img.data;
+    const hT = new Float64Array(4), hU = new Float64Array(4), hV = new Float64Array(4), hK = new Uint8Array(4);
+    let nh = 0;
+    const push = (tau, u, v) => { if (nh < 3) { hT[nh] = tau; hU[nh] = u; hV[nh] = v; hK[nh] = 1; nh++; } };
+    const col = [0, 0, 0], q = [0, 0, 0], nrm = [0, 0, 0], d = [0, 0, 0];
+    const op = HW.opacity;
+    for (let j = 0; j < H; j++) {
+      const sy = (1 - 2 * (j + 0.5) / H) * cam.tY;
+      for (let i = 0; i < W; i++) {
+        const sx = (2 * (i + 0.5) / W - 1) * cam.tX;
+        let dx = F[0] + sx * Rt[0] + sy * U[0], dy = F[1] + sx * Rt[1] + sy * U[1], dz = F[2] + sx * Rt[2] + sy * U[2];
+        const dn = 1 / Sq(dx * dx + dy * dy + dz * dz); dx *= dn; dy *= dn; dz *= dn;
+        d[0] = AT[0][0] * dx + AT[0][1] * dy + AT[0][2] * dz; d[1] = AT[1][0] * dx + AT[1][1] * dy + AT[1][2] * dz; d[2] = AT[2][0] * dx + AT[2][1] * dy + AT[2][2] * dz;
+        nh = 0;
+        const b = oP[0] * d[0] + oP[1] * d[1] + oP[2] * d[2], c = oP[0] * oP[0] + oP[1] * oP[1] + oP[2] * oP[2] - 1, disc = b * b - c;
+        if (disc > 0) { const tau = -b - Sq(disc); if (tau > 0) { hT[0] = tau; hK[0] = 0; nh = 1; } }
+        S.intersect(oP, d, t, push);
+        // sort by distance (at most 3 hits)
+        for (let a = 1; a < nh; a++) for (let k = a; k > 0 && hT[k] < hT[k - 1]; k--) {
+          let x = hT[k]; hT[k] = hT[k - 1]; hT[k - 1] = x; x = hU[k]; hU[k] = hU[k - 1]; hU[k - 1] = x; x = hV[k]; hV[k] = hV[k - 1]; hV[k - 1] = x;
+          const y = hK[k]; hK[k] = hK[k - 1]; hK[k - 1] = y;
+        }
+        let r = 0, g = 0, bl = 0, al = 0;
+        for (let k = 0; k < nh && al < 0.995; k++) {
+          let a, shade;
+          if (hK[k] === 0) {
+            const tau = hT[k]; q[0] = oP[0] + tau * d[0]; q[1] = oP[1] + tau * d[1]; q[2] = oP[2] + tau * d[2];
+            shade = 0.56 + 0.44 * Math.max(0, q[0] * Lp[0] + q[1] * Lp[1] + q[2] * Lp[2]);
+            a = 1;
+          } else {
+            if (!S.toGlobe(hU[k], hV[k], q)) { q[0] = NaN; }
+            S.normal(hU[k], hV[k], t, nrm);
+            const facing = nrm[0] * d[0] + nrm[1] * d[1] + nrm[2] * d[2] < 0;
+            shade = 0.7 + 0.3 * Ab(nrm[0] * Lp[0] + nrm[1] * Lp[1] + nrm[2] * Lp[2]);
+            a = op;
+            if (q[0] === q[0]) {
+              const gz = g20 * q[0] + g21 * q[1] + g22 * q[2];
+              texSample(tex, Math.asin(gz > 1 ? 1 : gz < -1 ? -1 : gz) * R2D, At2(g10 * q[0] + g11 * q[1] + g12 * q[2], g00 * q[0] + g01 * q[1] + g02 * q[2]) * R2D, col);
+            } else { col[0] = PAPER[0]; col[1] = PAPER[1]; col[2] = PAPER[2]; }
+            if (facing) { col[0] = col[0] * 0.9 + PAPER[0] * 0.1; col[1] = col[1] * 0.9 + PAPER[1] * 0.1; col[2] = col[2] * 0.9 + PAPER[2] * 0.1; }
+            else { col[0] = col[0] * 0.2 + PAPER_BACK[0] * 0.8; col[1] = col[1] * 0.2 + PAPER_BACK[1] * 0.8; col[2] = col[2] * 0.2 + PAPER_BACK[2] * 0.8; }
+            const w = (1 - al) * a * shade;
+            r += w * col[0]; g += w * col[1]; bl += w * col[2]; al += (1 - al) * a;
+            continue;
+          }
+          const gz = g20 * q[0] + g21 * q[1] + g22 * q[2];
+          texSample(tex, Math.asin(gz > 1 ? 1 : gz < -1 ? -1 : gz) * R2D, At2(g10 * q[0] + g11 * q[1] + g12 * q[2], g00 * q[0] + g01 * q[1] + g02 * q[2]) * R2D, col);
+          const w = (1 - al) * a * shade;
+          r += w * col[0]; g += w * col[1]; bl += w * col[2]; al += (1 - al) * a;
+        }
+        const p4 = 4 * (j * W + i);
+        if (al > 0) { px[p4] = r / al; px[p4 + 1] = g / al; px[p4 + 2] = bl / al; px[p4 + 3] = al * 255; }
+      }
+    }
+    return { img, cam, S, A, AT, t };
+  }
+
+  /* ---------- vector overlay: graticule, standard lines, Tissot circles, light rays ---------- */
+  function hwOverlay(c2, fr, scale) {
+    const { cam, S, A, AT, t } = fr, op = HW.opacity;
+    const ink = cssHex('--map-edge', hexRgb(INK)), stdC = cssHex('--std', [15, 107, 219]), rayC = cssHex('--ray', [217, 154, 0]), acc = cssHex('--accent', [163, 25, 91]);
+    const rgba = (c, a) => 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a.toFixed(3) + ')';
+    const Ginv = mT(mm(rotZ(HW.spin * D2R), A));
+    const proj = (X) => {
+      const vx = X[0] - cam.pos[0], vy = X[1] - cam.pos[1], vz = X[2] - cam.pos[2];
+      const z = vx * cam.F[0] + vy * cam.F[1] + vz * cam.F[2]; if (z < 0.05) return null;
+      return [cam.W / 2 + (vx * cam.Rt[0] + vy * cam.Rt[1] + vz * cam.Rt[2]) / z * cam.fpx, cam.H / 2 - (vx * cam.U[0] + vy * cam.U[1] + vz * cam.U[2]) / z * cam.fpx];
+    };
+    const oP = mv(AT, cam.pos);
+    let hitsBefore = 0, Lmax = 0;
+    const countSheet = (tau) => { if (tau < Lmax) hitsBefore++; };
+    // 0 = hidden by the globe; otherwise dimmed by each sheet of paper in front
+    const vis = (Xs) => {
+      const dx = Xs[0] - cam.pos[0], dy = Xs[1] - cam.pos[1], dz = Xs[2] - cam.pos[2], L = Math.hypot(dx, dy, dz);
+      const d = mv(AT, [dx / L, dy / L, dz / L]);
+      const b = oP[0] * d[0] + oP[1] * d[1] + oP[2] * d[2], c = oP[0] * oP[0] + oP[1] * oP[1] + oP[2] * oP[2] - 1, disc = b * b - c;
+      if (disc > 0) { const tau = -b - Sq(disc); if (tau > 1e-6 && tau < L - 2e-3) return 0; }
+      hitsBefore = 0; Lmax = L - 2e-3; S.intersect(oP, d, t, countSheet);
+      return Math.pow(1 - op * 0.9, hitsBefore);
+    };
+    const tmp = [0, 0, 0], uv = [0, 0];
+    const onSheet = (p) => { if (!S.fromGlobe(p, uv)) return null; return { u: uv[0], v: uv[1], X: mv(A, S.place(uv[0], uv[1], t, tmp)) }; };
+    // draw a polyline of scene points (null = break) with per-vertex visibility
+    const stroke = (pts, color, width, alpha, dash, xray) => {
+      const scr = pts.map((X) => (X ? proj(X) : null)), vv = pts.map((X) => (X ? (xray ? 1 : vis(X)) : 0));
+      const buckets = new Map();
+      for (let i = 1; i < pts.length; i++) {
+        if (!scr[i] || !scr[i - 1]) continue;
+        const a = Math.round(Math.min(vv[i], vv[i - 1]) * alpha * 10) / 10;
+        if (a <= 0.02) continue;
+        if (!buckets.has(a)) buckets.set(a, new Path2D());
+        const p = buckets.get(a); p.moveTo(scr[i - 1][0], scr[i - 1][1]); p.lineTo(scr[i][0], scr[i][1]);
+      }
+      c2.lineWidth = width * scale; c2.setLineDash(dash ? dash.map((x) => x * scale) : []); c2.lineCap = 'round';
+      buckets.forEach((p, a) => { c2.strokeStyle = rgba(color, a); c2.stroke(p); });
+      c2.setLineDash([]);
+    };
+    const geoToP = (latD, lonD) => { const la = latD * D2R, lo = lonD * D2R; return mv(Ginv, [Cs(la) * Cs(lo), Cs(la) * Sn(lo), Sn(la)]); };
+    const sheetLine = (ps) => { const out = []; let prev = null; ps.forEach((p) => { const s = onSheet(p); if (s && prev && S.seam && Ab(s.u - prev.u) > 0.5 * (S.u1 - S.u0)) out.push(null); out.push(s ? s.X : null); prev = s; }); return out; };
+
+    // paper edge and globe outline
+    S.outline().forEach((edge) => {
+      const pts = [];
+      for (let k = 0; k + 1 < edge.length; k++) for (let s = 0; s < 24; s++) { const f = s / 24; pts.push(mv(A, S.place(edge[k][0] + (edge[k + 1][0] - edge[k][0]) * f, edge[k][1] + (edge[k + 1][1] - edge[k][1]) * f, t, tmp))); }
+      const last = edge[edge.length - 1]; pts.push(mv(A, S.place(last[0], last[1], t, tmp)));
+      stroke(pts, ink, 1.1, 0.7);
+    });
+    {
+      const C = cam.pos, dc = Math.hypot(C[0], C[1], C[2]), cen = C.map((x) => x / (dc * dc)), rr = Sq(1 - 1 / (dc * dc)) * 1.003;
+      const e1 = vnrm([-C[1], C[0], 0]), nC = C.map((x) => x / dc), e2 = [nC[1] * e1[2] - nC[2] * e1[1], nC[2] * e1[0] - nC[0] * e1[2], nC[0] * e1[1] - nC[1] * e1[0]];
+      const pts = []; for (let k = 0; k <= 96; k++) { const a = 2 * PI_ * k / 96; pts.push([0, 1, 2].map((m) => cen[m] + rr * (Cs(a) * e1[m] + Sn(a) * e2[m]))); }
+      stroke(pts, ink, 1, 0.55);
+    }
+    // graticule (geographic, every 15°) on the globe and on the paper
+    if (HW.grat) {
+      const lines = [];
+      for (let la = -75; la <= 75; la += 15) { const ps = []; for (let lo = -180; lo <= 180; lo += 2) ps.push(geoToP(la, lo)); lines.push(ps); }
+      for (let lo = -180; lo < 180; lo += 15) { const ps = []; for (let la = -88; la <= 88; la += 2) ps.push(geoToP(la, lo)); lines.push(ps); }
+      lines.forEach((ps) => { stroke(ps.map((p) => mv(A, p)), ink, 0.7, 0.32); stroke(sheetLine(ps), ink, 0.7, 0.32); });
+    }
+    // Tissot circles: the same 6°-radius circle every 30°, on the globe and on the paper
+    if (HW.tissot) {
+      const rad = 6 * D2R;
+      for (let la = -60; la <= 60; la += 30) for (let lo = -180; lo < 180; lo += 30) {
+        const c0 = geoToP(la, lo), e = Ab(c0[2]) > 0.9 ? [1, 0, 0] : [0, 0, 1];
+        const u1 = vnrm([c0[1] * e[2] - c0[2] * e[1], c0[2] * e[0] - c0[0] * e[2], c0[0] * e[1] - c0[1] * e[0]]);
+        const u2 = [c0[1] * u1[2] - c0[2] * u1[1], c0[2] * u1[0] - c0[0] * u1[2], c0[0] * u1[1] - c0[1] * u1[0]];
+        const ring = []; for (let k = 0; k < 28; k++) { const a = 2 * PI_ * k / 28; ring.push([0, 1, 2].map((m) => Cs(rad) * c0[m] + Sn(rad) * (Cs(a) * u1[m] + Sn(a) * u2[m]))); }
+        const fill = (pts, centre) => {
+          const vc = vis(centre); if (vc < 0.05) return;
+          const scr = pts.map(proj); if (scr.some((s) => !s)) return;
+          c2.beginPath(); scr.forEach((s, k) => (k ? c2.lineTo(s[0], s[1]) : c2.moveTo(s[0], s[1]))); c2.closePath();
+          c2.fillStyle = rgba(acc, 0.55 * vc); c2.fill();
+        };
+        fill(ring.map((p) => mv(A, p)), mv(A, c0));
+        const sc = onSheet(c0), rs = ring.map(onSheet);
+        if (sc && rs.every((s) => s) && !(S.seam && rs.some((s) => Ab(s.u - sc.u) > 0.5 * (S.u1 - S.u0)))) fill(rs.map((s) => s.X), sc.X);
+      }
+    }
+    // standard lines: where the paper touches or cuts the globe
+    const stdW = 2.6;
+    S.std.forEach((phi) => {
+      const ps = []; for (let k = 0; k <= 180; k++) { const a = -PI_ + 2 * PI_ * k / 180; ps.push([Cs(phi) * Cs(a), Cs(phi) * Sn(a), Sn(phi)]); }
+      stroke(ps.map((p) => mv(A, p)), stdC, stdW, 1);
+      stroke(sheetLine(ps), stdC, stdW, 1);
+    });
+    if (S.cls === 'plane' && S.kase === 'tangent') {
+      [mv(A, [0, 0, 1]), mv(A, S.place(0, 0, t, tmp))].forEach((X) => { const s = proj(X), v = vis(X); if (!s || v < 0.05) return; c2.beginPath(); c2.arc(s[0], s[1], 4.5 * scale, 0, 2 * PI_); c2.fillStyle = rgba(stdC, v); c2.fill(); });
+    }
+    // light rays (fade out as the paper unrolls)
+    const ra = HW.rays ? clamp(1 - t / 0.3, 0, 1) : 0;
+    if (ra > 0) {
+      const samples = [], cP = mv(AT, cam.pos), az = At2(cP[1], cP[0]) * R2D, sides = [az + 78, az - 78];
+      if (S.cls === 'cylinder') { for (let la = -45; la <= 45; la += 15) for (const th of sides) samples.push([la, th]); }
+      else if (S.cls === 'cone') { for (let la = 80; la >= -5; la -= 12) for (const th of sides) samples.push([la, th]); }
+      else { const top = S.light === 'centre' ? 55 : S.light === 'far' ? 85 : 80; for (let c = 10; c <= top; c += 15) for (const th of sides) samples.push([90 - c, th]); }
+      let lightAt = null;
+      samples.forEach(([la, th]) => {
+        const p = [Cs(la * D2R) * Cs(th * D2R), Cs(la * D2R) * Sn(th * D2R), Sn(la * D2R)], s = onSheet(p); if (!s) return;
+        let src;
+        if (S.light === 'centre') src = [0, 0, 0];
+        else if (S.light === 'axis') src = [0, 0, p[2]];
+        else if (S.light === 'far') src = [0, 0, -1];
+        else src = [p[0], p[1], -1.15];
+        const srcS = mv(A, src), pS = mv(A, p);
+        // the part inside the globe is drawn dashed, as if the globe were glass
+        stroke([srcS, pS], rayC, 1.3, 0.7 * ra, [4, 3], true);
+        if (S.light !== 'infinity') lightAt = srcS;
+        const seg = []; for (let k = 0; k <= 12; k++) seg.push([0, 1, 2].map((m) => pS[m] + (s.X[m] - pS[m]) * k / 12));
+        stroke(seg, rayC, 2.2, ra);
+        [[pS, 2.4, ink], [s.X, 3.2, rayC]].forEach(([X, rr, cc]) => { const e = proj(X), ve = vis(X); if (e && ve > 0.05) { c2.beginPath(); c2.arc(e[0], e[1], rr * scale, 0, 2 * PI_); c2.fillStyle = rgba(cc, ve * ra); c2.fill(); } });
+      });
+      if (lightAt) {
+        const s = proj(lightAt);
+        if (s) {
+          const gr = c2.createRadialGradient(s[0], s[1], 0, s[0], s[1], 16 * scale);
+          gr.addColorStop(0, rgba(rayC, 0.95 * ra)); gr.addColorStop(1, rgba(rayC, 0));
+          c2.fillStyle = gr; c2.beginPath(); c2.arc(s[0], s[1], 16 * scale, 0, 2 * PI_); c2.fill();
+          c2.fillStyle = rgba([255, 255, 255], ra); c2.beginPath(); c2.arc(s[0], s[1], 3.2 * scale, 0, 2 * PI_); c2.fill();
+        }
+      }
+    }
+  }
+
+  /* ---------- page wiring ---------- */
+  const hwCanvas = $('#hw-canvas'), hwStage = $('#hw-stage'), hwCtx = hwCanvas.getContext('2d');
+  let hwCssW = 800, hwCssH = 460, hwTimer = 0, hwRaf = 0, hwAnim = 0;
+  function hwLayout() {
+    const w = Math.max(260, hwStage.clientWidth);
+    hwCssW = Math.round(w); hwCssH = Math.round(clamp(w * 0.56, 280, Math.max(320, window.innerHeight * 0.62)));
+    hwCanvas.style.width = hwCssW + 'px'; hwCanvas.style.height = hwCssH + 'px';
+  }
+  function hwDraw(full) {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2), budget = full ? 9e5 : 1.3e5;
+    let s = dpr; if (hwCssW * hwCssH * s * s > budget) s = Math.sqrt(budget / (hwCssW * hwCssH));
+    const W = Math.max(40, Math.round(hwCssW * s)), H = Math.max(30, Math.round(hwCssH * s));
+    const t0 = performance.now();
+    const fr = hwTrace(hwCtx, W, H);
+    hwCanvas.width = W; hwCanvas.height = H;
+    hwCtx.putImageData(fr.img, 0, 0);
+    hwOverlay(hwCtx, fr, s);
+    hwCanvas.dataset.ms = Math.round(performance.now() - t0);
+  }
+  function hwSchedule(quick) {
+    if (state.tab !== 'how') return;
+    cancelAnimationFrame(hwRaf); clearTimeout(hwTimer);
+    if (quick) hwRaf = requestAnimationFrame(() => hwDraw(false));
+    hwTimer = setTimeout(() => hwDraw(true), quick ? 180 : 0);
+  }
+
+  const HW_TEXT = {
+    cylinder: 'A cylinder wraps around the globe. Cut along one side and unrolled, it becomes a rectangle. In the normal aspect, meridians become evenly spaced vertical lines and parallels become horizontal lines.',
+    cone: 'A cone sits on the globe like a lampshade. Cut along one side and unrolled, it becomes a fan. In the normal aspect, meridians become straight lines that meet at a point, and parallels become arcs of circles.',
+    plane: 'A flat sheet is laid against the globe. It is flat already, so nothing needs unrolling. In the polar aspect, meridians spread out from the centre like spokes and parallels become circles.',
+  };
+  function hwLineName() {
+    const a = HW.aspect, c = HW.cls, k = HW.kase;
+    if (c === 'cylinder') return k === 'tangent' ? { normal: 'along the equator', transverse: 'along a pair of opposite meridians', oblique: 'along a tilted great circle' }[a]
+      : { normal: 'along two parallels, 41.4°N and 41.4°S', transverse: 'along two small circles on either side of a meridian', oblique: 'along two tilted small circles' }[a];
+    if (c === 'cone') return k === 'tangent' ? (a === 'normal' ? 'along one parallel, 40°N' : 'along one small circle')
+      : (a === 'normal' ? 'along two parallels, 25°N and 55°N' : 'along two small circles');
+    return k === 'tangent' ? { normal: 'at one point, the North Pole', transverse: 'at one point on the equator', oblique: 'at one point at 45°N' }[a]
+      : (a === 'normal' ? 'along one circle, the 60°N parallel' : 'along one small circle');
+  }
+  function hwResult() {
+    const c = HW.cls, l = HW.light, sec = HW.kase === 'secant';
+    if (c === 'cylinder' && l === 'centre') return { text: 'A lamp at the centre of the globe throws every place onto the paper along a straight ray. The result is the central cylindrical projection' + (sec ? ', at a smaller scale' : '') + '. Far from the equator the rays hit the paper at a shallow angle, so the poles can never be shown.', key: 'central' };
+    if (c === 'cylinder') return { text: 'Rays shine straight out from the Earth’s axis, so every place keeps its height above the equator. ' + (sec ? 'With the narrower cylinder you get an equal-area map with the same shape as the Behrmann projection. Its circles stay round at 30°N and 30°S, not on the blue lines.' : 'This gives Lambert’s cylindrical equal-area projection, the parent of the Gall–Peters map.'), key: 'cea', params: { std: sec ? 30 : 0 } };
+    if (c === 'cone') return { text: 'A lamp at the centre of the globe throws every place onto the cone. This perspective conic map is rarely used. The conic maps people actually use, such as Albers and the Lambert conformal conic, place the parallels with formulas instead, but the cone and its standard lines work the same way.' };
+    if (l === 'centre') return { text: 'A lamp at the centre gives the gnomonic projection' + (sec ? ' at a smaller scale' : '') + '. Every great circle, the shortest route between two places, becomes a straight line, which is why navigators used it to plan routes.', key: 'gnomonic' };
+    if (l === 'far') return { text: 'A lamp on the far side of the globe gives the stereographic projection' + (sec ? ' at a smaller scale' : '') + '. It keeps angles and local shapes true, and every circle on the globe stays a circle on the map.', key: 'stereographic' };
+    return { text: 'Parallel rays from a light very far away give the orthographic projection: the globe as it looks in a photograph from space.' + (sec ? ' Because the rays are parallel, moving the paper closer does not change the map at all.' : ''), key: 'orthographic' };
+  }
+  function hwUpdateText() {
+    const aspWord = HW.cls === 'plane' ? { normal: 'polar', transverse: 'equatorial', oblique: 'oblique' }[HW.aspect] : HW.aspect;
+    $('#hw-class-text').textContent = HW_TEXT[HW.cls];
+    $('#hw-case-text').textContent = (HW.kase === 'tangent' ? 'Tangent case: the paper touches the globe ' : 'Secant case: the paper cuts through the globe ') + hwLineName() + '. '
+      + 'Aspect: ' + aspWord + (HW.aspect === 'normal' ? (HW.cls === 'plane' ? ', centred on a pole.' : ', with the surface’s axis along the Earth’s axis.') : HW.aspect === 'transverse' ? (HW.cls === 'plane' ? ', centred on the equator.' : ', turned 90° so the axis lies in the equator.') : ', tilted somewhere in between.');
+    const point = HW.cls === 'plane' && HW.kase === 'tangent', two = HW.kase === 'secant' && HW.cls !== 'plane';
+    $('#hw-std-text').textContent = HW.kase === 'tangent'
+      ? 'The blue ' + (point ? 'dot is the standard point' : 'line is the standard line') + ', where the paper touches the globe. The map has no distortion there, and distortion grows the farther you go from it.'
+      : 'The blue ' + (two ? 'lines are the standard lines' : 'line is the standard line') + ', where the paper cuts the globe. Distances along ' + (two ? 'them' : 'it') + ' are true to scale, and the error is spread more evenly than in the tangent case. Shapes are not always perfect right on the ' + (two ? 'lines' : 'line') + ', so compare the circles there.';
+    const res = hwResult();
+    $('#hw-light-text').textContent = res.text;
+    const btn = $('#hw-open');
+    btn.hidden = !res.key;
+    if (res.key) { btn.textContent = 'Open the ' + (res.key === 'cea' ? (res.params.std ? 'Behrmann' : 'Lambert equal-area') : byKey[res.key].name.toLowerCase().replace(/^./, (m) => m)) + ' map'; btn.dataset.key = res.key; btn.dataset.params = JSON.stringify(res.params || {}); }
+    document.querySelectorAll('.classcard').forEach((el) => el.classList.toggle('current', el.dataset.cls === HW.cls));
+    const tOut = $('#hw-t-out'); tOut.textContent = HW.t < 0.01 ? 'Wrapped' : HW.t > 0.99 ? 'Flat' : Math.round(HW.t * 100) + '%';
+    $('#hw-play').textContent = HW.t > 0.5 ? 'Wrap it back' : (HW.cls === 'plane' ? 'Lay it flat' : 'Unroll the paper');
+  }
+  function hwBuildLights() {
+    const box = $('#hw-light'); box.innerHTML = '';
+    if (!HW_LIGHTS[HW.cls].includes(HW.light)) HW.light = HW_LIGHTS[HW.cls][0];
+    HW_LIGHTS[HW.cls].forEach((l) => {
+      const lab = document.createElement('label');
+      lab.innerHTML = '<input type="radio" name="hw-light" id="hw-light-' + l + '" value="' + l + '"' + (HW.light === l ? ' checked' : '') + '><span>' + HW_LIGHT_LABEL[l] + '</span>';
+      lab.querySelector('input').addEventListener('change', () => { HW.light = l; hwChanged(); });
+      box.appendChild(lab);
+    });
+    const asp = { normal: HW.cls === 'plane' ? 'Polar' : 'Normal', transverse: HW.cls === 'plane' ? 'Equatorial' : 'Transverse', oblique: 'Oblique' };
+    Object.keys(asp).forEach((k) => { $('#hw-asp-' + k).nextElementSibling.textContent = asp[k]; });
+  }
+  function hwChanged(opts) { hwUpdateText(); hwSchedule(!(opts && opts.full)); }
+  function hwSetClass(c) {
+    HW.cls = c; HW.yaw = 0; HW.pitch = 0; HW.zoom = 1;
+    document.querySelectorAll('.classpick button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.cls === c ? 'true' : 'false'));
+    hwBuildLights(); hwChanged({ full: true });
+  }
+  document.querySelectorAll('.classpick button').forEach((b) => b.addEventListener('click', () => hwSetClass(b.dataset.cls)));
+  document.querySelectorAll('input[name="hw-case"]').forEach((r) => r.addEventListener('change', () => { HW.kase = r.value; hwChanged({ full: true }); }));
+  document.querySelectorAll('input[name="hw-asp"]').forEach((r) => r.addEventListener('change', () => { HW.aspect = r.value; HW.yaw = 0; HW.pitch = 0; hwChanged({ full: true }); }));
+  $('#hw-t').addEventListener('input', (e) => { cancelAnimationFrame(hwAnim); HW.t = +e.target.value; hwChanged(); });
+  $('#hw-spin').addEventListener('input', (e) => { HW.spin = +e.target.value; e.target.nextElementSibling.textContent = fmtLon(HW.spin); hwChanged(); });
+  $('#hw-op').addEventListener('input', (e) => { HW.opacity = +e.target.value; e.target.nextElementSibling.textContent = Math.round(HW.opacity * 100) + '%'; hwChanged(); });
+  [['#hw-rays', 'rays'], ['#hw-tissot', 'tissot'], ['#hw-grat', 'grat']].forEach(([id, k]) => $(id).addEventListener('change', (e) => { HW[k] = e.target.checked; hwChanged({ full: true }); }));
+  // The raster tab's aspect (lat, lon, rotation) that shows the same map as the flattened paper in 3D.
+  // Paper frame → geographic is G = Rz(spin)·A. Cylinders share the app's centre frame (their map frame
+  // cannot turn, so a transverse map comes out turned by the tilt). A flat plane faces the camera with the
+  // tilt A = Rx(a) applied about the view axis, so it maps to the app's polar frame turned back by −a.
+  const HW_TILT = { normal: 0, transverse: -90, oblique: -45 };
+  function hwAppAspect() {
+    const G = mm(rotZ(HW.spin * D2R), hwAspectM());
+    const M = HW.cls === 'plane' ? mm(G, aspectMatrix(90, 0, -HW_TILT[HW.aspect])) : G;
+    const lat = Math.asin(clamp(M[2][0], -1, 1)) * R2D, lon = Math.abs(lat) > 89.9999 ? 0 : At2(M[1][0], M[0][0]) * R2D;
+    const R = mm(mT(aspectMatrix(lat, lon, 0)), M), rot = At2(R[2][1], R[1][1]) * R2D;
+    const r1 = (v) => { const x = Math.round(v * 10) / 10; return x === 0 ? 0 : x; };
+    return [r1(lat), r1(wrap180(lon)), r1(wrap180(rot))];
+  }
+  $('#hw-open').addEventListener('click', (e) => {
+    const key = e.target.dataset.key, params = JSON.parse(e.target.dataset.params || '{}');
+    Object.assign(paramState[key], params);
+    const asp = hwAppAspect(), n = byKey[key].aspect;
+    setPreset(asp.every((v, i) => Math.abs(v - n[i]) < 0.05) ? 'normal' : null);
+    state.lat = asp[0]; state.lon = asp[1]; state.rot = asp[2];
+    selectProj(key); syncAspect(); switchTab('raster');
+  });
+  $('#hw-play').addEventListener('click', () => {
+    cancelAnimationFrame(hwAnim);
+    const from = HW.t, to = HW.t > 0.5 ? 0 : 1, dur = 2400 * Math.abs(to - from);
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || dur < 1) { HW.t = to; $('#hw-t').value = to; hwChanged({ full: true }); return; }
+    const t0 = performance.now();
+    const step = (now) => {
+      const f = clamp((now - t0) / dur, 0, 1), e = f < 0.5 ? 2 * f * f : 1 - Math.pow(-2 * f + 2, 2) / 2;
+      HW.t = from + (to - from) * e; $('#hw-t').value = HW.t; hwUpdateText();
+      if (f < 1) { hwDraw(false); hwAnim = requestAnimationFrame(step); } else hwDraw(true);
+    };
+    hwAnim = requestAnimationFrame(step);
+  });
+  // orbit the camera with one pointer, zoom with two
+  let hwDrag = null, hwPinch = 0;
+  const hwPtrs = new Map();
+  const pinchDist = () => { const p = [...hwPtrs.values()]; return Math.hypot(p[0][0] - p[1][0], p[0][1] - p[1][1]); };
+  hwCanvas.addEventListener('pointerdown', (e) => {
+    hwPtrs.set(e.pointerId, [e.clientX, e.clientY]); hwCanvas.setPointerCapture(e.pointerId); hwCanvas.classList.add('grabbing');
+    if (hwPtrs.size === 2) { hwPinch = pinchDist(); hwDrag = null; } else hwDrag = [e.clientX, e.clientY];
+  });
+  hwCanvas.addEventListener('pointermove', (e) => {
+    if (!hwPtrs.has(e.pointerId)) return;
+    hwPtrs.set(e.pointerId, [e.clientX, e.clientY]);
+    if (hwPtrs.size === 2 && hwPinch) { const d = pinchDist(); HW.zoom = clamp(HW.zoom * d / hwPinch, 0.6, 3.5); hwPinch = d; hwSchedule(true); return; }
+    if (!hwDrag) return;
+    HW.yaw -= (e.clientX - hwDrag[0]) * 0.008; HW.pitch = clamp(HW.pitch + (e.clientY - hwDrag[1]) * 0.008, -150 * D2R, 150 * D2R);
+    hwDrag = [e.clientX, e.clientY]; hwSchedule(true);
+  });
+  const hwEnd = (e) => {
+    hwPtrs.delete(e.pointerId);
+    if (hwPtrs.size === 1) { hwPinch = 0; const p = [...hwPtrs.values()][0]; hwDrag = [p[0], p[1]]; return; }
+    if (hwPtrs.size) return;
+    hwDrag = null; hwPinch = 0; hwCanvas.classList.remove('grabbing'); hwSchedule(false);
+  };
+  hwCanvas.addEventListener('pointerup', hwEnd); hwCanvas.addEventListener('pointercancel', hwEnd);
+  hwCanvas.addEventListener('wheel', (e) => { e.preventDefault(); HW.zoom = clamp(HW.zoom * Math.exp(-e.deltaY * 0.0015), 0.6, 3.5); hwSchedule(true); }, { passive: false });
+  hwCanvas.addEventListener('dblclick', () => { HW.yaw = 0; HW.pitch = 0; HW.zoom = 1; hwSchedule(false); });
+  hwCanvas.addEventListener('keydown', (e) => {
+    const s = (e.shiftKey ? 2 : 8) * D2R;
+    if (e.key === 'ArrowLeft') HW.yaw += s; else if (e.key === 'ArrowRight') HW.yaw -= s;
+    else if (e.key === 'ArrowUp') HW.pitch = clamp(HW.pitch + s, -150 * D2R, 150 * D2R); else if (e.key === 'ArrowDown') HW.pitch = clamp(HW.pitch - s, -150 * D2R, 150 * D2R);
+    else if (e.key === '+' || e.key === '=') HW.zoom = clamp(HW.zoom * 1.15, 0.6, 3.5); else if (e.key === '-') HW.zoom = clamp(HW.zoom / 1.15, 0.6, 3.5);
+    else return;
+    e.preventDefault(); hwSchedule(true);
+  });
+
+  /* ---------- common projections by class ---------- */
+  const HW_CLASSES = [
+    { cls: 'cylinder', title: 'Cylindrical', surface: 'Cylinder', text: 'Straight, evenly spaced meridians and straight parallels. Accurate near the equator, or along a meridian in the transverse aspect, which is how UTM zones and many national grids work.', keys: ['mercator', 'equirect', 'cea', 'miller', 'gallster', 'central'] },
+    { cls: 'cone', title: 'Conic', surface: 'Cone', text: 'Straight meridians that meet at a point and parallels that are arcs. Best for mid-latitude regions that are wide east to west, like the United States, Europe or China.', keys: ['albers', 'lcc', 'eqdc'] },
+    { cls: 'plane', title: 'Planar (azimuthal)', surface: 'Plane', text: 'Directions from the centre are true. Used for polar maps, for maps centred on one city, and for air routes and radio ranges.', keys: ['orthographic', 'stereographic', 'gnomonic', 'azeqd', 'laea', 'perspective'] },
+    { title: 'Pseudocylindrical', surface: 'Modified cylinder', text: 'Like cylindrical maps, but the meridians curve in toward the poles. They come from formulas, not from a single surface, and are common for world maps.', keys: ['mollweide', 'sinusoidal', 'robinson', 'equalearth', 'eckert4', 'naturalearth', 'kavrayskiy', 'tobler', 'goode', 'gores'] },
+    { title: 'Modified azimuthal', surface: 'Modified plane', text: 'Each starts from a planar map and reshapes it. Hammer and Aitoff stretch half of one sideways, Winkel tripel averages Aitoff with a cylindrical map, the two-point equidistant measures from two centres instead of one, and Peirce and Guyou fold a conformal view of each hemisphere into a square.', keys: ['hammer', 'aitoff', 'winkel', 'twopoint', 'peirce', 'guyou'] },
+    { title: 'Polyhedral and other', surface: 'Many planes', text: 'The globe is wrapped in a solid with flat faces, and each face is a small planar map. Distortion stays low, at the cost of cuts between the faces. Van der Grinten fits no single class: its meridians and parallels are all arcs of circles.', keys: ['tetrapower', 'tetraarea', 'butterfly', 'icosa', 'vandergrinten'] },
+  ];
+  function hwBuildCards() {
+    const box = $('#hw-cards'); box.innerHTML = '';
+    HW_CLASSES.forEach((c) => {
+      const card = document.createElement('section'); card.className = 'classcard'; if (c.cls) card.dataset.cls = c.cls;
+      const id = 'cc-' + c.title.replace(/[^a-z]+/gi, '-').toLowerCase();
+      card.setAttribute('aria-labelledby', id);
+      card.innerHTML = '<div class="cc-head"><h3 id="' + id + '">' + c.title + '</h3><span class="cc-surf">' + c.surface + '</span></div><p></p><div class="cc-chips"></div>';
+      card.querySelector('p').textContent = c.text;
+      const chips = card.querySelector('.cc-chips');
+      c.keys.forEach((k) => {
+        const p = byKey[k]; if (!p) return;
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'cc-chip';
+        b.innerHTML = '<span></span><small class="' + (TAG_CLASS[p.tags[0]] || '') + '"></small>';
+        b.firstChild.textContent = p.name.replace(' (AuthaGraph-style)', ''); b.lastChild.textContent = p.tags[0];
+        b.title = 'Open ' + p.name + ' in the raster map';
+        b.addEventListener('click', () => { selectProj(k); switchTab('raster'); });
+        chips.appendChild(b);
+      });
+      if (c.cls) {
+        const show = document.createElement('button'); show.type = 'button'; show.className = 'btn cc-show'; show.textContent = 'Show the ' + c.surface.toLowerCase() + ' above';
+        show.addEventListener('click', () => { hwSetClass(c.cls); $('#hw-stage').scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+        card.appendChild(show);
+      }
+      box.appendChild(card);
+    });
+  }
+  hwBuildCards(); hwBuildLights(); hwUpdateText();
+
   /* ================= Tabs ================= */
   function switchTab(t) {
     state.tab = t;
-    ['raster', 'vector', 'compare', 'batch'].forEach((n) => $('#tab-' + n).setAttribute('aria-selected', n === t ? 'true' : 'false'));
+    TABS.forEach((n) => $('#tab-' + n).setAttribute('aria-selected', n === t ? 'true' : 'false'));
     const work = t === 'raster' || t === 'vector';
-    $('#panel-work').hidden = !work; $('#panel-compare').hidden = t !== 'compare'; $('#panel-batch').hidden = t !== 'batch';
+    $('#panel-work').hidden = !work; $('#panel-compare').hidden = t !== 'compare'; $('#panel-batch').hidden = t !== 'batch'; $('#panel-how').hidden = t !== 'how';
+    if (t === 'how') { hwLayout(); hwUpdateText(); hwSchedule(false); }
     $('#panel-work').setAttribute('aria-labelledby', 'tab-' + (t === 'vector' ? 'vector' : 'raster'));
     document.querySelectorAll('.raster-only').forEach((el) => { el.hidden = t !== 'raster'; });
     document.querySelectorAll('.vector-only').forEach((el) => { el.hidden = t !== 'vector'; });
@@ -2240,10 +3025,11 @@ if (typeof module !== 'undefined') module.exports = { TETRA, OCTA, ICOSA, lentic
     if (t === 'compare' && !compareResults && !compareBusy) $('#cmp-run').click();
     else if (t === 'compare' && compareResults) drawCompare(compareResults);
   }
-  ['raster', 'vector', 'compare', 'batch'].forEach((n) => $('#tab-' + n).addEventListener('click', () => switchTab(n)));
+  const TABS = ['how', 'raster', 'vector', 'compare', 'batch'];
+  TABS.forEach((n) => $('#tab-' + n).addEventListener('click', () => switchTab(n)));
   $('.tabs').addEventListener('keydown', (e) => {
-    const order = ['raster', 'vector', 'compare', 'batch'], i = order.indexOf(state.tab);
-    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const n = order[(i + (e.key === 'ArrowRight' ? 1 : 3)) % 4]; switchTab(n); $('#tab-' + n).focus(); e.preventDefault(); }
+    const i = TABS.indexOf(state.tab);
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const n = TABS[(i + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length]; switchTab(n); $('#tab-' + n).focus(); e.preventDefault(); }
   });
 
   /* ================= World data ================= */
@@ -2258,6 +3044,7 @@ if (typeof module !== 'undefined') module.exports = { TETRA, OCTA, ICOSA, lentic
       styleSel.querySelectorAll('option[value="political"],option[value="land"]').forEach((o) => { o.disabled = true; });
       note('Couldn’t load the world map data, so a checkerboard is shown instead. Open an equirectangular (2:1) map image to draw with it.');
       if (state.style !== 'upload') setStyle('test');
+      hwSchedule(false);
     };
     s.onload = () => {
       if (done) return;
@@ -2269,7 +3056,7 @@ if (typeof module !== 'undefined') module.exports = { TETRA, OCTA, ICOSA, lentic
         done = true; worldStatus = 'ready';
         $('#loading').hidden = true;
         if (state.style === 'political' || state.style === 'land') textures[state.style] = buildWorldTexture(state.style);
-        refresh({ immediate: true });
+        refresh({ immediate: true }); hwSchedule(false);
       } catch (e) { console.error(e); fail(); }
     };
     s.onerror = fail;
@@ -2284,14 +3071,17 @@ if (typeof module !== 'undefined') module.exports = { TETRA, OCTA, ICOSA, lentic
   syncAspect();
   let resizeT = 0;
   new ResizeObserver(() => { clearTimeout(resizeT); resizeT = setTimeout(() => { if (state.tab === 'raster' || state.tab === 'vector') refresh({ relayout: true, immediate: true }); }, 60); }).observe(stage);
-  if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => refresh({ immediate: true }));
+  let hwResizeT = 0, hwLastW = 0;
+  new ResizeObserver(() => { clearTimeout(hwResizeT); hwResizeT = setTimeout(() => { if (state.tab === 'how' && hwStage.clientWidth !== hwLastW) { hwLastW = hwStage.clientWidth; hwLayout(); hwSchedule(false); } }, 60); }).observe(hwStage);
+  if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { refresh({ immediate: true }); hwSchedule(false); });
   loadWorld();
-  layout(); drawRaster(true);
-  window.__mapApp = { state, paramState, selectProj, switchTab, setStyle, drawRaster, drawVector, buildSVG, optimise, runCompare, makeZip,
+  switchTab('how');
+  window.__mapApp = { state, paramState, selectProj, switchTab, HW, hwDraw, hwSetClass, hwSurface, setStyle, drawRaster, drawVector, buildSVG, optimise, runCompare, makeZip,
     get worldStatus() { return worldStatus; }, get lastFrame() { return lastFrame; }, get compareResults() { return compareResults; } };
 
 
 })();
+
 </script>
 </body>
 </html>
