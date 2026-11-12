@@ -135,7 +135,7 @@ const SUF=k=>PCT100(k)?' of U.S. avg':k==='gsh'?' of U.S. GDP':(k==='g1r'||k==='
 const T=(k,v)=>v==null?null:LOGK(k)?Math.log10(v):v;
 const FG=(k,v)=>v==null?'—':(k==='g1r'||k==='g4r')?(Math.abs(v)<0.05?'0.0':(v>0?'+':'')+v.toFixed(1))+' pts':k==='gpcr'?v.toFixed(0)+'%':k==='gsh'?v.toFixed(v<1?2:1)+'%':k==='pi'||k==='gpc'?'$'+Math.round(v).toLocaleString('en-US'):k==='pir'?v.toFixed(0)+'%':k==='pit'?(v>=1e6?'$'+(v/1e6).toFixed(2)+'T':v>=1000?'$'+(v/1000).toFixed(1)+'B':'$'+v.toFixed(0)+'M'):k==='g'?(v>=1000?'$'+(v/1000).toFixed(2)+'T':'$'+v.toFixed(v<10?2:1)+'B'):(Math.abs(v)<0.05?'0.0':(v>0?'+':'')+v.toFixed(1))+'%';
 const NAME={gpc:'GDP per person',gpcr:'GDP per person vs. U.S. average',g1r:'1-yr GDP growth vs. U.S.',g4r:'4-yr GDP growth vs. U.S.',gsh:'Share of U.S. real GDP',g:'Real GDP',g1:'1-yr real GDP growth',g4:'4-yr annualized GDP growth',pi:'Income per person',pir:'Income per person vs. U.S. average'};
-const lc=s=>s[0].toLowerCase()+s.slice(1);
+const lc=s=>/^[A-Z]{2}/.test(s)?s:s[0].toLowerCase()+s.slice(1);
 const fm=m=>m==null?'—':(m>=0?'D +':'R +')+Math.abs(m).toFixed(1);
 const fp=p=>p==null?'—':p+'%';
 const NAEP_FLAG={NA:'not available (state did not take part)',S:'suppressed (reporting standards not met)'};
